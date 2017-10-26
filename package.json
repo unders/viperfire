@@ -1,0 +1,42 @@
+{
+  "name": "viperfire",
+  "version": "0.0.1",
+  "description": "viperfire fullstack app",
+  "main": "main.js",
+  "dependencies": {
+    "hyperhtml": "^1.7.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^21.1.1",
+    "awesome-typescript-loader": "^3.2.3",
+    "jest": "^21.1.0",
+    "node-sass": "^4.5.3",
+    "source-map-loader": "^0.2.1",
+    "ts-jest": "^21.0.1",
+    "typescript": "^2.5.2",
+    "webpack": "^3.5.6",
+    "webpack-closure-compiler": "^2.1.5"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/unders/viperfire"
+  },
+  "author": "Anders Törnqvist",
+  "license": "ISC",
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  }
+}
