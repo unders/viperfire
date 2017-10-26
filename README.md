@@ -8,3 +8,8 @@
 
 ### Firebase
 * [Config](https://firebase.google.com/docs/hosting/full-config)
+
+### Tools
+* [REDbot](https://redbot.org/)
+* [Web page test](https://www.webpagetest.org/)
+* [Pingdom Website Speed Test](https://tools.pingdom.com/)
