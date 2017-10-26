@@ -29,7 +29,7 @@ dist: ## creates a release
 	@rsync -avz --exclude 'assets/css' --exclude 'assets/js' public/ dist/
 
 .PHONY: deploy
-deploy: ## deploys to firebase
+deploy: dist ## deploys to firebase
 	firebase deploy --public dist
 
 .PHONY: help-closure
