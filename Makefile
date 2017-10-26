@@ -18,11 +18,12 @@ start: ## starts dev environment
 
 .PHONY: test
 test: ## runs tests
-	&& node_modules/.bin/jest
+	node_modules/.bin/jest
 
 .PHONY: dist
 dist: ## creates a release
 	@node_modules/.bin/node-sass --output-style compressed --output ./dist/assets/css ./sass
+	@node_modules/.bin/webpack --config support/webpack.dev.config.js
 	@node_modules/.bin/webpack --config support/webpack.prod.config.js
 	@cd functions && tsc
 	@rsync -avz --exclude 'assets/css' --exclude 'assets/js' public/ dist/

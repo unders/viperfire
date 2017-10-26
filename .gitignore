@@ -62,5 +62,6 @@ typings/
 functions/build
 public/assets/js
 public/assets/css
+dist
 
 
