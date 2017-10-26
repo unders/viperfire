@@ -38,7 +38,7 @@ help-closure: ## shows closure compiler options
 
 .PHONY: tree
 tree: ## lists the projects file structure
-	tree -I node_modules
+	tree -I 'dist|node_modules|build|public'
 
 .PHONY: clean
 clean: ## remove files in dist folder
