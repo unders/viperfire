@@ -1,5 +1,10 @@
+import {bind, wire} from './dom/dom'
+
 const main = () => {
-    console.log("It works");
+    const app = document.getElementById("app");
+    if (app) {
+        bind(app)`<div>It works</div>${wire()`<p>Hello world</p>`}`
+    }
 };
 
 main();

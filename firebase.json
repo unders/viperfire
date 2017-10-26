@@ -8,6 +8,19 @@
     ],
     "rewrites": [ {
       "source": "/hello", "function": "helloWorld"
+    } ],
+    "headers": [{
+      "source" : "**/*.@(jpg|jpeg|gif|png)",
+      "headers" : [ {
+        "key" : "Cache-Control",
+        "value" : "max-age=7200"
+      } ]
+      }, {
+      "source" : "404.html",
+      "headers" : [ {
+        "key" : "Cache-Control",
+        "value" : "max-age=300"
+      } ]
     } ]
   }
 }
