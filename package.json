@@ -4,6 +4,7 @@
   "description": "viperfire fullstack app",
   "main": "main.js",
   "dependencies": {
+    "firebase": "^4.6.0",
     "hyperhtml": "^1.7.3"
   },
   "devDependencies": {
