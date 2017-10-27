@@ -1,12 +1,12 @@
 # viperfire
 
-## TODO
+### TODO
 - [ ] Setup Service worker with Workbox
 - [ ] Setup HTTP push
 - [ ] Setup ViperHTML for server rendering
 
 
-## Project
+### Project
 * [Firebase Console - viperfire stag](https://console.firebase.google.com/project/viperfire-stag/overview)
 * [Web - viperfire stage](https://viperfire-stag.firebaseapp.com)
 * [Functions - viperfire stag](https://us-central1-viperfire-stag.cloudfunctions.net/helloWorld)
