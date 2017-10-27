@@ -46,6 +46,3 @@ tree: ## lists the projects file structure
 log: ## show git log
 	@git log --graph --oneline --decorate
 
-.PHONY: clean
-clean: ## remove files in dist folder
-	rm -rf dist
