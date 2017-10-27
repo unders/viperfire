@@ -4,7 +4,9 @@
 - [ ] Setup Service worker with Workbox
 - [ ] Setup HTTP push
 - [ ] Setup ViperHTML for server rendering
-- [ ] Setup Pingdom to root
+- [ ] Buy domain
+- [ ] Add custom domain
+- [ ] Setup Pingdom to ping custom domain
 
 
 ### Project
