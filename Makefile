@@ -22,11 +22,13 @@ test: ## runs tests
 
 .PHONY: dist
 dist: ## creates a release
+	@rm -rf dist/assets
 	@node_modules/.bin/node-sass --output-style compressed --output ./dist/assets/css ./sass
 	@node_modules/.bin/webpack --config support/webpack.dev.config.js
 	@node_modules/.bin/webpack --config support/webpack.prod.config.js
 	@cd functions && tsc
-	@rsync -avz --exclude 'assets/css' --exclude 'assets/js' public/ dist/
+	@rsync -avz --delete --exclude 'assets/css' --exclude 'assets/js' public/ dist/
+	@./bin/hasher.sh
 
 .PHONY: deploy
 deploy: dist ## deploys to firebase
