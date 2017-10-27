@@ -30,9 +30,20 @@ dist: ## creates a release
 	@rsync -avz --delete --exclude 'assets/css' --exclude 'assets/js' public/ dist/
 	@./bin/hasher.sh
 
-.PHONY: deploy
-deploy: dist ## deploys to firebase
+.PHONY: stag-deploy
+stag-deploy: dist ## deploys app to viperfire-stag
+	firebase use viperfire-stag
 	firebase deploy --public dist
+
+.PHONY: prod-deploy
+prod-deploy: ## deploys app firebase: viperfire-prod
+	@#firebase use viperfire-prod
+	@./bin/deploy.sh
+	@#firebase use viperfire-stag
+
+.PHONY: list
+list: ## shows firebase projects
+	firebase list
 
 .PHONY: help-closure
 help-closure: ## shows closure compiler options

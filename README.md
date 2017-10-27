@@ -16,7 +16,7 @@
 
 ### Firebase
 * [Config](https://firebase.google.com/docs/hosting/full-config)
-* [write-firebase-functions]( https://firebase.google.com/docs/functions/write-firebase-functions)
+* [write-firebase-functions](https://firebase.google.com/docs/functions/write-firebase-functions)
 
 ### Performance Tools
 * [REDbot](https://redbot.org/)
