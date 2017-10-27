@@ -9,7 +9,18 @@
 ### Firebase
 * [Config](https://firebase.google.com/docs/hosting/full-config)
 
-### Tools
+### Performance Tools
 * [REDbot](https://redbot.org/)
 * [Web page test](https://www.webpagetest.org/)
 * [Pingdom Website Speed Test](https://tools.pingdom.com/)
+
+
+### Service Worker
+* [offline-cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/)
+* [Workbox](https://workboxjs.org/)
+* [workbox lab](https://codelabs.developers.google.com/codelabs/workbox-lab/#0)
+* [Workbox: Flexible PWA Libraries ](https://www.youtube.com/watch?v=DtuJ55tmjps)
+* [Workbox](https://developers.google.com/web/tools/workbox/)
+
+### Docs
+* [Firebase Glob patterns](http://mywiki.wooledge.org/glob)
