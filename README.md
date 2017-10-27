@@ -16,6 +16,7 @@
 
 ### Firebase
 * [Config](https://firebase.google.com/docs/hosting/full-config)
+* [write-firebase-functions]( https://firebase.google.com/docs/functions/write-firebase-functions)
 
 ### Performance Tools
 * [REDbot](https://redbot.org/)
@@ -29,6 +30,9 @@
 * [workbox lab](https://codelabs.developers.google.com/codelabs/workbox-lab/#0)
 * [Workbox: Flexible PWA Libraries ](https://www.youtube.com/watch?v=DtuJ55tmjps)
 * [Workbox](https://developers.google.com/web/tools/workbox/)
+
+### ViperHTML
+* [ViperHTML](https://github.com/unders/mywiki/wiki/ViperHTML)
 
 ### Docs
 * [Firebase Glob patterns](http://mywiki.wooledge.org/glob)
