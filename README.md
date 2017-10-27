@@ -4,6 +4,7 @@
 - [ ] Setup Service worker with Workbox
 - [ ] Setup HTTP push
 - [ ] Setup ViperHTML for server rendering
+- [ ] Setup Pingdom to root
 
 
 ### Project
