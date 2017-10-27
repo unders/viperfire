@@ -1,5 +1,10 @@
 # viperfire
 
+## TODO
+[] Setup Service worker with Workbox
+[] Setup HTTP push
+[] Setup ViperHTML for server rendering
+
 
 ## Project
 * [Firebase Console - viperfire stag](https://console.firebase.google.com/project/viperfire-stag/overview)
