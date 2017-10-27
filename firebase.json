@@ -10,12 +10,18 @@
       "source": "/hello", "function": "helloWorld"
     } ],
     "headers": [{
-      "source" : "**/*.@(jpg|jpeg|gif|png)",
+      "source" : "**/*.@(jpg|jpeg|gif|png|js|css)",
       "headers" : [ {
         "key" : "Cache-Control",
-        "value" : "max-age=7200"
+        "value" : "public, max-age=31536000"
       } ]
       }, {
+      "source" : "/@(android-chrome*|apple-touch-icon.png|favicon*|mstile*|browserconfig.xml|manifest.json)",
+      "headers" : [ {
+        "key" : "Cache-Control",
+        "value" : "max-age=432000"
+      } ]
+      },{
       "source" : "404.html",
       "headers" : [ {
         "key" : "Cache-Control",
