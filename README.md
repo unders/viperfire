@@ -1,9 +1,9 @@
 # viperfire
 
 ## TODO
-[] Setup Service worker with Workbox
-[] Setup HTTP push
-[] Setup ViperHTML for server rendering
+- [] Setup Service worker with Workbox
+- [] Setup HTTP push
+- [] Setup ViperHTML for server rendering
 
 
 ## Project
