@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      { "source": "/", "function": "appV1" },
+      { "source": "/about", "function": "appV1"},
+      { "source": "/article/*", "function": "appV1"}
+    ]
+  }
+}

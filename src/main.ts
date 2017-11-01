@@ -1,4 +1,4 @@
-import { bind, wire } from './dom/dom'
+// import { bind, wire } from './dom/dom'
 import * as firebase from "firebase";
 
 const main = async () => {
@@ -15,13 +15,14 @@ const main = async () => {
         }
     });
 
-    console.log("it works");
+    // const index = renderIndex(wire(), {message: "Hello World 7"});
 
+    // const app = document.getElementById("app");
+    // if (app) {
+    //     bind(app)`<div>Hyper HTML is cool</div>${index}`
+    // }
 
-    const app = document.getElementById("app");
-    if (app) {
-        bind(app)`<div>It works</div>${wire()`<p>Hello world</p>`}`
-    }
+    console.log("it works 6");
 };
 
 main();
