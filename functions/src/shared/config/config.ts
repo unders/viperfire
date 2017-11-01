@@ -2,23 +2,24 @@ import { App } from "../view/app";
 import { ArticleList } from "../view/article_list";
 import { About, AboutContext } from "../view/about";
 import { Header } from '../view/header';
-import { ServerActions } from '../actions';
+import { ServerActions, ClientActions } from '../actions';
+import { env } from './env'
 
 export interface Config {
     readonly isOnline: boolean
     readonly app: App;
 }
 
-export const getConfig = function(env: any): Config {
-    let online = false;
-    let url = "//localhost:8000";
-    if (!env.LOCAL) {
-        online = true;
-        url = "//viperfire-stag.firebaseapp.com/";
-    }
+export const getServerConfig = function(): Config {
+    return getConfig(new ServerActions());
+};
 
-    const logo = { name: "Viperfire", url: url };
-    const actions = new ServerActions();
+export const getClientConfig = function(): Config {
+    return getConfig(new ClientActions({}));
+};
+
+const getConfig = function(actions: any): Config {
+    const logo = { name: "Viperfire", url: env.host };
 
     const ctx = {
         header: new Header({ logo: logo, actions: actions }),
@@ -28,7 +29,7 @@ export const getConfig = function(env: any): Config {
     };
 
     return {
-        isOnline: online,
+        isOnline: env.online,
         app: new App(ctx),
     };
 };

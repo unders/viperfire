@@ -10,13 +10,13 @@ export class ClientActions {
     constructor(ctx: Context) {}
 
     signIn(event: Event): any {
-        console.log(event);
+        event.preventDefault();
         console.log(event.type);
         console.log(event.currentTarget);
     }
 
     signOut(event: Event): any {
-        console.log(event);
+        event.preventDefault();
         console.log(event.type);
         console.log(event.currentTarget);
     }

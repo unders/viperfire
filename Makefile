@@ -22,6 +22,7 @@ test: ## runs tests
 
 .PHONY: dist
 dist: ## creates a release
+	@cp support/config.env.prod.ts functions/src/shared/config/env.ts
 	@rm -rf dist/assets
 	@node_modules/.bin/node-sass --output-style compressed --output ./dist/assets/css ./sass
 	@node_modules/.bin/webpack --config support/webpack.dev.config.js
@@ -30,6 +31,7 @@ dist: ## creates a release
 	@cd functions && tsc
 	@rsync -avz --delete --exclude 'assets/css' --exclude 'assets/js' public/ dist/
 	@./bin/hasher.sh
+	@cp support/config.env.dev.ts functions/src/shared/config/env.ts
 
 .PHONY: stag-deploy
 stag-deploy: dist ## deploys app to viperfire-stag

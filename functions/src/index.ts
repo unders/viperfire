@@ -1,12 +1,12 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin';
 import * as express from "express";
-import { getConfig } from "./shared/config/config";
+import { getServerConfig } from "./shared/config/config";
 import { newPage } from "./page/page";
 
 const firebase = admin.initializeApp(functions.config().firebase);
 const app = express();
-const config = getConfig(process.env);
+const config = getServerConfig();
 const page = newPage(config);
 
 // Index shows landing page with articles order_by: rank | newest

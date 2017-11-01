@@ -1,7 +1,7 @@
 # viperfire
 
 ### TODO
-- [ ] Setup ViperHTML for server rendering
+- [ X ] Setup ViperHTML for server rendering
 - [ ] Setup Service worker with Workbox
 - [ ] Setup HTTP push
 - [ ] Buy domain
