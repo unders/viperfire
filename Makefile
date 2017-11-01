@@ -26,6 +26,7 @@ dist: ## creates a release
 	@node_modules/.bin/node-sass --output-style compressed --output ./dist/assets/css ./sass
 	@node_modules/.bin/webpack --config support/webpack.dev.config.js
 	@node_modules/.bin/webpack --config support/webpack.prod.config.js
+	@rm -rf functions/build
 	@cd functions && tsc
 	@rsync -avz --delete --exclude 'assets/css' --exclude 'assets/js' public/ dist/
 	@./bin/hasher.sh
