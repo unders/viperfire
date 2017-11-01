@@ -38,7 +38,7 @@ stag-deploy: dist ## deploys app to viperfire-stag
 	@cp support/firebase.dev.json firebase.json
 
 .PHONY: prod-deploy
-prod-deploy: ## deploys app firebase: viperfire-prod
+prod-deploy: dist ## deploys app firebase: viperfire-prod
 	@#firebase use viperfire-prod
 	@cp support/firebase.prod.json firebase.json
 	@./bin/deploy.sh

@@ -15,9 +15,10 @@ function update() {
         fi
     done
 
-    file=dist/index.html
-    sed -i old "s|$old|$new|g" ${file}
-    rm ${file}old
+#    add static html files here if any...
+#    file=dist/index.html
+#    sed -i old "s|$old|$new|g" ${file}
+#    rm ${file}old
 }
 
 function updateFiles() {
