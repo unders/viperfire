@@ -12,7 +12,7 @@ interface Logo {
 }
 
 interface Actions {
-    handleEvent(event: Event): void
+    handleEvent(event: Event): any
 }
 
 interface User {

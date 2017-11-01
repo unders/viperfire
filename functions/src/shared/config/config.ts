@@ -4,6 +4,7 @@ import { About, AboutContext } from "../view/about";
 import { Header } from '../view/header';
 import { ServerActions, ClientActions } from '../actions';
 import { env } from './env'
+import { State } from "../data/state";
 
 export interface Config {
     readonly isOnline: boolean
@@ -14,8 +15,8 @@ export const getServerConfig = function(): Config {
     return getConfig(new ServerActions());
 };
 
-export const getClientConfig = function(): Config {
-    return getConfig(new ClientActions({}));
+export const getClientConfig = function(state: State): Config {
+    return getConfig(new ClientActions({state: state}));
 };
 
 const getConfig = function(actions: any): Config {
