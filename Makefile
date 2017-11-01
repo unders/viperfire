@@ -33,13 +33,17 @@ dist: ## creates a release
 .PHONY: stag-deploy
 stag-deploy: dist ## deploys app to viperfire-stag
 	firebase use viperfire-stag
+	@cp support/firebase.prod.json firebase.json
 	firebase deploy --public dist
+	@cp support/firebase.dev.json firebase.json
 
 .PHONY: prod-deploy
 prod-deploy: ## deploys app firebase: viperfire-prod
 	@#firebase use viperfire-prod
+	@cp support/firebase.prod.json firebase.json
 	@./bin/deploy.sh
 	@#firebase use viperfire-stag
+	@cp support/firebase.dev.json firebase.json
 
 .PHONY: list
 list: ## shows firebase projects

@@ -59,6 +59,7 @@ typings/
 # dotenv environment variables file
 .env
 
+src/shared
 functions/build
 public/assets/js
 public/assets/css
