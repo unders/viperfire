@@ -11,10 +11,11 @@ export interface Config {
 }
 
 export const getConfig = function(env: any): Config {
-    const online = env.LOCAL === "";
+    let online = false;
     let url = "//localhost:8000";
-    if (online) {
-       url = "https://viperfire-stag.firebaseapp.com/";
+    if (!env.LOCAL) {
+        online = true;
+        url = "//viperfire-stag.firebaseapp.com/";
     }
 
     const logo = new Logo({name: "Viperfire", url: url});
