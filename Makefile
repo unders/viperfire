@@ -23,6 +23,7 @@ test: ## runs tests
 .PHONY: dist
 dist: ## creates a release
 	@cp support/config.env.prod.ts functions/src/shared/config/env.ts
+	@rsync -avz --delete functions/src/shared/ src/shared/
 	@rm -rf dist/assets
 	@node_modules/.bin/node-sass --output-style compressed --output ./dist/assets/css ./sass
 	@node_modules/.bin/webpack --config support/webpack.dev.config.js
