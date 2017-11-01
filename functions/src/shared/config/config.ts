@@ -3,7 +3,6 @@ import { ArticleList } from "../view/article_list";
 import { About, AboutContext } from "../view/about";
 import { Header } from '../view/header';
 import { ServerActions } from '../actions';
-import { Logo } from '../data/logo';
 
 export interface Config {
     readonly isOnline: boolean
@@ -18,7 +17,7 @@ export const getConfig = function(env: any): Config {
         url = "//viperfire-stag.firebaseapp.com/";
     }
 
-    const logo = new Logo({name: "Viperfire", url: url});
+    const logo = { name: "Viperfire", url: url };
     const actions = new ServerActions();
 
     const ctx = {
