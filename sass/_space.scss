@@ -1,0 +1,14 @@
+@mixin ph1-to-ph2($breakpoint) {
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @media screen and (min-width: $breakpoint) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@mixin pv1() {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}

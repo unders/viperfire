@@ -1,7 +1,70 @@
+@import "space";
+@import "link";
+@import "palette";
+
+//
+//       CONSTANTS
+//
+$font-size-body: 20px;
+$breakpoint-small: 460px;
+
+//
+//         LAYOUT
+//
+@supports (display: grid) {
+    header {
+        grid-area: hd;
+    }
+    main {
+        grid-area: main;
+    }
+    footer {
+        grid-area: ft;
+    }
+    .app {
+        display: grid;
+        grid-gap: 40px;
+        grid-template-areas: "hd" "main" "ft";
+        grid-template-rows: auto 1fr auto;
+        height: 100vh;
+    }
+}
+
 //
 //         BODY
 //
 body {
-    margin: 55px;
-    background: ghostwhite;
+    margin: 0;
+    background: $body_color;
+    font-size: $font-size-body;
 }
+
+//
+//         HEADER
+//
+header {
+    background: $primary-color;
+    color: $primary-color-text;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    font-size: 40px;
+    color: inherit;
+    @include link($primary-color, $primary-color-dark);
+    @include ph1-to-ph2($breakpoint-small);
+    @include pv1();
+}
+.header-account-link  > a {
+    color: inherit;
+    @include link($primary-color, $primary-color-dark);
+    @include ph1-to-ph2($breakpoint-small);
+    @include pv1();
+}
+
+.header-account-link.hide {
+    display: none;
+}
+

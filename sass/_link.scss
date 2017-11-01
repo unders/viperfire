@@ -1,0 +1,15 @@
+@mixin link($color, $selected-color) {
+  text-decoration: none;
+  &:focus {
+    outline: 0;
+  }
+  &:hover {
+    background: darken($color, 5%);
+  }
+  &.selected {
+    background: $selected-color;
+  }
+  &.selected:hover {
+    background: darken($selected-color, 5%);
+  }
+}

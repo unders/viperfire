@@ -45,14 +45,14 @@ export class Header {
         }
 
         return wire(user)`
+            <a href="${logo.url}" class="header-logo">${logo.name}</a>
             <div class="header-account">
-                <a href="${logo.url}">${logo.name}</a>
-            <div class="${signInKlass}">
-                <a href="#sign-in" onclick="${actions.signIn}">Sign In</a>
-            </div>
-            <div class="${signOutKlass}">
-                Welcome ${user.name} | <a href="#sign-out" onclick="${actions.signOut}">Sign Out</a>
-            </div>
-        </div>`;
+                <div class="${signInKlass}">
+                    <a href="#sign-in" onclick="${actions.signIn}">Sign In</a>
+                </div>
+                <div class="${signOutKlass}">
+                    Welcome ${user.name} | <a href="#sign-out" onclick="${actions.signOut}">Sign Out</a>
+                </div>
+            </div>`;
     }
 }
