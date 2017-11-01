@@ -19,6 +19,13 @@ function update() {
 #    file=dist/index.html
 #    sed -i old "s|$old|$new|g" ${file}
 #    rm ${file}old
+    for file in $(find functions/build/shared);
+    do
+        if [ -f "$file" ];then
+            sed -i old "s|$old|$new|g" ${file}
+            rm ${file}old
+        fi
+    done
 }
 
 function updateFiles() {
