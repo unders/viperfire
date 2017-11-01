@@ -57,7 +57,8 @@ header {
     @include ph1-to-ph2($breakpoint-small);
     @include pv1();
 }
-.header-account-link  > a {
+
+.header-account-link > a {
     color: inherit;
     @include link($primary-color, $primary-color-dark);
     @include ph1-to-ph2($breakpoint-small);

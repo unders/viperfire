@@ -1,23 +1,37 @@
+import { State } from "./data/state";
+
 export class ServerActions {
     signIn(event: any): any  { /* no operation on server */ }
     signOut(event: any): any { /* no operation on server */ }
 }
 
 interface Context {
+    state: State;
 }
 
 export class ClientActions {
-    constructor(ctx: Context) {}
+    state: State;
 
-    signIn(event: Event): any {
-        event.preventDefault();
-        console.log(event.type);
-        console.log(event.currentTarget);
+    constructor(ctx: Context) {
+        this.state = ctx.state;
     }
 
-    signOut(event: Event): any {
+    handleEvent(event: Event): void {
+        const ct = event.currentTarget as Element;
+        if ('getAttribute' in ct) {
+            const action = ct.getAttribute('data-action');
+            this[action + 'On' + event.type](event);
+        }
+    }
+
+    signInOnclick(event: Event): void {
         event.preventDefault();
-        console.log(event.type);
-        console.log(event.currentTarget);
+        this.state.user.signedIn = true;
+        console.log("SignIn Clicked");
+    }
+
+    signOutOnclick(event: Event): void {
+        event.preventDefault();
+        this.state.user.signedIn = false;
     }
 }

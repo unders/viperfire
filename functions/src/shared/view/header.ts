@@ -12,8 +12,7 @@ interface Logo {
 }
 
 interface Actions {
-    signIn(event: any): void
-    signOut(event: any): void
+    handleEvent(event: Event): void
 }
 
 interface User {
@@ -48,10 +47,10 @@ export class Header {
             <a href="${logo.url}" class="header-logo">${logo.name}</a>
             <div class="header-account">
                 <div class="${signInKlass}">
-                    <a href="#sign-in" onclick="${actions.signIn}">Sign In</a>
+                    <a href="#sign-in" onclick="${actions}" data-action="signIn">Sign In</a>
                 </div>
                 <div class="${signOutKlass}">
-                    Welcome ${user.name} | <a href="#sign-out" onclick="${actions.signOut}">Sign Out</a>
+                    Welcome ${user.name} | <a href="#sign-out" onclick="${actions}" data-action="signOut">Sign Out</a>
                 </div>
             </div>`;
     }
