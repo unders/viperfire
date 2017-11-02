@@ -2,9 +2,7 @@ import { App } from "../view/app";
 import { ArticleList } from "../view/article_list";
 import { About, AboutContext } from "../view/about";
 import { Header } from '../view/header';
-import { ServerActions, ClientActions } from '../actions';
 import { env } from './env'
-import { State } from "../data/state";
 
 export interface Config {
     readonly isOnline: boolean
@@ -12,18 +10,18 @@ export interface Config {
 }
 
 export const getServerConfig = function(): Config {
-    return getConfig(new ServerActions());
+    return getConfig();
 };
 
-export const getClientConfig = function(state: State): Config {
-    return getConfig(new ClientActions({state: state}));
+export const getClientConfig = function(): Config {
+    return getConfig();
 };
 
-const getConfig = function(actions: any): Config {
+const getConfig = function(): Config {
     const logo = { name: "Viperfire", url: env.host };
 
     const ctx = {
-        header: new Header({ logo: logo, actions: actions }),
+        header: new Header({ logo: logo }),
         articleList: new ArticleList(),
         about: new About(aboutCtx()),
         footer: "<div>Viperfire footer</div>"
