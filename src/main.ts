@@ -12,15 +12,20 @@ const main = () => {
 
     const root = document.getElementById("app");
     if (root) {
-        const { initialState, errMessage } = getInitialState();
+        const { path, initialState, errMessage } = getInitialState();
         if (initialState === null) {
             logger.error("getInitialState() failed; error= " + errMessage);
             return;
         }
 
         const fireapp = firebase.app();
-        const state = new State(initialState);
-        const page = new Page({ root: root, app: config.app, state: state });
+        const { state, err } = new State().init(path, initialState);
+        if (state === null) {
+            logger.error("Could init app state; error " + err);
+            return;
+        }
+
+        const page = new Page({ root: root, view: config.view, state: state });
         new ActionHandler({state: state, page: page });
         logger.info("init app done");
     } else {

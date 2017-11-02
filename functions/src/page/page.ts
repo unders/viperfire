@@ -1,37 +1,46 @@
 import { wire } from '../dom/dom'
-import { Config } from '../shared/config/config'
-import { App } from "../shared/view/app";
+import { View } from "../shared/view/view";
 import { User } from "../shared/data/user";
+import { State } from "../shared/data/state";
 import { renderMainPageLayout } from "../shared/view/layout";
-import { InitialState } from "../shared/data/state";
 
 class Context {
-    app: App;
+    view: View;
 }
 
-class Page {
+interface Result {
+    body: string;
+    err: string|null;
+}
+
+export class Page {
     private readonly user: User = new User({name: "", signedIn: false});
-    private readonly app: App;
+    private readonly view: View;
 
     constructor(ctx: Context) {
-        this.app = ctx.app;
+        this.view = ctx.view;
     }
 
-    articleList(msg: string): string {
-        const html = this.app.renderArticleList(wire(), this.user, { message: msg });
-        const state = new InitialState({ user: this.user, path: "/" }).toJSON();
-        const ctx = { title: "Index page", html: html, initialState: state, path: "/" };
-        return renderMainPageLayout(wire(), ctx);
+    articleList(path: string, msg: string): Result {
+        const { state, err } = new State().init(path, { user: this.user, articleList: { message: msg }});
+        if (state === null) {
+            return { body: "", err: "Could not init state; error= " + err }
+        }
+        const html = this.view.renderArticleList(wire(), this.user, { message: msg });
+        const jsonState = state.articleListToJSON();
+        const ctx = { title: "Index page", html: html, initialState: jsonState };
+        return { body: renderMainPageLayout(wire(), ctx), err: null };
     }
 
-    about(): string {
-        const html = this.app.renderAbout(wire(), this.user);
-        const state = new InitialState({ user: this.user, path: "/about" }).toJSON();
-        const ctx = { title: "About page", html: html, initialState: state, path: "/about" };
-        return renderMainPageLayout(wire(), ctx);
+    about(path: string): Result {
+        const { state, err } = new State().init(path, { user: this.user });
+        if (state === null) {
+            return { body: "", err: "Could not init state; error= " + err }
+        }
+        const html = this.view.renderAbout(wire(), this.user);
+        const jsonState = state.aboutToJSON();
+        const ctx = { title: "About page", html: html, initialState: jsonState };
+        return { body: renderMainPageLayout(wire(), ctx), err: null };
     }
 }
 
-export const newPage = function(c: Config): Page {
-    return new Page({ app: c.app, });
-};

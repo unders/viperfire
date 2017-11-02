@@ -4,20 +4,20 @@ import { Header } from "./header";
 import { ArticleList, ArticleListContext } from "./article_list";
 import { About } from "./about";
 
-interface AppContext {
+interface Context {
     header: Header;
     footer: string;
     articleList: ArticleList;
     about: About;
 }
 
-export class App {
+export class View {
     private readonly header: Header;
     private readonly articleList: ArticleList;
     private readonly about: About;
     private readonly footer: string;
 
-    constructor(ctx: AppContext) {
+    constructor(ctx: Context) {
         this.header = ctx.header;
         this.footer = ctx.footer;
         this.articleList = ctx.articleList;

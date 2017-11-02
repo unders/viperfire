@@ -1,4 +1,4 @@
-import { App } from "../view/app";
+import { View } from "../view/view";
 import { ArticleList } from "../view/article_list";
 import { About, AboutContext } from "../view/about";
 import { Header } from '../view/header';
@@ -6,7 +6,7 @@ import { env } from './env'
 
 export interface Config {
     readonly isOnline: boolean
-    readonly app: App;
+    readonly view: View;
 }
 
 export const getServerConfig = function(): Config {
@@ -29,7 +29,7 @@ const getConfig = function(): Config {
 
     return {
         isOnline: env.online,
-        app: new App(ctx),
+        view: new View(ctx),
     };
 };
 

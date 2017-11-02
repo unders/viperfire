@@ -2,12 +2,12 @@ import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin';
 import * as express from "express";
 import { getServerConfig } from "./shared/config/config";
-import { newPage } from "./page/page";
+import { Page } from "./page/page";
 
 const firebase = admin.initializeApp(functions.config().firebase);
 const app = express();
 const config = getServerConfig();
-const page = newPage(config);
+const page = new Page({ view: config.view });
 
 // Index shows landing page with articles order_by: rank | newest
 //
@@ -21,7 +21,14 @@ app.get("/", (req, res) => {
     if (config.isOnline) {
         res.set("Cache-Control", "public, max-age=1 s-max-age=1");
     }
-    res.status(200).send(page.articleList("Hello World"));
+
+    const { body, err } = page.articleList("/", "Hello World");
+    if (err) {
+        console.error("index page render failed; " + err);
+        res.status(500).send("500 page");
+        return
+    }
+    res.status(200).send(body);
 });
 
 app.get("/about", (req, res) => {
@@ -29,7 +36,13 @@ app.get("/about", (req, res) => {
     if (config.isOnline) {
         res.set("Cache-Control", "public, max-age=10 s-max-age=100");
     }
-    res.status(200).send(page.about());
+    const { body, err } = page.about("/about");
+    if (err) {
+        console.error("about page render failed; " + err);
+        res.status(500).send("500 page");
+        return
+    }
+    res.status(200).send(body);
 });
 
 app.get("/article/:id", (req, res) => {

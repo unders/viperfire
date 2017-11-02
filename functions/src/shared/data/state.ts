@@ -5,66 +5,90 @@ declare global {
     interface Window { __INITIAL_STATE__: string; }
 }
 
+interface Path {
+    path: string
+}
+
 interface Result {
-    initialState: InitialState|null;
+    path: string;
+    initialState: object|null;
     errMessage: string;
 }
 
 export const getInitialState = function(): Result {
     try {
         const state = JSON.parse(window.__INITIAL_STATE__);
-        return { initialState: state, errMessage: "" };
+        const { path } = state as Path;
+        return { path: path, initialState: state, errMessage: "" };
     } catch(e) {
-        return { initialState: null, errMessage: e.message };
+        return { path: "", initialState: null, errMessage: e.message };
     }
 };
 
-interface Context {
-    readonly user: User;
-    readonly path: string;
-}
-
-export class InitialState {
-    readonly user: User;
-    readonly path: string;
-
-    constructor(ctx: Context) {
-        this.user = ctx.user;
-        this.path = ctx.path;
-    }
-
-    toJSON(): string {
-        return JSON.stringify({ user: this.user, path: this.path });
-    }
-}
-
 interface ArticleList {
+    readonly path: string;
     readonly user: User;
-    readonly ctx: ArticleListContext;
+    readonly articleList: ArticleListContext;
 }
 
 interface About {
+    readonly path: string;
     readonly user: User;
 }
 
-export class State {
-    user: User;
-    path: string;
+interface InitResult {
+    state: State|null;
+    err: string;
+}
 
-    constructor(ctx: InitialState) {
-        this.user = ctx.user;
-        this.path = ctx.path;
+export class State {
+    path: string;
+    user: User;
+    articleList: ArticleListContext;
+
+    init(path: string, o: object): InitResult {
+        try {
+            switch (path) {
+                case "/":
+                    const al = o as ArticleList;
+                    this.path = path;
+                    this.user = al.user;
+                    this.articleList = al.articleList;
+                    break;
+                case "/about":
+                    const about = o as About;
+                    this.path = path;
+                    this.user = about.user;
+                    break;
+                default:
+                    return { state: null, err: `path: ${path} not found` };
+            }
+
+            return { state: this, err: "" }
+        } catch(e) {
+            return { state: null, err: e.message };
+        }
+    }
+
+    articleListToJSON(): string {
+        return JSON.stringify(this.getArticleList());
     }
 
     getArticleList(): ArticleList {
         return {
+            path: this.path,
             user: this.user,
-            ctx: { message: "Hello World" },
+            articleList: this.articleList
         }
+    }
+
+    aboutToJSON(): string {
+        return JSON.stringify(this.getAbout());
     }
 
     getAbout(): About {
         return {
+            path: this.path,
             user: this.user,
         }
     }
