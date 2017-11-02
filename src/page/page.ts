@@ -1,29 +1,34 @@
-import { wire } from '../dom/dom'
-import { Config } from '../shared/config/config'
+import { bind } from '../dom/dom'
 import { App } from "../shared/view/app";
-import { User } from "../shared/data/user";
+import { State } from "../shared/data/state";
 
 class Context {
+    root: Element;
+    state: State;
     app: App;
 }
 
-class Page {
+export class Page {
+    private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
     private readonly app: App;
+    private readonly state: State;
 
     constructor(ctx: Context) {
+        this.html = bind(ctx.root);
         this.app = ctx.app;
+        this.state = ctx.state;
     }
 
-    articleList(user: User, msg: string): string {
-        const ctx = {user: user, message: msg};
-        return this.app.renderArticleList(wire(ctx), user, { message: msg });
-    }
+    render() {
+        if (this.state.path == "/") {
+            const { user, ctx } = this.state.getArticleList();
+            this.app.renderArticleList(this.html, user, ctx);
+        }
 
-    about(user: User): string {
-        return this.app.renderAbout(wire(user), user);
+        if (this.state.path == "/about") {
+            const { user } = this.state.getAbout();
+            this.app.renderAbout(this.html, user);
+        }
     }
 }
 
-export const newPage = function(c: Config): Page {
-    return new Page({ app: c.app, });
-};

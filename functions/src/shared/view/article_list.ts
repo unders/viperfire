@@ -5,8 +5,14 @@ export interface ArticleListContext {
 }
 
 export class ArticleList {
+    private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
+
+    constructor() {
+        this.html = wire(this);
+    }
+
     render(ctx: ArticleListContext): string {
-        return wire(ctx)`
+        return this.html`
             <p>${ctx.message}</p>
         `;
     }

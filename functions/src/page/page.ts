@@ -3,6 +3,7 @@ import { Config } from '../shared/config/config'
 import { App } from "../shared/view/app";
 import { User } from "../shared/data/user";
 import { renderMainPageLayout } from "../shared/view/layout";
+import { InitialState } from "../shared/data/state";
 
 class Context {
     app: App;
@@ -17,13 +18,17 @@ class Page {
     }
 
     articleList(msg: string): string {
-        const app = this.app.renderArticleList(wire(), this.user, { message: msg });
-        return renderMainPageLayout(wire(), { title: "Index page", app: app })
+        const html = this.app.renderArticleList(wire(), this.user, { message: msg });
+        const state = new InitialState({ user: this.user, path: "/" }).toJSON();
+        const ctx = { title: "Index page", html: html, initialState: state, path: "/" };
+        return renderMainPageLayout(wire(), ctx);
     }
 
     about(): string {
-        const app = this.app.renderAbout(wire(), this.user);
-        return renderMainPageLayout(wire(), { title: "About page", app: app })
+        const html = this.app.renderAbout(wire(), this.user);
+        const state = new InitialState({ user: this.user, path: "/about" }).toJSON();
+        const ctx = { title: "About page", html: html, initialState: state, path: "/about" };
+        return renderMainPageLayout(wire(), ctx);
     }
 }
 

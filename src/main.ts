@@ -1,45 +1,31 @@
 import * as firebase from "firebase";
-import { bind } from './dom/dom'
 import { getClientConfig } from './shared/config/config'
-import { User } from "./shared/data/user";
-import { State } from "./shared/data/state";
+import { State, getInitialState } from "./shared/data/state";
 import { ActionHandler } from "./actions";
-import { newPage } from './page/page'
+import { Page } from './page/page'
+import { log } from './log/log'
 
-const main = async () => {
-    const resp = await fetch('/__/firebase/init.json');
-    const json = await resp.json();
-    const fireapp = firebase.initializeApp(json);
-
+const main = () => {
     const config = getClientConfig();
-    const user = new User({name: "", signedIn: false});
-    const state = new State({user: user});
-    new ActionHandler({state: state});
-    const page = newPage(config);
+    const logger = log(config.isOnline);
+    logger.info("init app start");
 
-    const dbRef = fireapp.database().ref().child('text');
-    dbRef.on('value', (snap) => {
-        if (snap) {
-            console.log(snap.val());
+    const root = document.getElementById("app");
+    if (root) {
+        const { initialState, errMessage } = getInitialState();
+        if (initialState === null) {
+            logger.error("getInitialState() failed; error= " + errMessage);
+            return;
         }
-    });
 
-    const app = document.getElementById("app");
-    if (app) {
-        const content = page.articleList(user, "Hello World from Client" );
-        const pager = bind(app);
-        pager`${content}`;
-
-        const update = () => {
-            console.log("update new page");
-            const content = page.about(user);
-            pager`${content}`;
-            console.log("updated new page");
-        };
-        setTimeout(update, 2000);
-        console.log("it works 6");
+        const fireapp = firebase.app();
+        const state = new State(initialState);
+        const page = new Page({ root: root, app: config.app, state: state });
+        new ActionHandler({state: state, page: page });
+        logger.info("init app done");
+    } else {
+        logger.error("Could not find id: #app");
     }
-
 };
 
 main();

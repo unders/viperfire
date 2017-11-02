@@ -2,7 +2,8 @@ import { wireRender } from "../../dom/dom";
 
 interface MainContext {
     title: string
-    app: string
+    html: string
+    initialState: string
 }
 
 export const renderMainPageLayout = function(render: wireRender, ctx: MainContext): string {
@@ -19,6 +20,7 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     <script defer src="/__/firebase/4.6.0/firebase-app.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-auth.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-database.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
     <!--
         <script src="/__/firebase/4.6.0/firebase-storage.js"></script>
         <script src="/__/firebase/4.6.0/firebase-messaging.js"></script>
@@ -26,9 +28,11 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     -->
 </head>
 <body>
-    <div id="app" class="app">${[ctx.app]}</div>
+    <div id="app" class="app">${[ctx.html]}</div>
+    <script>
+        window.__INITIAL_STATE__ ='${[ctx.initialState]}';
+    </script>
     <script defer src="/assets/js/bundle.js"></script>
 </body>
-</html>
-`;
+</html>`;
 };

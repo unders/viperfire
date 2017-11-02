@@ -15,16 +15,17 @@ export class About {
     private readonly hyperLink: link;
     private readonly viperLink: link;
     private readonly links: link[];
-    private readonly about: object = {};
+    private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
 
     constructor(ctx: AboutContext) {
         this.hyperLink = ctx.hyperLink;
         this.viperLink = ctx.viperLink;
         this.links = ctx.links;
+        this.html = wire(this);
     }
 
     render(): string {
-        return wire(this.about)`
+        return this.html`
             <h1>About Viperfire</h1>
             <p>A starter application hosted on Firebase and using 
                 <a href="${this.hyperLink.url}">${this.hyperLink.name}</a> 

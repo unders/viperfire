@@ -17,9 +17,11 @@ interface User {
 
 export class Header {
     private readonly logo: Logo;
+    private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
 
     constructor(ctx: Context) {
         this.logo = ctx.logo;
+        this.html = wire(this);
     }
 
     render(user: User): string {
@@ -35,14 +37,14 @@ export class Header {
             signOutKlass = `header-account-link ${css.hide}`;
         }
 
-        return wire(user)`
+        return this.html`
             <a href="${logo.url}" class="header-logo">${logo.name}</a>
             <div class="header-account">
                 <div class="${signInKlass}">
                     <a href="#sign-in" data-action="showSignInForm">Sign In</a>
                 </div>
                 <div class="${signOutKlass}">
-                    Welcome ${user.name} | <a href="#sign-out" data-action="signOut">Sign Out</a>
+                    <a href="#sign-out" data-action="signOut">Sign Out</a>
                 </div>
             </div>`;
     }
