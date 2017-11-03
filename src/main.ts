@@ -4,6 +4,7 @@ import { getInitialState } from "./shared/data/state";
 import { ActionHandler } from "./actions";
 import { Page } from './page/page'
 import { log } from './log/log'
+import { Firebase } from './firebase/firebase'
 
 const main = () => {
     const config = getClientConfig();
@@ -18,9 +19,9 @@ const main = () => {
             return;
         }
 
-        const fireapp = firebase.app();
+        const fireapp =  new Firebase(firebase.app());
         const page = new Page({ root: root, view: config.view, state: state });
-        new ActionHandler({state: state, page: page });
+        new ActionHandler({ state: state, page: page, firebase: fireapp, logger: logger });
         logger.info("init app done");
     } else {
         logger.error("Could not find id: #app");
