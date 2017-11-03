@@ -21,6 +21,9 @@
 ### Firebase
 * [Config](https://firebase.google.com/docs/hosting/full-config)
 
+### Firebase Web
+* [quickstart js](https://github.com/firebase/quickstart-js)
+
 ### Firebase Functions
 * [write-firebase-functions](https://firebase.google.com/docs/functions/write-firebase-functions)
 * [http events](https://firebase.google.com/docs/functions/http-events)
