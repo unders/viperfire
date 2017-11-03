@@ -33,12 +33,16 @@ export class ActionHandler {
     }
 
     handleEvent(event: Event): any {
-        const ct = event.target as Element;
-        if ('getAttribute' in ct) {
-            const action = ct.getAttribute(name);
-            if (action) {
-                this[action + 'On' + event.type](event);
+        try {
+            const ct = event.target as Element;
+            if ('getAttribute' in ct) {
+                const action = ct.getAttribute(name);
+                if (action) {
+                    this[action + 'On' + event.type](event);
+                }
             }
+        } catch(e) {
+            this.logger.error(e);
         }
     }
 
@@ -58,7 +62,7 @@ export class ActionHandler {
         }
     }
 
-    async showSignInFormOnclick(event: Event)  {
+    async signInWithGoogleOnclick(event: Event)  {
         event.preventDefault();
 
         const { user, err } = await this.auth.signInWithPopup();

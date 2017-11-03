@@ -41,7 +41,7 @@ export class Header {
             <a href="${logo.url}" class="header-logo">${logo.name}</a>
             <div class="header-account">
                 <div class="${signInKlass}">
-                    <a href="#sign-in" data-action="showSignInForm">Sign In</a>
+                    <a href="#sign-in" data-action="signInWithGoogle">Sign In with Google</a>
                 </div>
                 <div class="${signOutKlass}">
                     <a href="#sign-out" data-action="signOut">Sign Out</a>
