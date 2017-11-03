@@ -3,6 +3,8 @@ import * as admin from 'firebase-admin';
 import * as express from "express";
 import { getServerConfig } from "./shared/config/config";
 import { Page } from "./page/page";
+import { ArticleListState, AboutState } from "./shared/data/state";
+import { User } from "./shared/data/user";
 
 const firebase = admin.initializeApp(functions.config().firebase);
 const app = express();
@@ -22,12 +24,11 @@ app.get("/", (req, res) => {
         res.set("Cache-Control", "public, max-age=1, s-max-age=1");
     }
 
-    const { body, err } = page.articleList("/", "Hello World");
-    if (err) {
-        console.error("index page render failed; " + err);
-        res.status(500).send("500 page");
-        return
-    }
+    const user = new User({ name: "", signedIn: false });
+    const articleList = { message: "Hello World"};
+    const state = new ArticleListState({ path: "/", user: user, articleList: articleList });
+    const body = page.articleList(state);
+
     res.status(200).send(body);
 });
 
@@ -36,12 +37,11 @@ app.get("/about", (req, res) => {
     if (config.isOnline) {
         res.set("Cache-Control", "public, max-age=10, s-max-age=100");
     }
-    const { body, err } = page.about("/about");
-    if (err) {
-        console.error("about page render failed; " + err);
-        res.status(500).send("500 page");
-        return
-    }
+
+    const user = new User({ name: "", signedIn: false });
+    const state = new AboutState("/about", user);
+    const body = page.about(state);
+
     res.status(200).send(body);
 });
 

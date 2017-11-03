@@ -1,17 +1,17 @@
 import { bind } from '../dom/dom'
 import { View } from "../shared/view/view";
-import { State } from "../shared/data/state";
+import { ArticleListState, AboutState, IState} from "../shared/data/state";
 
 class Context {
     root: Element;
-    state: State;
+    state: IState;
     view: View;
 }
 
 export class Page {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
     private readonly view: View;
-    private readonly state: State;
+    private readonly state: IState;
 
     constructor(ctx: Context) {
         this.html = bind(ctx.root);
@@ -21,13 +21,13 @@ export class Page {
 
     render() {
         if (this.state.path == "/") {
-            const { path, user, articleList } = this.state.getArticleList();
-            this.view.renderArticleList(this.html, user, articleList);
+            const state = this.state as ArticleListState;
+            this.view.renderArticleList(this.html, state);
         }
 
         if (this.state.path == "/about") {
-            const { user } = this.state.getAbout();
-            this.view.renderAbout(this.html, user);
+            const state = this.state as AboutState;
+            this.view.renderAbout(this.html, state);
         }
     }
 }

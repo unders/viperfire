@@ -1,6 +1,6 @@
 import * as firebase from "firebase";
 import { getClientConfig } from './shared/config/config'
-import { State, getInitialState } from "./shared/data/state";
+import { getInitialState } from "./shared/data/state";
 import { ActionHandler } from "./actions";
 import { Page } from './page/page'
 import { log } from './log/log'
@@ -12,19 +12,13 @@ const main = () => {
 
     const root = document.getElementById("app");
     if (root) {
-        const { path, initialState, errMessage } = getInitialState();
-        if (initialState === null) {
+        const { state, errMessage } = getInitialState();
+        if (state === null) {
             logger.error("getInitialState() failed; error= " + errMessage);
             return;
         }
 
         const fireapp = firebase.app();
-        const { state, err } = new State().init(path, initialState);
-        if (state === null) {
-            logger.error("Could init app state; error " + err);
-            return;
-        }
-
         const page = new Page({ root: root, view: config.view, state: state });
         new ActionHandler({state: state, page: page });
         logger.info("init app done");

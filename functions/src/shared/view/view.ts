@@ -1,5 +1,6 @@
 import { wireRender } from "../../dom/dom";
 import { User } from "../data/user";
+import { AboutState, ArticleListState } from "../data/state";
 import { Header } from "./header";
 import { ArticleList, ArticleListContext } from "./article_list";
 import { About } from "./about";
@@ -24,12 +25,12 @@ export class View {
         this.about = ctx.about;
     }
 
-    renderArticleList(html: wireRender, user: User, ctx: ArticleListContext): string {
-        return this.render(html, user, this.articleList.render(ctx));
+    renderArticleList(html: wireRender, state: ArticleListState): string {
+        return this.render(html, state.user, this.articleList.render(state.articleList));
     }
 
-    renderAbout(html: wireRender, user: User): string {
-        return this.render(html, user, this.about.render())
+    renderAbout(html: wireRender, state: AboutState): string {
+        return this.render(html, state.user, this.about.render())
     }
 
     private render(html: wireRender, user: User, main: string): string {

@@ -5,23 +5,27 @@ declare global {
     interface Window { __INITIAL_STATE__: string; }
 }
 
-interface Path {
-    path: string
+export interface IState {
+    isState: boolean
+    path: string;
+    user: User;
+    toJSON(): string
 }
 
 interface Result {
-    path: string;
-    initialState: object|null;
+    state: IState|null;
     errMessage: string;
 }
 
+
 export const getInitialState = function(): Result {
     try {
-        const state = JSON.parse(window.__INITIAL_STATE__);
-        const { path } = state as Path;
-        return { path: path, initialState: state, errMessage: "" };
+        const o = JSON.parse(window.__INITIAL_STATE__);
+        const state = o as IState;
+        state.isState;
+        return { state: state, errMessage: "" };
     } catch(e) {
-        return { path: "", initialState: null, errMessage: e.message };
+        return { state: null, errMessage: e.message };
     }
 };
 
@@ -31,66 +35,47 @@ interface ArticleList {
     readonly articleList: ArticleListContext;
 }
 
-interface About {
-    readonly path: string;
-    readonly user: User;
-}
-
-interface InitResult {
-    state: State|null;
-    err: string;
-}
 
 export class State {
+    isState: boolean = true;
     path: string;
     user: User;
+
+    constructor(path: string, user: User) {
+        this.path = path;
+        this.user = user;
+    }
+}
+
+export class ArticleListState extends State {
     articleList: ArticleListContext;
 
-    init(path: string, o: object): InitResult {
-        try {
-            switch (path) {
-                case "/":
-                    const al = o as ArticleList;
-                    this.path = path;
-                    this.user = al.user;
-                    this.articleList = al.articleList;
-                    break;
-                case "/about":
-                    const about = o as About;
-                    this.path = path;
-                    this.user = about.user;
-                    break;
-                default:
-                    return { state: null, err: `path: ${path} not found` };
-            }
-
-            return { state: this, err: "" }
-        } catch(e) {
-            return { state: null, err: e.message };
-        }
+    constructor(ctx: ArticleList) {
+        super(ctx.path, ctx.user);
+        this.articleList = ctx.articleList;
     }
 
-    articleListToJSON(): string {
-        return JSON.stringify(this.getArticleList());
-    }
-
-    getArticleList(): ArticleList {
-        return {
+    toJSON(): string {
+        return JSON.stringify({
+            isState: true,
             path: this.path,
             user: this.user,
-            articleList: this.articleList
-        }
+            articleList: this.articleList,
+        });
+    }
+}
+
+export class AboutState extends State {
+    constructor(path: string, user: User) {
+        super(path, user);
     }
 
-    aboutToJSON(): string {
-        return JSON.stringify(this.getAbout());
-    }
-
-    getAbout(): About {
-        return {
+    toJSON(): string {
+        return JSON.stringify({
+            isState: true,
             path: this.path,
             user: this.user,
-        }
+        });
     }
 }
 
