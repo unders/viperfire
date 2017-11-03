@@ -22,7 +22,6 @@ export const getInitialState = function(): Result {
     try {
         const o = JSON.parse(window.__INITIAL_STATE__);
         const state = o as IState;
-        state.isState;
         return { state: state, errMessage: "" };
     } catch(e) {
         return { state: null, errMessage: e.message };
@@ -55,13 +54,19 @@ export class ArticleListState extends State {
         this.articleList = ctx.articleList;
     }
 
-    toJSON(): string {
+    static toJSON(o: object): string {
+        const s = o as ArticleListState;
         return JSON.stringify({
             isState: true,
-            path: this.path,
-            user: this.user,
-            articleList: this.articleList,
+            path: s.path,
+            user: s.user,
+            articleList: s.articleList,
         });
+    }
+
+    // Only works on the server
+    toJSON(): string {
+        return ArticleListState.toJSON(this);
     }
 }
 
@@ -70,12 +75,18 @@ export class AboutState extends State {
         super(path, user);
     }
 
-    toJSON(): string {
+    static toJSON(o: object): string {
+        const s = o as AboutState;
         return JSON.stringify({
             isState: true,
-            path: this.path,
-            user: this.user,
+            path: s.path,
+            user: s.user,
         });
+    }
+
+    // Only works on server
+    toJSON(): string {
+        return AboutState.toJSON(this);
     }
 }
 
