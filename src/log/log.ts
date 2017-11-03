@@ -1,4 +1,4 @@
-interface Logger {
+export interface Logger {
     info(data: any): void
     error(data: any): void
 }
