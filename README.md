@@ -2,6 +2,8 @@
 
 ### TODO
 - [ X ] Setup ViperHTML for server rendering
+- [ X ] Sign In With Google Provider
+- [ ] Create user profile and profile page profile/:id
 - [ ] Setup Service worker with Workbox
 - [ ] Setup HTTP push
 - [ ] Buy domain
