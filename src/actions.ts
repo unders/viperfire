@@ -68,7 +68,7 @@ export class ActionHandler {
         const { user, err } = await this.auth.signInWithPopup();
         if (user === null) {
             this.logger.error(err);
-            // TODO: post an error notice:
+            // TODO: post an error notice: SnackBar
         }
     }
 
