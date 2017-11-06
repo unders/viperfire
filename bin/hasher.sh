@@ -10,20 +10,16 @@ function update() {
     for file in $(find dist/assets);
     do
         if [ -f "$file" ];then
-            sed -i old "s|$old|$new|g" ${file}
-            rm ${file}old
+            sed -i oldx "s|$old|$new|g" ${file}
+            rm ${file}oldx
         fi
     done
 
-#    add static html files here if any...
-#    file=dist/index.html
-#    sed -i old "s|$old|$new|g" ${file}
-#    rm ${file}old
     for file in $(find functions/build/shared);
     do
         if [ -f "$file" ];then
-            sed -i old "s|$old|$new|g" ${file}
-            rm ${file}old
+            sed -i oldx "s|$old|$new|g" ${file}
+            rm ${file}oldx
         fi
     done
 }
