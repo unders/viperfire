@@ -27,8 +27,12 @@
 * [quickstart js](https://github.com/firebase/quickstart-js)
 
 ### Firebase Functions
+* [Extend Cloud Firestore with Cloud Functions](https://firebase.google.com/docs/firestore/extend-with-functions)
 * [write-firebase-functions](https://firebase.google.com/docs/functions/write-firebase-functions)
 * [http events](https://firebase.google.com/docs/functions/http-events)
+* [Code: functions samples](https://github.com/firebase/functions-samples)
+* [Writing an Authentication Trigger with Cloud Functions for Firebase ](https://www.youtube.com/watch?v=pADTJA3BoxE)
+* [Code: Auth triggers](https://github.com/firebase/functions-samples/blob/master/quickstarts/email-users/functions/index.js)
 
 ### Firebase hosting
 * [Video: Building Fast Web Experiences with Firebase Hosting](https://www.youtube.com/watch?v=R3v8EcYzf_M)

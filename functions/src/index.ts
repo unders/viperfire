@@ -6,7 +6,9 @@ import { Page } from "./page/page";
 import { ArticleListState, AboutState } from "./shared/data/state";
 import { User } from "./shared/data/user";
 
-const firebase = admin.initializeApp(functions.config().firebase);
+admin.initializeApp(functions.config().firebase);
+const db = admin.firestore();
+
 const app = express();
 const config = getServerConfig();
 const page = new Page({ view: config.view });
@@ -52,9 +54,33 @@ app.get("/article/:id", (req, res) => {
     res.status(200).send(`article/${req.params.id}\n`);
 });
 
-app.get("/profile/:id", (req, res) => {
+app.get("/profile/:uid", async (req, res) => {
+    const uid = req.params.uid;
+    try {
+        const doc = await db.doc(`profiles/${uid}`).get();
+        if (!doc.exists) {
+            res.status(404).send("404 page not found");
+        } else {
+            const user = doc.data();
+            res.status(200).send(`User: ${user.name}`);
+        }
+    } catch {
+        res.status(500).send("500 internal error");
+    }
 
 });
 
-export let appV1 = functions.https.onRequest(app);
-
+export const appV1 = functions.https.onRequest(app);
+export const createUserProfile = functions.auth.user().onCreate( async (event) => {
+    const user = event.data;
+    const data = {
+        // photoUrl: user.photoURL || default image;
+        name: user.displayName,
+        email: user.email,
+    };
+    try {
+        await db.collection('profiles').doc(`${user.uid}`).set(data);
+    } catch (e) {
+        console.error(`CreateUserFailed uid=${user.uid} email=${user.email} name=${user.email}`);
+    }
+});

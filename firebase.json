@@ -9,7 +9,8 @@
     "rewrites": [
       { "source": "/", "function": "appV1" },
       { "source": "/about", "function": "appV1"},
-      { "source": "/article/*", "function": "appV1"}
+      { "source": "/article/*", "function": "appV1"},
+      { "source": "/profile/*", "function": "appV1"}
     ]
   }
 }

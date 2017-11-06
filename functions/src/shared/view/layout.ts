@@ -19,12 +19,11 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     <link rel="stylesheet" href="/assets/css/main.css">
     <script defer src="/__/firebase/4.6.0/firebase-app.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.6.0/firebase-database.js"></script>
+    <script defer src="/__/firebase/4.6.0/firebase-firestore.js"></script>
     <script defer src="/__/firebase/init.js"></script>
     <!--
-        <script src="/__/firebase/4.6.0/firebase-storage.js"></script>
-        <script src="/__/firebase/4.6.0/firebase-messaging.js"></script>
-        <script src="/__/firebase/4.6.0/firebase-firestore.js"></script>
+        <script defer src="/__/firebase/4.6.0/firebase-messaging.js"></script>
+        <script defer src="/__/firebase/4.6.0/firebase-storage.js"></script>
     -->
 </head>
 <body>
