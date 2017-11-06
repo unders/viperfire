@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 import * as express from "express";
 import { getServerConfig } from "./shared/config/config";
 import { Page } from "./page/page";
-import { ArticleListState, AboutState } from "./shared/data/state";
+import { ArticleListState, AboutState, ProfileState } from "./shared/data/state";
 import { User } from "./shared/data/user";
 
 admin.initializeApp(functions.config().firebase);
@@ -55,14 +55,19 @@ app.get("/article/:id", (req, res) => {
 });
 
 app.get("/profile/:uid", async (req, res) => {
+    res.set("Content-Type", "text/html; charset=utf-8");
+
     const uid = req.params.uid;
     try {
         const doc = await db.doc(`profiles/${uid}`).get();
         if (!doc.exists) {
             res.status(404).send("404 page not found");
         } else {
-            const user = doc.data();
-            res.status(200).send(`User: ${user.name}`);
+            const data = doc.data();
+            const user = new User({ name: "", signedIn: false });
+            const ctx =  { path: "/profile/:uid", user: user, ctx: { name: data.name } };
+            const body = page.profile(new ProfileState( ctx));
+            res.status(200).send(body);
         }
     } catch {
         res.status(500).send("500 internal error");

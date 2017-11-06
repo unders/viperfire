@@ -1,5 +1,6 @@
 import { User } from "./user";
 import { ArticleListContext } from "../view/article_list";
+import { ProfileContext } from "../view/profile";
 
 declare global {
     interface Window { __INITIAL_STATE__: string; }
@@ -67,6 +68,36 @@ export class ArticleListState extends State {
     // Only works on the server
     toJSON(): string {
         return ArticleListState.toJSON(this);
+    }
+}
+
+interface Profile {
+    readonly path: string;
+    readonly user: User;
+    readonly ctx: ProfileContext;
+}
+
+export class ProfileState extends State {
+    ctx: ProfileContext;
+
+    constructor(ctx: Profile) {
+        super(ctx.path, ctx.user);
+        this.ctx = ctx.ctx;
+    }
+
+    static toJSON(o: object): string {
+        const s = o as ProfileState;
+        return JSON.stringify({
+            isState: true,
+            path: s.path,
+            user: s.user,
+            ctx: s.ctx
+        });
+    }
+
+    // Only works on server
+    toJSON(): string {
+        return ProfileState.toJSON(this);
     }
 }
 

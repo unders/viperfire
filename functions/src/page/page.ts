@@ -1,6 +1,6 @@
 import { wire } from '../dom/dom'
 import { View } from "../shared/view/view";
-import { AboutState, ArticleListState } from "../shared/data/state";
+import { AboutState, ArticleListState, ProfileState } from "../shared/data/state";
 import { renderMainPageLayout } from "../shared/view/layout";
 
 class Context {
@@ -16,6 +16,12 @@ export class Page {
 
     articleList(state: ArticleListState): string {
         const html = this.view.renderArticleList(wire(), state);
+        const ctx = { title: "Index page", html: html, initialState: state.toJSON() };
+        return renderMainPageLayout(wire(), ctx);
+    }
+
+    profile(state: ProfileState): string {
+        const html = this.view.renderProfile(wire(), state);
         const ctx = { title: "Index page", html: html, initialState: state.toJSON() };
         return renderMainPageLayout(wire(), ctx);
     }
