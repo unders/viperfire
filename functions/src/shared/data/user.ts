@@ -4,7 +4,7 @@ interface Context {
 }
 
 export class User {
-    readonly name: string;
+    name: string;
     signedIn: boolean;
 
     constructor(ctx: Context) {

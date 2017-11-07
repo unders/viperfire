@@ -20,8 +20,17 @@ const main = () => {
         }
 
         const fireapp =  new Firebase(firebase.app());
+        const { user, err } = fireapp.userCache();
+        if (user === null) {
+            logger.info("could not get user from local cache; message= " + err);
+        } else {
+            state.user.name = user.name;
+            state.user.signedIn = user.signedIn;
+        }
         const page = new Page({ root: root, view: config.view, state: state });
         new ActionHandler({ state: state, page: page, firebase: fireapp, logger: logger });
+
+        page.render();
         logger.info("init app done");
     } else {
         logger.error("Could not find id: #app");

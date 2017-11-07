@@ -3,8 +3,15 @@ import * as firebase from "firebase";
 const authOperationNotAllowed = "auth/operation-not-allowed";
 
 interface AuthResult {
-    user: firebase.UserInfo|null;
+    user: User|null;
     err: string
+}
+
+// see: firebase.UserInfo
+interface User {
+    signedIn: boolean
+    name: string
+    email: string;
 }
 
 export interface Auth {
@@ -21,6 +28,42 @@ export class Firebase {
 
     authGoogle(event: OnAuthStateChanged): Auth {
         return new AuthGoogle(this.firebase, event);
+    }
+
+    userCache(): AuthResult {
+        return new UserCache(this.firebase.options as Config).get();
+    }
+}
+
+
+interface Config {
+    apiKey: string;
+}
+
+class UserCache {
+    readonly key: string;
+
+    constructor(c: Config) {
+        this.key = `firebase:authUser:${c.apiKey}:[DEFAULT]`;
+    }
+
+    get(): AuthResult {
+        const text = localStorage.getItem(this.key);
+        if (!text) {
+            return { user: null, err: `no user exists in local storage; apiKey=${this.key}` };
+        }
+        try {
+            const u = JSON.parse(text) as firebase.UserInfo;
+            const user = {
+                signedIn: true,
+                name:     u.displayName || "",
+                email:    u.email || ""
+            };
+
+            return { user: user, err: "" };
+        } catch {
+            return { user: null, err: `local storage JSON.parse(text) error of text: ${text}` };
+        }
     }
 }
 
@@ -43,7 +86,13 @@ class AuthGoogle {
         const provider = new firebase.auth.GoogleAuthProvider();
         try {
             const result = await this.firebase.auth().signInWithPopup(provider);
-            const user = result.user as firebase.UserInfo;
+            const u = result.user as firebase.UserInfo;
+            const user = {
+                signedIn: true,
+                name:     u.displayName || "",
+                email:    u.email || ""
+            };
+
             return { user: user, err: "" };
         } catch (e) {
             const err = e as firebase.auth.Error;
