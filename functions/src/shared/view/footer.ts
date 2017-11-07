@@ -20,12 +20,12 @@ export class Footer {
 
     render(ctx: FooterContext): string {
         return this.html`
-            <ul>
+            <ul class="footer-list">
                 ${this.links.map( (link, index) => wire(link)`
-                    <li><a href="${link.url}">${link.name}</a></li>`)}
+                    <li class="footer-list-item"><a href="${link.url}">${link.name}</a></li>`)}
                 
                 ${ctx.links.map( (link, index) => wire(link)`
-                    <li><a href="${link.url}">${link.name}</a></li>`)}
+                    <li class="footer-list-item"><a href="${link.url}">${link.name}</a></li>`)}
             </ul>`;
     }
 }

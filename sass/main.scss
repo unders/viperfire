@@ -69,3 +69,26 @@ header {
     display: none;
 }
 
+//
+//         FOOTER
+//
+footer {
+    background: lighten($primary-color-light, 10%);
+    color: $secondary-text-color;
+}
+
+.footer-list {
+    list-style-type: none;
+    min-height: 50px;
+    padding-left: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.footer-list-item > a {
+    color: inherit;
+    @include pv1();
+    @include ph1-to-ph2($breakpoint-small);
+    @include link(lighten($primary-color-light, 13%), $primary-color);
+}
