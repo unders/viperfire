@@ -48,6 +48,10 @@ class UserCache {
     }
 
     get(): AuthResult {
+        if(!window.localStorage) {
+            return { user: null, err: `no local storage in this browser` };
+        }
+
         const text = localStorage.getItem(this.key);
         if (!text) {
             return { user: null, err: `no user exists in local storage; apiKey=${this.key}` };
