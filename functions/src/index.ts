@@ -26,9 +26,8 @@ app.get("/", (req, res) => {
         res.set("Cache-Control", "public, max-age=1, s-max-age=1");
     }
 
-    const user = new User({ name: "", signedIn: false });
     const articleList = { message: "Hello World"};
-    const state = new ArticleListState({ path: "/", user: user, articleList: articleList });
+    const state = new ArticleListState({ path: "/", user: User.signedOut(), articleList: articleList });
     const body = page.articleList(state);
 
     res.status(200).send(body);
@@ -40,8 +39,7 @@ app.get("/about", (req, res) => {
         res.set("Cache-Control", "public, max-age=10, s-max-age=100");
     }
 
-    const user = new User({ name: "", signedIn: false });
-    const state = new AboutState("/about", user);
+    const state = new AboutState("/about", User.signedOut());
     const body = page.about(state);
 
     res.status(200).send(body);
@@ -64,8 +62,7 @@ app.get("/profile/:uid", async (req, res) => {
             res.status(404).send("404 page not found");
         } else {
             const data = doc.data();
-            const user = new User({ name: "", signedIn: false });
-            const ctx =  { path: "/profile/:uid", user: user, ctx: { name: data.name } };
+            const ctx =  { path: "/profile/:uid", user: User.signedOut(), ctx: { name: data.name } };
             const body = page.profile(new ProfileState( ctx));
             res.status(200).send(body);
         }
@@ -80,6 +77,7 @@ export const createUserProfile = functions.auth.user().onCreate( async (event) =
     const user = event.data;
     const data = {
         // photoUrl: user.photoURL || default image;
+        // uid: user.uid,
         name: user.displayName,
         email: user.email,
     };

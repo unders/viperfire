@@ -5,10 +5,11 @@ import { Header } from "./header";
 import { ArticleList } from "./article_list";
 import { About } from "./about";
 import { Profile } from "./profile";
+import { Footer } from "./footer";
 
 interface Context {
     header: Header;
-    footer: string;
+    footer: Footer;
     articleList: ArticleList;
     about: About;
 }
@@ -18,7 +19,7 @@ export class View {
     private readonly articleList: ArticleList;
     private readonly about: About;
     private readonly profile: Profile = new Profile();
-    private readonly footer: string;
+    private readonly footer: Footer;
 
     constructor(ctx: Context) {
         this.header = ctx.header;
@@ -40,10 +41,15 @@ export class View {
     }
 
     private render(html: wireRender, user: User, main: string): string {
+        let links = [];
+        if (user.signedIn) {
+            links[0]= { name: "My Profile", url:  `/profile/${user.uid}` };
+        }
+
         return html`
             <header>${[this.header.render(user)]}</header>
             <main>${[main]}</main>
-            <footer>${[this.footer]}</footer>
+            <footer>${[this.footer.render({ links: links })]}</footer>
         `;
     }
 }

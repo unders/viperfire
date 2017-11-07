@@ -5,6 +5,7 @@ import { ActionHandler } from "./actions";
 import { Page } from './page/page'
 import { log } from './log/log'
 import { Firebase } from './firebase/firebase'
+import { User } from "./shared/data/user";
 
 const main = () => {
     const config = getClientConfig();
@@ -24,8 +25,7 @@ const main = () => {
         if (user === null) {
             logger.info("could not get user from local cache; message= " + err);
         } else {
-            state.user.name = user.name;
-            state.user.signedIn = user.signedIn;
+            state.user = new User(user);
         }
         const page = new Page({ root: root, view: config.view, state: state });
         new ActionHandler({ state: state, page: page, firebase: fireapp, logger: logger });

@@ -1,17 +1,11 @@
 import * as firebase from "firebase";
+import { User } from "../shared/data/user";
 
 const authOperationNotAllowed = "auth/operation-not-allowed";
 
 interface AuthResult {
     user: User|null;
     err: string
-}
-
-// see: firebase.UserInfo
-interface User {
-    signedIn: boolean
-    name: string
-    email: string;
 }
 
 export interface Auth {
@@ -58,13 +52,7 @@ class UserCache {
         }
         try {
             const u = JSON.parse(text) as firebase.UserInfo;
-            const user = {
-                signedIn: true,
-                name:     u.displayName || "",
-                email:    u.email || ""
-            };
-
-            return { user: user, err: "" };
+            return { user: User.fromFirebase(u), err: "" };
         } catch {
             return { user: null, err: `local storage JSON.parse(text) error of text: ${text}` };
         }
@@ -91,13 +79,7 @@ class AuthGoogle {
         try {
             const result = await this.firebase.auth().signInWithPopup(provider);
             const u = result.user as firebase.UserInfo;
-            const user = {
-                signedIn: true,
-                name:     u.displayName || "",
-                email:    u.email || ""
-            };
-
-            return { user: user, err: "" };
+            return { user: User.fromFirebase(u), err: "" };
         } catch (e) {
             const err = e as firebase.auth.Error;
             switch (err.code) {

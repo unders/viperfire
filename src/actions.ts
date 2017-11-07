@@ -2,6 +2,7 @@ import { State } from "./shared/data/state";
 import { Logger } from "./log/log";
 import { Firebase, Auth } from "./firebase/firebase";
 import * as firebase from "firebase";
+import { User } from "./shared/data/user";
 
 interface Page {
     render(): void
@@ -53,11 +54,11 @@ export class ActionHandler {
     OnAuthStateChanged(user: firebase.UserInfo): void {
         if (user) {
             this.logger.info("Signed in as: " + user.displayName);
-            this.state.user.signedIn = true;
+            this.state.user = User.fromFirebase(user);
             this.page.render();
         } else {
             this.logger.info("Signed Out");
-            this.state.user.signedIn = false;
+            this.state.user = User.signedOut();
             this.page.render();
         }
     }

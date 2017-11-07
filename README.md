@@ -3,7 +3,8 @@
 ### TODO
 - [ X ] Setup ViperHTML for server rendering
 - [ X ] Sign In With Google Provider
-- [ ] Create user profile and profile page profile/:id
+- [ X ] Create user profile and profile page profile/:id
+- [ ] Create footer with links to all pages: Home | About | My Profile (Sign In)
 - [ ] Setup Service worker with Workbox
 - [ ] Setup HTTP push
 - [ ] Buy domain

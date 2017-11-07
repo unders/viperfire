@@ -2,6 +2,7 @@ import { View } from "../view/view";
 import { ArticleList } from "../view/article_list";
 import { About, AboutContext } from "../view/about";
 import { Header } from '../view/header';
+import { Footer, FooterContext } from "../view/footer";
 import { env } from './env'
 
 export interface Config {
@@ -24,13 +25,22 @@ const getConfig = function(): Config {
         header: new Header({ logo: logo }),
         articleList: new ArticleList(),
         about: new About(aboutCtx()),
-        footer: "<div>Viperfire footer</div>"
+        footer: new Footer(footerCtx())
     };
 
     return {
         isOnline: env.online,
         view: new View(ctx),
     };
+};
+
+const footerCtx = function(): FooterContext {
+    return {
+        links: [
+            { name: "Home", url: "/" },
+            { name: "About", url: "/about" },
+        ],
+    }
 };
 
 const aboutCtx = function(): AboutContext {
