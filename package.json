@@ -5,7 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "firebase": "^4.6.0",
-    "hyperhtml": "^1.7.3"
+    "hyperhtml": "^1.7.3",
+    "hyperhtml-app": "0.2.1"
   },
   "devDependencies": {
     "@types/jest": "^21.1.1",

@@ -2,10 +2,11 @@ import * as firebase from "firebase";
 import { getClientConfig } from './shared/config/config'
 import { getInitialState } from "./shared/data/state";
 import { ActionHandler } from "./actions";
-import { Page } from './page/page'
 import { log } from './log/log'
 import { Firebase } from './firebase/firebase'
 import { User } from "./shared/data/user";
+import { router } from './router/router';
+import { App } from "./app/app";
 
 const main = () => {
     const config = getClientConfig();
@@ -27,10 +28,11 @@ const main = () => {
         } else {
             state.user = new User(user);
         }
-        const page = new Page({ root: root, view: config.view, state: state });
-        new ActionHandler({ state: state, page: page, firebase: fireapp, logger: logger });
+        const app = new App({ root: root, view: config.view, state: state, logger: logger });
+        new ActionHandler({ app: app, firebase: fireapp, logger: logger });
+        router(app);
 
-        page.render();
+        app.render();
         logger.info("init app done");
     } else {
         logger.error("Could not find id: #app");

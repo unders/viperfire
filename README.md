@@ -59,6 +59,7 @@
 
 ### ViperHTML
 * [ViperHTML](https://github.com/unders/mywiki/wiki/ViperHTML)
+* [Video: VDOM vs lit-html](https://www.youtube.com/watch?v=uCHZJy2n8Qs)
 
 ### Docs
 * [Firebase Glob patterns](http://mywiki.wooledge.org/glob)

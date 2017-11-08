@@ -1,35 +1,31 @@
-import { State } from "./shared/data/state";
 import { Logger } from "./log/log";
 import { Firebase, Auth } from "./firebase/firebase";
 import * as firebase from "firebase";
 import { User } from "./shared/data/user";
 
-interface Page {
-    render(): void
+interface App {
+    onUserStateChanged(user: User): void;
 }
 
 interface Context {
-    readonly logger: Logger;
-    readonly state: State;
-    readonly page: Page;
+    readonly app: App;
     readonly firebase: Firebase;
+    readonly logger: Logger;
 }
 
 const name: string = "data-action";
 
 export class ActionHandler {
-    private logger: Logger;
-    private state: State;
-    private page: Page;
+    private app: App;
     private auth: Auth;
+    private logger: Logger;
 
     [key: string]: any;
 
     constructor(ctx: Context) {
-        this.logger = ctx.logger;
-        this.page = ctx.page;
-        this.state = ctx.state;
+        this.app = ctx.app;
         this.auth = ctx.firebase.authGoogle(this);
+        this.logger = ctx.logger;
         document.body.addEventListener('click', this);
     }
 
@@ -47,19 +43,16 @@ export class ActionHandler {
         }
     }
 
-
     //
     // Authentication start
     //
     OnAuthStateChanged(user: firebase.UserInfo): void {
         if (user) {
             this.logger.info("Signed in as: " + user.displayName);
-            this.state.user = User.fromFirebase(user);
-            this.page.render();
+            this.app.onUserStateChanged(User.fromFirebase(user));
         } else {
             this.logger.info("Signed Out");
-            this.state.user = User.signedOut();
-            this.page.render();
+            this.app.onUserStateChanged(User.signedOut());
         }
     }
 
