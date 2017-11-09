@@ -6,6 +6,7 @@ import { log } from './log/log'
 import { Firebase } from './firebase/firebase'
 import { User } from "./shared/data/user";
 import { router } from './router/router';
+import { Domain } from "./shared/domain/domain";
 import { App } from "./app/app";
 
 const main = () => {
@@ -28,11 +29,12 @@ const main = () => {
         } else {
             state.user = new User(user);
         }
-        const app = new App({ root: root, view: config.view, state: state, logger: logger });
+        const domain =  new Domain({firestore: firebase.firestore()});
+        const app = new App({ root: root, domain: domain, view: config.view, state: state, logger: logger });
+        app.render();
         new ActionHandler({ app: app, firebase: fireapp, logger: logger });
         router(app);
 
-        app.render();
         logger.info("init app done");
     } else {
         logger.error("Could not find id: #app");
