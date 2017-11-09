@@ -5,6 +5,11 @@
 - [ X ] Sign In With Google Provider
 - [ X ] Create user profile and profile page profile/:id
 - [ X ] Create footer with links to all pages: Home | About | My Profile (Sign In)
+- [ ] Rename State to presenter
+- [ ] Should update title on page transition
+- [ ] Add a global loading like Youtube on the top.
+- [ ] Fix so that title is updated
+- [ ] Add snackbar (to should error messages etc.)
 - [ ] Setup Service worker with Workbox
 - [ ] Setup HTTP push
 - [ ] Buy domain
