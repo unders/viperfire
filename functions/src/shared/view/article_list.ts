@@ -1,8 +1,5 @@
 import { wire } from "../../dom/dom";
-
-export interface ArticleListContext {
-    message: string
-}
+import { ArticleListPresenter } from "../presenter/article_list";
 
 export class ArticleList {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
@@ -11,7 +8,7 @@ export class ArticleList {
         this.html = wire(this);
     }
 
-    render(ctx: ArticleListContext): string {
+    render(ctx: ArticleListPresenter): string {
         return this.html`
             <p>${ctx.message}</p>
         `;

@@ -1,8 +1,5 @@
 import { wire } from "../../dom/dom";
-
-export interface ProfileContext {
-    readonly name: string
-}
+import { ProfilePresenter } from "../presenter/profile";
 
 export class Profile {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
@@ -11,9 +8,9 @@ export class Profile {
         this.html = wire(this);
     }
 
-    render(ctx: ProfileContext): string {
+    render(ctx: ProfilePresenter): string {
         return this.html`
-            <p>${ctx.name}</p>
+            <p>${ctx.profileUser.name}</p>
         `;
     }
 }

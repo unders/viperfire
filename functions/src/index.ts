@@ -3,12 +3,12 @@ import * as admin from 'firebase-admin';
 import * as express from "express";
 import { getServerConfig } from "./shared/config/config";
 import { Page } from "./page/page";
-import { ArticleListState, AboutState, ProfileState } from "./shared/data/state";
 import { User } from "./shared/data/user";
+import { Domain } from "./domain/domain";
+import { aboutPath, profilePath } from "./shared/path/path";
 
 admin.initializeApp(functions.config().firebase);
-const db = admin.firestore();
-
+const domain = new Domain({ firestore: admin.firestore() });
 const app = express();
 const config = getServerConfig();
 const page = new Page({ view: config.view });
@@ -19,29 +19,21 @@ const page = new Page({ view: config.view });
 // GET /?order_by=newest&page_token=xxxxxxxxx   - articles ordered by newest
 //
 app.get("/", (req, res) => {
-    const pageToken = req.query.page_token;
-
     res.set("Content-Type", "text/html; charset=utf-8");
-    if (config.isOnline) {
-        res.set("Cache-Control", "public, max-age=1, s-max-age=1");
-    }
+    setCacheControl(res);
 
-    const articleList = { message: "Hello World"};
-    const state = new ArticleListState({ path: "/", user: User.signedOut(), articleList: articleList });
-    const body = page.articleList(state);
+    const presenter = domain.article().all({ currentUser: User.signedOut() });
+    const body = page.articleList(presenter);
 
     res.status(200).send(body);
 });
 
-app.get("/about", (req, res) => {
+app.get(aboutPath, (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
-    if (config.isOnline) {
-        res.set("Cache-Control", "public, max-age=10, s-max-age=100");
-    }
+    setCacheControl10(res);
 
-    const state = new AboutState("/about", User.signedOut());
-    const body = page.about(state);
-
+    const presenter = domain.about(User.signedOut());
+    const body = page.about(presenter);
     res.status(200).send(body);
 });
 
@@ -52,38 +44,45 @@ app.get("/article/:id", (req, res) => {
     res.status(200).send(`article/${req.params.id}\n`);
 });
 
-app.get("/profile/:uid", async (req, res) => {
+app.get(profilePath, async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
-    const uid = req.params.uid;
-    try {
-        const doc = await db.doc(`profiles/${uid}`).get();
-        if (!doc.exists) {
-            res.status(404).send("404 page not found");
-        } else {
-            const data = doc.data();
-            const ctx =  { path: "/profile/:uid", user: User.signedOut(), ctx: { name: data.name } };
-            const body = page.profile(new ProfileState( ctx));
-            res.status(200).send(body);
-        }
-    } catch {
-        res.status(500).send("500 internal error");
+    const ctx = { uid: req.params.uid, currentUser: User.signedOut() };
+    const { code, presenter, err } = await domain.profile().get(ctx);
+    if (code === 200) {
+        setCacheControl(res);
+        res.status(code).send(page.profile(presenter));
+    } else {
+        res.status(code).send(`error page=${err}`);
+        // res.status(code).send(page.errorPage(code, profile, err));
     }
-
 });
+
+const setCacheControl = function(res): void {
+    if(config.isOnline) {
+        res.set("Cache-Control", "public, max-age=1, s-max-age=2");
+    }
+};
+
+const setCacheControl10 = function(res): void {
+    if(config.isOnline) {
+        res.set("Cache-Control", "public, max-age=10, s-max-age=100");
+    }
+};
 
 export const appV1 = functions.https.onRequest(app);
 export const createUserProfile = functions.auth.user().onCreate( async (event) => {
-    const user = event.data;
-    const data = {
+    const data = event.data;
+    const user = {
         // photoUrl: user.photoURL || default image;
-        // uid: user.uid,
-        name: user.displayName,
-        email: user.email,
+        signedIn: false,
+        uid: data.uid,
+        name: data.displayName,
+        email: data.email
     };
-    try {
-        await db.collection('profiles').doc(`${user.uid}`).set(data);
-    } catch (e) {
-        console.error(`CreateUserFailed uid=${user.uid} email=${user.email} name=${user.email}`);
+
+    const { err } = await domain.profile().set(user);
+    if (err) {
+        console.error(`CreateUserProfile failed; uid=${user.uid} email=${user.email} name=${user.name}; error: ${err}`);
     }
 });

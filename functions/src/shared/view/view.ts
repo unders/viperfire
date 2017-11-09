@@ -1,11 +1,14 @@
 import { wireRender } from "../../dom/dom";
 import { User } from "../data/user";
-import { AboutState, ArticleListState, ProfileState } from "../data/state";
 import { Header } from "./header";
 import { ArticleList } from "./article_list";
 import { About } from "./about";
 import { Profile } from "./profile";
 import { Footer } from "./footer";
+import { newProfilePath } from "../path/path";
+import { ProfilePresenter } from "../presenter/profile";
+import { AboutPresenter } from "../presenter/about";
+import { ArticleListPresenter } from "../presenter/article_list";
 
 interface Context {
     header: Header;
@@ -28,26 +31,26 @@ export class View {
         this.about = ctx.about;
     }
 
-    renderArticleList(html: wireRender, state: ArticleListState): string {
-        return this.render(html, state.user, this.articleList.render(state.articleList));
+    renderArticleList(html: wireRender, p: ArticleListPresenter): string {
+        return this.render(html, p.currentUser, this.articleList.render(p));
     }
 
-    renderProfile(html: wireRender, state: ProfileState): string {
-        return this.render(html, state.user, this.profile.render(state.ctx))
+    renderProfile(html: wireRender, p: ProfilePresenter): string {
+        return this.render(html, p.currentUser, this.profile.render(p))
     }
 
-    renderAbout(html: wireRender, state: AboutState): string {
-        return this.render(html, state.user, this.about.render())
+    renderAbout(html: wireRender, p: AboutPresenter): string {
+        return this.render(html, p.currentUser, this.about.render())
     }
 
-    private render(html: wireRender, user: User, main: string): string {
+    private render(html: wireRender, currentUser: User, main: string): string {
         let links = [];
-        if (user.signedIn) {
-            links[0]= { name: "My Profile", url:  `/profile/${user.uid}` };
+        if (currentUser.signedIn) {
+            links[0]= { name: "My Profile", url:  newProfilePath(currentUser.uid) };
         }
 
         return html`
-            <header>${[this.header.render(user)]}</header>
+            <header>${[this.header.render(currentUser)]}</header>
             <main>${[main]}</main>
             <footer>${[this.footer.render({ links: links })]}</footer>
         `;
