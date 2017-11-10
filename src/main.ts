@@ -23,13 +23,13 @@ const main = () => {
         }
 
         const fireapp =  new Firebase(firebase.app());
+        const domain =  new Domain({ firestore: firebase.firestore(), logger: logger });
         const { user, err } = fireapp.userCache();
         if (user === null) {
             logger.info("could not get user from local cache; message= " + err);
         } else {
             presenter.currentUser = new User(user);
         }
-        const domain =  new Domain({firestore: firebase.firestore()});
         const app = new App({
             root: root,
             domain: domain,

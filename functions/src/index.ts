@@ -7,17 +7,12 @@ import { User } from "./shared/data/user";
 import { Domain } from "./domain/domain";
 import { aboutPath, profilePath } from "./shared/path/path";
 
-admin.initializeApp(functions.config().firebase);
-const domain = new Domain({ firestore: admin.firestore() });
+const adminApp = admin.initializeApp(functions.config().firebase);
+const domain = new Domain({ firestore: adminApp.firestore(), admin: adminApp });
 const app = express();
 const config = getServerConfig();
 const page = new Page({ view: config.view });
 
-// Index shows landing page with articles order_by: rank | newest
-//
-// GET /?page_token=xxxxxxxxx                   - articles ordered by rank
-// GET /?order_by=newest&page_token=xxxxxxxxx   - articles ordered by newest
-//
 app.get("/", (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
     setCacheControl(res);
@@ -38,10 +33,12 @@ app.get(aboutPath, (req, res) => {
 });
 
 app.get("/article/:id", (req, res) => {
-    if (config.isOnline) {
-        res.set("Cache-Control", "public, max-age=1, s-max-age=2");
-    }
-    res.status(200).send(`article/${req.params.id}\n`);
+    res.set("Content-Type", "text/html; charset=utf-8");
+    setCacheControl(res);
+
+    const presenter = domain.about(User.signedOut());
+    const body = page.about(presenter);
+    res.status(200).send(body);
 });
 
 app.get(profilePath, async (req, res) => {
@@ -81,8 +78,14 @@ export const createUserProfile = functions.auth.user().onCreate( async (event) =
         email: data.email
     };
 
+    // Custom claim admin be actively set inside in firebase.
+    const result = await domain.auth().setClaims(user.uid, { admin: false });
+    if (!result.ok) {
+        await domain.err().log({ currentUser: user, message: result.err, func: "createUserProfile:setClaims" });
+    }
+
     const { err } = await domain.profile().set(user);
     if (err) {
-        console.error(`CreateUserProfile failed; uid=${user.uid} email=${user.email} name=${user.name}; error: ${err}`);
+        await domain.err().log({ currentUser: user, message: err, func: "createUserProfile:profile().set(user)" });
     }
 });

@@ -74,14 +74,6 @@ export class App {
         }
     }
 
-    notFound(path: string) {
-        this.logger.info(path);
-    }
-
-    internalError(): void {
-
-    }
-
     private updatePageCounter(msg: string): number {
         this.pageCounter++;
         this.logger.info(`${msg}; visitCount=${this.pageCounter}`);
@@ -91,9 +83,15 @@ export class App {
     //
     // State Changes
     //
-    onUserStateChanged(user: User): void {
-        this.presenter.currentUser = user;
+    onUserStateChanged(currentUser: User): void {
+        const uid = this.presenter.currentUser.uid;
+        this.presenter.currentUser = currentUser;
         this.render();
+        if (currentUser.signedIn) {
+            this.domain.profile().subscribe(currentUser.uid);
+        } else {
+            this.domain.profile().unsubscribe(uid);
+        }
     }
 
     //

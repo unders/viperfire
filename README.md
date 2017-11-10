@@ -42,6 +42,10 @@
 ### Firebase hosting
 * [Video: Building Fast Web Experiences with Firebase Hosting](https://www.youtube.com/watch?v=R3v8EcYzf_M)
 
+### Firebase Auth
+* [manage-users](https://firebase.google.com/docs/auth/admin/manage-users)
+* [custom-claims](https://firebase.google.com/docs/auth/admin/custom-claims)
+
 ### Firebase Firestore
 * [security reference](https://firebase.google.com/docs/firestore/reference/security/)
 * [security rules](https://firebase.google.com/docs/firestore/security/secure-data)

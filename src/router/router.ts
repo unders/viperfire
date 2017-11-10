@@ -47,7 +47,7 @@ export const router = (app: App): void => {
         }
     });
 
-    route.get('*', function(ctx: Context){
-        app.notFound("not found");
-    });
+     route.get('*', function(ctx: Context){
+         window.location.reload(false);
+     });
 };
