@@ -8,6 +8,7 @@ interface Context {
 }
 
 interface Serialize {
+    readonly title: string;
     readonly isPresenter: boolean;
     readonly path: string;
     readonly currentUser: User;
@@ -15,6 +16,7 @@ interface Serialize {
 }
 
 export class ProfilePresenter implements Presenter {
+    readonly title: string = "Profile";
     readonly isPresenter: boolean = true;
     readonly path: string = profilePath;
     readonly currentUser: User;
@@ -47,6 +49,7 @@ export class ProfilePresenter implements Presenter {
 
     private toObject(): Serialize {
         return {
+            title:       this.title,
             isPresenter: this.isPresenter,
             path:        this.path,
             currentUser: this.currentUser,

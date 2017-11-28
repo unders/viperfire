@@ -4,17 +4,20 @@ import { User } from "../data/user";
 
 interface Context {
     readonly currentUser: User;
-    readonly message: string
+    readonly title: string;
+    readonly message: string;
 }
 
 interface Serialize {
+    readonly title: string;
     readonly isPresenter: boolean;
     readonly path: string;
     readonly currentUser: User;
-    readonly message: string
+    readonly message: string;
 }
 
 export class ErrorPresenter implements Presenter {
+    readonly title: string;
     readonly isPresenter: boolean = true;
     readonly path: string = errorPath;
     readonly currentUser: User;
@@ -22,6 +25,7 @@ export class ErrorPresenter implements Presenter {
 
     constructor(ctx: Context) {
         this.currentUser = ctx.currentUser;
+        this.title = ctx.title;
         this.message = ctx.message;
     }
 
@@ -32,15 +36,22 @@ export class ErrorPresenter implements Presenter {
     static FromCode(code: number, currentUser: User) {
         switch (code) {
             case 404:
-                return new ErrorPresenter({message: "Page Not Found", currentUser: currentUser});
+                return new ErrorPresenter({
+                    title: "Not Found",
+                    message: "Page Not Found",
+                    currentUser: currentUser});
             default:
-                return new ErrorPresenter({message: "Internal Error", currentUser: currentUser});
+                return new ErrorPresenter({
+                    title: "Internal Error",
+                    message: "Internal Error",
+                    currentUser: currentUser});
         }
     }
 
     static Init(p: Presenter): ErrorPresenter {
         const pr = p as ErrorPresenter;
         return new ErrorPresenter({
+            title: pr.title,
             currentUser: pr.currentUser,
             message: pr.message
         });
@@ -48,6 +59,7 @@ export class ErrorPresenter implements Presenter {
 
     private toObject(): Serialize {
         return {
+            title: this.title,
             isPresenter: this.isPresenter,
             path:        this.path,
             currentUser: this.currentUser,

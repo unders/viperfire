@@ -10,6 +10,7 @@ declare global {
 }
 
 export interface Presenter {
+    title: string;
     isPresenter: boolean
     path: string;
     currentUser: User;
