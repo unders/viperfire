@@ -1,7 +1,7 @@
 import { ProfilePresenter } from "../presenter/profile";
 import { User } from "../data/user";
 
-export const collectionName = "profiles";
+export const profileCollection = "profiles";
 
 export interface Result {
     code: number;
@@ -14,7 +14,7 @@ export interface GetContext {
     readonly currentUser: User;
 }
 
-export const docPath = (uid: string): string => {
-    return `${collectionName}/${uid}`;
+export const profilePath = (uid: string): string => {
+    return `${profileCollection}/${uid}`;
 };
 
