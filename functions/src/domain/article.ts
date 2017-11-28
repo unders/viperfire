@@ -18,6 +18,7 @@ export class Article {
     }
 
     all(ctx: AllContext): ArticleListPresenter {
+        // TODO: fetch article from firestore.
         return new ArticleListPresenter({ currentUser: ctx.currentUser, message: "Hello World" });
     }
 }

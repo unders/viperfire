@@ -5,7 +5,7 @@ import { getServerConfig } from "./shared/config/config";
 import { Page } from "./page/page";
 import { User } from "./shared/data/user";
 import { Domain } from "./domain/domain";
-import { aboutPath, profilePath } from "./shared/path/path";
+import { aboutPath, newProfilePath, profilePath } from "./shared/path/path";
 
 const adminApp = admin.initializeApp(functions.config().firebase);
 const domain = new Domain({ firestore: adminApp.firestore(), admin: adminApp });
@@ -32,13 +32,15 @@ app.get(aboutPath, (req, res) => {
     res.status(200).send(body);
 });
 
-app.get("/article/:id", (req, res) => {
+app.get("/article/:id", async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
     setCacheControl(res);
 
+    // TODO: fetch article from firestore.
     const presenter = domain.about(User.signedOut());
     const body = page.about(presenter);
     res.status(200).send(body);
+
 });
 
 app.get(profilePath, async (req, res) => {
@@ -50,8 +52,7 @@ app.get(profilePath, async (req, res) => {
         setCacheControl(res);
         res.status(code).send(page.profile(presenter));
     } else {
-        res.status(code).send(`error page=${err}`);
-        // res.status(code).send(page.errorPage(code, profile, err));
+        res.status(code).send(page.error(code, User.signedOut()));
     }
 });
 
@@ -81,7 +82,7 @@ export const createUserProfile = functions.auth.user().onCreate( async (event) =
     // Custom claim admin be actively set inside in firebase.
     const result = await domain.auth().setClaims(user.uid, { admin: false });
     if (!result.ok) {
-        await domain.err().log({ currentUser: user, message: result.err, func: "createUserProfile:setClaims" });
+        await domain.err().log({ currentUser: user, message: result.err, func: "createUserProfile:auth().setClaims" });
     }
 
     const { err } = await domain.profile().set(user);

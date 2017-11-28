@@ -4,11 +4,13 @@ import { Header } from "./header";
 import { ArticleList } from "./article_list";
 import { About } from "./about";
 import { Profile } from "./profile";
+import { Error } from "./error";
 import { Footer } from "./footer";
 import { newProfilePath } from "../path/path";
 import { ProfilePresenter } from "../presenter/profile";
 import { AboutPresenter } from "../presenter/about";
 import { ArticleListPresenter } from "../presenter/article_list";
+import { ErrorPresenter } from "../presenter/error";
 
 interface Context {
     header: Header;
@@ -22,6 +24,7 @@ export class View {
     private readonly articleList: ArticleList;
     private readonly about: About;
     private readonly profile: Profile = new Profile();
+    private readonly error: Error = new Error();
     private readonly footer: Footer;
 
     constructor(ctx: Context) {
@@ -41,6 +44,10 @@ export class View {
 
     renderAbout(html: wireRender, p: AboutPresenter): string {
         return this.render(html, p.currentUser, this.about.render())
+    }
+
+    renderError(html: wireRender, p: ErrorPresenter): string {
+        return this.render(html, p.currentUser, this.error.render(p));
     }
 
     private render(html: wireRender, currentUser: User, main: string): string {

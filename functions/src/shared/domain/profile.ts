@@ -1,10 +1,11 @@
 import { ProfilePresenter } from "../presenter/profile";
 import { User } from "../data/user";
+import { statusCode } from "./domain";
 
 export const profileCollection = "profiles";
 
 export interface Result {
-    code: number;
+    code: statusCode;
     presenter: ProfilePresenter;
     err: string|null;
 }

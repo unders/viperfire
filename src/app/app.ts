@@ -4,10 +4,11 @@ import { User } from "../shared/data/user";
 import { Presenter } from "../shared/presenter/presenter";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
-import { articleListPath, aboutPath, profilePath } from '../shared/path/path';
+import { articleListPath, aboutPath, profilePath, errorPath } from '../shared/path/path';
 import { ArticleListPresenter } from '../shared/presenter/article_list';
 import { AboutPresenter } from '../shared/presenter/about';
 import { ProfilePresenter } from "../shared/presenter/profile";
+import { ErrorPresenter } from "../shared/presenter/error";
 
 class Context {
     readonly root: Element;
@@ -61,8 +62,7 @@ export class App {
         const counter = this.updatePageCounter(msg);
         const { code, presenter, err } = await this.domain.profile().get({uid: uid, currentUser: this.presenter.currentUser});
         if (err) {
-            this.logger.error(`could not get resource=profile/${uid}; code=${code}; error=${err}`);
-            // show snackBar error message; code = 404 or 500
+            this.renderError(counter, code, err);
             return;
         }
 
@@ -71,6 +71,17 @@ export class App {
             this.view.renderProfile(this.html, presenter);
         } else {
             this.logger.info(`${counter} !== ${this.pageCounter}`);
+        }
+    }
+
+    private renderError(pageCounter: number, code: number, err: string): void {
+        this.logger.info(`renderError: code=${code}; error=${err}`);
+        if (pageCounter === this.pageCounter) {
+            const p = ErrorPresenter.FromCode(code, this.presenter.currentUser);
+            this.presenter = p;
+            this.view.renderError(this.html, p);
+        } else {
+            this.logger.info(`${pageCounter} !== ${this.pageCounter}`);
         }
     }
 
@@ -111,8 +122,11 @@ export class App {
             case profilePath:
                 this.view.renderProfile(this.html, this.presenter as ProfilePresenter);
                 break;
+            case errorPath:
+                this.view.renderError(this.html, this.presenter as ErrorPresenter);
+                break;
             default:
-                this.logger.error(`app.render() failed; path=${path} found no match`);
+                this.logger.error(`app.render() failed; path=${path}  -  Not Found`);
         }
     }
 }

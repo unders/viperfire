@@ -1,8 +1,9 @@
 import { User } from "../data/user";
-import { aboutPath, profilePath, articleListPath } from "../path/path";
+import { aboutPath, profilePath, articleListPath, errorPath } from "../path/path";
 import { ProfilePresenter } from "./profile";
 import { AboutPresenter } from "./about";
 import { ArticleListPresenter } from "./article_list";
+import { ErrorPresenter } from "./error";
 
 declare global {
     interface Window { __INITIAL_STATE__: string; }
@@ -38,8 +39,10 @@ const buildPresenter = (p: Presenter): Result => {
                 return { presenter: ProfilePresenter.Init(p), errMessage: "" };
             case aboutPath:
                 return { presenter: AboutPresenter.Init(p), errMessage: "" };
+            case errorPath:
+                return { presenter: ErrorPresenter.Init(p), errMessage: "" };
             default:
-                return { presenter: null, errMessage: `p.path=${p.path} no match` };
+                return { presenter: null, errMessage: `${p.path} not found` };
         }
     } catch(e) {
         return { presenter: null, errMessage: e.message };

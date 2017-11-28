@@ -1,6 +1,7 @@
 import * as firebase from "firebase";
-import { GetContext, Result, docPath, collectionName } from '../shared/domain/profile'
+import { GetContext, Result, profilePath } from '../shared/domain/profile'
 import { ProfilePresenter } from "../shared/presenter/profile";
+import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 import { User } from "../shared/data/user";
 import { Logger } from "../log/log";
 
@@ -24,54 +25,59 @@ export class Profile {
 
     async get(ctx: GetContext): Promise<Result> {
         const u = this.cache[ctx.uid];
+        const profile = profilePath(ctx.uid);
         if (u) {
-            this.logger.info(`cache hit ${docPath(ctx.uid)}`);
+            this.logger.info(`cache hit ${profile}`);
             const p = new ProfilePresenter({ currentUser: ctx.currentUser, profileUser: u });
-            return { code: 200, presenter: p, err: null };
+            return { code: statusCode.OK, presenter: p, err: null };
         }
-        this.logger.info(`cache miss ${docPath(ctx.uid)}`);
+        this.logger.info(`cache miss ${profile}`);
         try {
-            const doc = await this.db.doc(docPath(ctx.uid)).get();
+            const doc = await this.db.doc(profile).get();
             if (!doc.exists) {
+                const { code, err } = domainNotFound(profile);
                 const p = ProfilePresenter.Empty(ctx.currentUser);
-                return { code: 404, presenter: p, err: "404 Not Found" };
+                return { code: code, presenter: p, err: err };
             }
             const u = doc.data() as User;
             const p = new ProfilePresenter({ currentUser: ctx.currentUser, profileUser: u });
-            return { code: 200, presenter: p, err: null };
+            return { code: statusCode.OK, presenter: p, err: null };
         } catch (e) {
+            const { code, err } = domainInternalError(profile, e.message);
             const p = ProfilePresenter.Empty(ctx.currentUser);
-            return { code: 500, presenter: p, err: `500 Internal Error=${e.message}` };
+            return { code: code, presenter: p, err: err };
         }
     }
 
     subscribe(uid: string) {
-        this.logger.info(`start subscription on ${docPath(uid)}`);
-        this.subscriptions[uid] = this.db.doc(docPath(uid)).onSnapshot((doc) => {
+        const profile = profilePath(uid);
+        this.logger.info(`start subscription on ${profile}`);
+        this.subscriptions[uid] = this.db.doc(profile).onSnapshot((doc) => {
             if (!doc.exists) {
-                this.logger.info(`${collectionName}/${uid}`);
-                delete this.cache[uid];
+                this.unsubscribe(uid);
                 return;
             }
+            this.logger.info(`add ${profile} to cache`);
             const u = doc.data() as User;
             this.cache[uid] = u;
-            const source = doc.metadata.hasPendingWrites ? "Local": "Server";
-            this.logger.info( `Doc: ${docPath(uid)} updated on ${source}`);
+            const source = doc.metadata.hasPendingWrites ? "Client": "Server";
+            this.logger.info( `${profile} updated on ${source}`);
             this.logger.info(u);
-            this.logger.info(this.cache);
         });
     }
 
     unsubscribe(uid: string) {
         if (uid === "") { return; }
+        const profile = profilePath(uid);
 
-        this.logger.info(`stop subscription on ${docPath(uid)}`);
+        this.logger.info(`unsubscribe to ${profile}`);
         delete this.cache[uid];
         const unsubscribe = this.subscriptions[uid];
         if (unsubscribe) {
-            this.logger.info("call unsubscribe");
+            this.logger.info("calling unsubscribe");
             unsubscribe();
             this.logger.info("called unsubscribe");
+            delete this.subscriptions[uid];
         }
     }
 }
