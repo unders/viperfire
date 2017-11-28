@@ -1,5 +1,5 @@
 export const errorCollection = "errors";
 
-export const docPath = (id: string): string => {
+export const errorPath = (id: string): string => {
     return `${errorCollection}/${id}`;
 };
