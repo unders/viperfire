@@ -20,26 +20,26 @@ export class Page {
 
     articleList(p: ArticleListPresenter): string {
         const html = this.view.renderArticleList(wire(), p);
-        const ctx = { title: "Index page", html: html, initialState: p.toJSON() };
+        const ctx = { title: p.title, html: html, initialState: p.toJSON() };
         return renderMainPageLayout(wire(), ctx);
     }
 
     profile(p: ProfilePresenter): string {
         const html = this.view.renderProfile(wire(), p);
-        const ctx = { title: "Profile page", html: html, initialState: p.toJSON() };
+        const ctx = { title: p.title, html: html, initialState: p.toJSON() };
         return renderMainPageLayout(wire(), ctx);
     }
 
     about(p: AboutPresenter): string {
         const html = this.view.renderAbout(wire(), p);
-        const ctx = { title: "About page", html: html, initialState: p.toJSON() };
+        const ctx = { title: p.title, html: html, initialState: p.toJSON() };
         return renderMainPageLayout(wire(), ctx);
     }
 
     error(code: number, currentUser: User): string {
         const p = ErrorPresenter.FromCode(code, currentUser);
         const html = this.view.renderError(wire(), p);
-        const ctx = { title: p.message, html: html, initialState: p.toJSON() };
+        const ctx = { title: p.title, html: html, initialState: p.toJSON() };
         return renderMainPageLayout(wire(), ctx);
     }
 }

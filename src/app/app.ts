@@ -9,26 +9,24 @@ import { ArticleListPresenter } from '../shared/presenter/article_list';
 import { AboutPresenter } from '../shared/presenter/about';
 import { ProfilePresenter } from "../shared/presenter/profile";
 import { ErrorPresenter } from "../shared/presenter/error";
+import { Page } from "../page/page";
 
 class Context {
-    readonly root: Element;
-    readonly view: View;
+    readonly page: Page;
     readonly presenter: Presenter;
     readonly logger: Logger;
     readonly domain: Domain
 }
 
 export class App {
-    private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
-    private readonly view: View;
+    private readonly page: Page;
     private readonly logger: Logger;
     private readonly domain: Domain;
     private presenter: Presenter;
     private pageCounter: number = 0;
 
     constructor(ctx: Context) {
-        this.html = bind(ctx.root);
-        this.view = ctx.view;
+        this.page = ctx.page;
         this.presenter = ctx.presenter;
         this.logger = ctx.logger;
         this.domain = ctx.domain;
@@ -44,7 +42,7 @@ export class App {
         this.updatePageCounter(msg);
         const p = this.domain.article().all({ currentUser: this.presenter.currentUser });
         this.presenter = p;
-        this.view.renderArticleList(this.html, p);
+        this.page.articleList(p);
     }
 
     aboutVisit() { this.about("aboutVisit"); }
@@ -53,7 +51,7 @@ export class App {
         this.updatePageCounter(msg);
         const p = this.domain.about(this.presenter.currentUser);
         this.presenter = p;
-        this.view.renderAbout(this.html, p);
+        this.page.about(p);
     }
 
     profileVisit(uid: string) { this.profile(uid, "profileVisit"); }
@@ -68,7 +66,7 @@ export class App {
 
         if (counter === this.pageCounter) {
             this.presenter = presenter;
-            this.view.renderProfile(this.html, presenter);
+            this.page.profile(presenter);
         } else {
             this.logger.info(`${counter} !== ${this.pageCounter}`);
         }
@@ -79,7 +77,7 @@ export class App {
         if (pageCounter === this.pageCounter) {
             const p = ErrorPresenter.FromCode(code, this.presenter.currentUser);
             this.presenter = p;
-            this.view.renderError(this.html, p);
+            this.page.error(p);
         } else {
             this.logger.info(`${pageCounter} !== ${this.pageCounter}`);
         }
@@ -114,16 +112,16 @@ export class App {
 
         switch(path) {
             case articleListPath:
-                this.view.renderArticleList(this.html, this.presenter as ArticleListPresenter);
+                this.page.articleList(this.presenter as ArticleListPresenter);
                 break;
             case aboutPath:
-                this.view.renderAbout(this.html, this.presenter as AboutPresenter);
+                this.page.about(this.presenter as AboutPresenter);
                 break;
             case profilePath:
-                this.view.renderProfile(this.html, this.presenter as ProfilePresenter);
+                this.page.profile(this.presenter as ProfilePresenter);
                 break;
             case errorPath:
-                this.view.renderError(this.html, this.presenter as ErrorPresenter);
+                this.page.error(this.presenter as ErrorPresenter);
                 break;
             default:
                 this.logger.error(`app.render() failed; path=${path}  -  Not Found`);
