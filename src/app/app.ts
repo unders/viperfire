@@ -1,5 +1,4 @@
-import { bind } from '../dom/dom'
-import { View } from "../shared/view/view";
+import * as firebase from "firebase";
 import { User } from "../shared/data/user";
 import { Presenter } from "../shared/presenter/presenter";
 import { Logger } from "../log/log";
@@ -92,15 +91,32 @@ export class App {
     //
     // State Changes
     //
-    onUserStateChanged(currentUser: User): void {
-        const uid = this.presenter.currentUser.uid;
-        this.presenter.currentUser = currentUser;
-        this.render();
-        if (currentUser.signedIn) {
-            this.domain.profile().subscribe(currentUser.uid);
+    async onUserStateChanged(user: firebase.User): Promise<void> {
+        let currentUser = User.signedOut();
+        if (user) {
+            currentUser = User.fromFirebase(user);
+            this.logger.info(`signed in as: ${currentUser.name}`);
+            this.presenter.currentUser = currentUser;
+            this.domain.profile().subscribe(user.uid);
         } else {
+            this.logger.info("signed out");
+            const uid = this.presenter.currentUser.uid;
+            this.presenter.currentUser = currentUser;
             this.domain.profile().unsubscribe(uid);
         }
+        this.render();
+
+        if (currentUser.signedIn) {
+            this.logger.info("getClaims()");
+            const { claims, err } = await this.domain.auth().getClaims(user);
+            if (err) {
+                this.logger.error(err);
+            }
+            this.presenter.currentUser = this.presenter.currentUser.withClaims(claims);
+        }
+
+        this.render();
+        this.logger.setUser(this.presenter.currentUser);
     }
 
     //

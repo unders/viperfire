@@ -1,29 +1,28 @@
 import * as firebase from "firebase";
 import { Profile } from "./profile";
-import { User } from "../shared/data/user";
 import { Article } from "./article";
+import { Auth } from "./auth";
 import { Logger } from "../log/log";
+import { User } from "../shared/data/user";
 import { ErrorPresenter } from "../shared/presenter/error";
 import { AboutPresenter } from "../shared/presenter/about";
 
 interface Context {
-    readonly firestore: firebase.firestore.Firestore;
     readonly logger: Logger;
 }
 
 export class Domain {
-    private readonly firestore: firebase.firestore.Firestore;
-    readonly logger: Logger;
-    readonly profileDomain: Profile;
-    readonly articleDomain: Article;
+    private readonly authDomain: Auth;
+    private readonly profileDomain: Profile;
+    private readonly articleDomain: Article;
 
     constructor(ctx: Context) {
-        this.firestore = ctx.firestore;
-        this.logger = ctx.logger;
-        this.profileDomain = new Profile({ firestore: this.firestore, logger: this.logger });
-        this.articleDomain = new Article({ firestore: this.firestore });
+        this.authDomain = new Auth(firebase.app());
+        this.profileDomain = new Profile({ firestore: firebase.firestore(), logger: ctx.logger });
+        this.articleDomain = new Article({ firestore: firebase.firestore()});
     }
 
+    auth(): Auth { return this.authDomain; }
     article(): Article { return this.articleDomain; }
     profile(): Profile { return this.profileDomain; }
 

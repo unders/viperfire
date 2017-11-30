@@ -1,7 +1,8 @@
 import * as admin from "firebase-admin";
 import { GetContext, Result, profilePath } from '../shared/domain/profile'
 import { ProfilePresenter } from "../shared/presenter/profile";
-import { User } from "../shared/data/user";
+// TODO: should be the user_profile instead of user.
+import { UserContext, User } from "../shared/data/user";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 
 export interface Context {
@@ -9,7 +10,7 @@ export interface Context {
 }
 
 interface ProfileSet {
-    err: string|null;
+    profileError: string|null;
 }
 
 export class Profile {
@@ -38,12 +39,12 @@ export class Profile {
         }
     }
 
-    async set(user: User): Promise<ProfileSet> {
+    async set(user: UserContext): Promise<ProfileSet> {
         try {
             await this.db.doc(profilePath(user.uid)).set(user);
-            return { err: null };
+            return { profileError: null };
         } catch (e) {
-            return { err: e.message };
+            return { profileError: e.message };
         }
     }
 }

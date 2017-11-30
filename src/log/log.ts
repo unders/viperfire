@@ -1,11 +1,25 @@
+import { User } from "../shared/data/user";
+
+interface viper {
+    user: User;
+}
+
+declare global {
+    interface Window { __VIPER__: viper; }
+}
+window.__VIPER__ = window.__VIPER__ || { user: User.signedOut() };
+
+
 export interface Logger {
     info(data: any): void
     error(data: any): void
+    setUser(user: User): void
 }
 
 class NoLog {
     static info(data: any): void { /* no operation when online */ }
     static error(data: any): void { /* no operation when online */ }
+    static setUser(data: User): void { /* no operation when online */ }
 }
 
 class Log {
@@ -14,6 +28,9 @@ class Log {
     }
     static error(data: any): void {
         console.error(data);
+    }
+    static setUser(user: User): void {
+        window.__VIPER__.user = user;
     }
 }
 

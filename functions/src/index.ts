@@ -6,6 +6,7 @@ import { Page } from "./page/page";
 import { User } from "./shared/data/user";
 import { Domain } from "./domain/domain";
 import { aboutPath, newProfilePath, profilePath } from "./shared/path/path";
+import { fromUserRecord } from "./lib/user";
 
 const adminApp = admin.initializeApp(functions.config().firebase);
 const domain = new Domain({ firestore: adminApp.firestore(), admin: adminApp });
@@ -71,22 +72,19 @@ const setCacheControl10 = function(res): void {
 export const appV1 = functions.https.onRequest(app);
 export const createUserProfile = functions.auth.user().onCreate( async (event) => {
     const data = event.data;
-    const user = {
-        // photoUrl: user.photoURL || default image;
-        signedIn: false,
-        uid: data.uid,
-        name: data.displayName,
-        email: data.email
-    };
+    const currentUser = fromUserRecord(data);
 
-    // Custom claim admin be actively set inside in firebase.
-    const result = await domain.auth().setClaims(user.uid, { admin: false });
-    if (!result.ok) {
-        await domain.err().log({ currentUser: user, message: result.err, func: "createUserProfile:auth().setClaims" });
+    const { claimError }  = await domain.auth().setDefaultClaims(currentUser.uid);
+    if (claimError) {
+        const f =  "createUserProfile:auth().setDefaultClaims";
+        await domain.err().log({ currentUser: currentUser, message: claimError, func: f });
     }
 
-    const { err } = await domain.profile().set(user);
-    if (err) {
-        await domain.err().log({ currentUser: user, message: err, func: "createUserProfile:profile().set(user)" });
+    // const userProfile = UserProfile.fromUser(currentUser);
+    const { profileError } = await domain.profile().set(currentUser);
+    if (profileError) {
+        const f =  "createUserProfile:profile().set(user)";
+        await domain.err().log({ currentUser: currentUser, message: profileError, func: f });
     }
 });
+

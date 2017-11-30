@@ -1,16 +1,11 @@
 import * as admin from "firebase-admin";
+import { Claims, defaultClaims } from "../shared/data/user";
 
 export interface Context {
     readonly admin: admin.app.App;
 }
-
-interface Claims {
-    admin: boolean;
-}
-
-interface Result {
-    ok: boolean
-    err: string
+interface SetClaimsResult {
+    claimError: string|null
 }
 
 export class Auth {
@@ -20,12 +15,16 @@ export class Auth {
         this.admin = ctx.admin;
     }
 
-    async setClaims(uid: string, claims: Claims): Promise<Result> {
+    async setDefaultClaims(uid: string): Promise<SetClaimsResult> {
+        return this.setClaims(uid, defaultClaims)
+    }
+
+    async setClaims(uid: string, claims: Claims): Promise<SetClaimsResult> {
         try {
             await this.admin.auth().setCustomUserClaims(uid, claims);
-            return { ok: true, err: "" };
+            return { claimError: null };
         } catch (e) {
-            return { ok: false, err: e.message };
+            return { claimError: e.message };
         }
     }
 }

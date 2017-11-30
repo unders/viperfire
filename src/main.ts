@@ -1,14 +1,11 @@
-import * as firebase from "firebase";
 import { getClientConfig } from './shared/config/config'
-import { ActionHandler } from "./actions";
+import { getPresenter } from "./shared/presenter/presenter";
 import { log } from './log/log'
-import { Firebase } from './firebase/firebase'
-import { User } from "./shared/data/user";
-import { router } from './router/router';
 import { Domain } from "./domain/domain";
-import { App } from "./app/app";
-import { getPresenter } from "../functions/src/shared/presenter/presenter";
 import { Page } from "./page/page";
+import { App } from "./app/app";
+import { ActionHandler } from "./actions";
+import { router } from './router/router';
 
 const main = () => {
     const config = getClientConfig();
@@ -27,22 +24,22 @@ const main = () => {
         return;
     }
 
-    const fireapp =  new Firebase(firebase.app());
-    const domain =  new Domain({ firestore: firebase.firestore(), logger: logger });
-    const { user, err } = fireapp.userCache();
-    if (user === null) {
-        logger.info(`could not get user from local cache; message=${err}`);
+    const domain =  new Domain({ logger: logger });
+    const { currentUser, err } = domain.auth().currentUser().getFromCache();
+    if (currentUser === null) {
+        logger.info(`auth().currentUser().getFromCache() failed; reason=${err}`);
     } else {
-        presenter.currentUser = new User(user);
+        presenter.currentUser = currentUser;
     }
+
     const app = new App({
-        page: new Page({ view: config.view, body: root}),
         domain: domain,
         presenter: presenter,
+        page: new Page({ view: config.view, body: root}),
         logger: logger
     });
     app.render();
-    new ActionHandler({ app: app, firebase: fireapp, logger: logger });
+    new ActionHandler({ app: app, domain: domain, logger: logger });
     router(app);
 
     logger.info("init app done");
