@@ -9,7 +9,7 @@ interface link {
     url: string
 }
 
-export class Footer {
+export class FooterView {
     private readonly links: link[];
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
 

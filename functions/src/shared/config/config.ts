@@ -1,8 +1,8 @@
 import { View } from "../view/view";
-import { ArticleList } from "../view/article_list";
-import { About, AboutContext } from "../view/about";
-import { Header } from '../view/header';
-import { Footer, FooterContext } from "../view/footer";
+import { ArticleListView } from "../view/article_list_view";
+import { AboutView, AboutContext } from "../view/about_view";
+import { HeaderView } from '../view/header_view';
+import { FooterView, FooterContext } from "../view/footer_view";
 import { env } from './env'
 
 export interface Config {
@@ -22,10 +22,10 @@ const getConfig = function(): Config {
     const logo = { name: "Viperfire", url: env.host };
 
     const ctx = {
-        header: new Header({ logo: logo }),
-        articleList: new ArticleList(),
-        about: new About(aboutCtx()),
-        footer: new Footer(footerCtx())
+        header: new HeaderView({ logo: logo }),
+        articleList: new ArticleListView(),
+        about: new AboutView(aboutCtx()),
+        footer: new FooterView(footerCtx())
     };
 
     return {

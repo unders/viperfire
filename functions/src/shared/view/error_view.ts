@@ -1,17 +1,18 @@
 import { wire } from "../../dom/dom";
-import { ProfilePresenter } from "../presenter/profile_presenter";
+import { ErrorPresenter } from "../presenter/error_presenter";
 
-export class Profile {
+export class ErrorView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
 
     constructor() {
         this.html = wire(this);
     }
 
-    render(p: ProfilePresenter): string {
+    render(p: ErrorPresenter): string {
         return this.html`
-            <h2>${p.userProfile.name}</h2>
-            <p>Admin? ${p.userProfile.admin}</p>
+            <div class="page-error">
+                <p>${p.message}</p>
+            </div>
         `;
     }
 }

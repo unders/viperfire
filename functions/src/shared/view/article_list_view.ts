@@ -1,7 +1,7 @@
 import { wire } from "../../dom/dom";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 
-export class ArticleList {
+export class ArticleListView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
 
     constructor() {

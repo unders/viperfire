@@ -11,7 +11,7 @@ interface link {
     url: string
 }
 
-export class About {
+export class AboutView {
     private readonly hyperLink: link;
     private readonly viperLink: link;
     private readonly links: link[];

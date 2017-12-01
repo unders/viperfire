@@ -15,7 +15,7 @@ interface User {
     readonly name: string
 }
 
-export class Header {
+export class HeaderView {
     private readonly logo: Logo;
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
 

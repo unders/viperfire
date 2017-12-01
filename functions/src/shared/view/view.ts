@@ -1,11 +1,11 @@
 import { wireRender } from "../../dom/dom";
 import { User } from "../data/user";
-import { Header } from "./header";
-import { ArticleList } from "./article_list";
-import { About } from "./about";
-import { Profile } from "./profile";
-import { Error } from "./error";
-import { Footer } from "./footer";
+import { HeaderView } from "./header_view";
+import { ArticleListView } from "./article_list_view";
+import { AboutView } from "./about_view";
+import { ProfileView } from "./profile_view";
+import { ErrorView } from "./error_view";
+import { FooterView } from "./footer_view";
 import { newProfilePath } from "../path/path";
 import { ProfilePresenter } from "../presenter/profile_presenter";
 import { AboutPresenter } from "../presenter/about_presenter";
@@ -13,19 +13,19 @@ import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
 
 interface Context {
-    header: Header;
-    footer: Footer;
-    articleList: ArticleList;
-    about: About;
+    header: HeaderView;
+    footer: FooterView;
+    articleList: ArticleListView;
+    about: AboutView;
 }
 
 export class View {
-    private readonly header: Header;
-    private readonly articleList: ArticleList;
-    private readonly about: About;
-    private readonly profile: Profile = new Profile();
-    private readonly error: Error = new Error();
-    private readonly footer: Footer;
+    private readonly header: HeaderView;
+    private readonly articleList: ArticleListView;
+    private readonly about: AboutView;
+    private readonly profile: ProfileView = new ProfileView();
+    private readonly error: ErrorView = new ErrorView();
+    private readonly footer: FooterView;
 
     constructor(ctx: Context) {
         this.header = ctx.header;
