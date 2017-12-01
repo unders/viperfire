@@ -1,5 +1,5 @@
 import * as firebase from "firebase";
-import { GetContext, Result, profilePath } from '../shared/domain/profile'
+import { GetContext, Result, profilePath } from '../shared/domain/profile_domain'
 import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 import { Logger } from "../log/log";

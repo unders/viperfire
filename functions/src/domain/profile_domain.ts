@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import { GetContext, Result, profilePath } from '../shared/domain/profile'
+import { GetContext, Result, profilePath } from '../shared/domain/profile_domain'
 import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
