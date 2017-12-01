@@ -29,6 +29,7 @@
   "author": "Anders Törnqvist",
   "license": "ISC",
   "jest": {
+    "modulePathIgnorePatterns": ["<rootDir>/src/shared/", "<rootDir>/functions/build/"],
     "transform": {
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
