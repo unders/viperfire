@@ -2,8 +2,8 @@ import * as firebase from "firebase";
 import { GetContext, Result, profilePath } from '../shared/domain/profile'
 import { ProfilePresenter } from "../shared/presenter/profile";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
-import { User } from "../shared/data/user";
 import { Logger } from "../log/log";
+import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";
 
 export interface Context {
     firestore: firebase.firestore.Firestore;
@@ -24,11 +24,11 @@ export class Profile {
     }
 
     async get(ctx: GetContext): Promise<Result> {
-        const u = this.cache[ctx.uid];
+        const userProfile = this.cache[ctx.uid];
         const profile = profilePath(ctx.uid);
-        if (u) {
+        if (userProfile) {
             this.logger.info(`cache hit ${profile}`);
-            const p = new ProfilePresenter({ currentUser: ctx.currentUser, profileUser: u });
+            const p = new ProfilePresenter({ currentUser: ctx.currentUser, userProfile: userProfile });
             return { code: statusCode.OK, presenter: p, err: null };
         }
         this.logger.info(`cache miss ${profile}`);
@@ -36,33 +36,31 @@ export class Profile {
             const doc = await this.db.doc(profile).get();
             if (!doc.exists) {
                 const { code, err } = domainNotFound(profile);
-                const p = ProfilePresenter.Empty(ctx.currentUser);
+                const p = ProfilePresenter.Empty(ctx.uid, ctx.currentUser);
                 return { code: code, presenter: p, err: err };
             }
-            const u = doc.data() as User;
-            const p = new ProfilePresenter({ currentUser: ctx.currentUser, profileUser: u });
+            const userProfile = userProfileBuilder.fromDB(doc.data() as UserProfile);
+            const p = new ProfilePresenter({ currentUser: ctx.currentUser, userProfile: userProfile});
             return { code: statusCode.OK, presenter: p, err: null };
         } catch (e) {
             const { code, err } = domainInternalError(profile, e.message);
-            const p = ProfilePresenter.Empty(ctx.currentUser);
+            const p = ProfilePresenter.Empty(ctx.uid, ctx.currentUser);
             return { code: code, presenter: p, err: err };
         }
     }
 
     subscribe(uid: string) {
         const profile = profilePath(uid);
-        this.logger.info(`start subscription on ${profile}`);
+        this.logger.info(`subscribe to ${profile}`);
         this.subscriptions[uid] = this.db.doc(profile).onSnapshot((doc) => {
             if (!doc.exists) {
                 this.unsubscribe(uid);
                 return;
             }
             this.logger.info(`add ${profile} to cache`);
-            const u = doc.data() as User;
-            this.cache[uid] = u;
+            this.cache[uid] = userProfileBuilder.fromDB(doc.data() as UserProfile);
             const source = doc.metadata.hasPendingWrites ? "Client": "Server";
             this.logger.info( `${profile} updated on ${source}`);
-            this.logger.info(u);
         });
     }
 
@@ -83,7 +81,7 @@ export class Profile {
 }
 
 class CacheProfile {
-    [key: string]: User;
+    [key: string]: UserProfile;
 }
 
 class Subscriptions {

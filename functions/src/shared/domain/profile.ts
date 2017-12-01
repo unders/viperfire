@@ -3,6 +3,9 @@ import { User } from "../data/user";
 import { statusCode } from "./domain";
 
 export const profileCollection = "profiles";
+export const profilePath = (uid: string): string => {
+    return `${profileCollection}/${uid}`;
+};
 
 export interface Result {
     code: statusCode;
@@ -15,7 +18,4 @@ export interface GetContext {
     readonly currentUser: User;
 }
 
-export const profilePath = (uid: string): string => {
-    return `${profileCollection}/${uid}`;
-};
 

@@ -1,10 +1,11 @@
 import { Presenter } from "./presenter";
 import { User } from "../data/user";
 import { profilePath } from "../path/path";
+import { UserProfile, userProfileBuilder } from "../data/user_profile";
 
 interface Context {
     readonly currentUser: User;
-    readonly profileUser: User;
+    readonly userProfile: UserProfile;
 }
 
 interface Serialize {
@@ -12,7 +13,7 @@ interface Serialize {
     readonly isPresenter: boolean;
     readonly path: string;
     readonly currentUser: User;
-    readonly profileUser: User;
+    readonly userProfile: UserProfile;
 }
 
 export class ProfilePresenter implements Presenter {
@@ -20,26 +21,25 @@ export class ProfilePresenter implements Presenter {
     readonly isPresenter: boolean = true;
     readonly path: string = profilePath;
     readonly currentUser: User;
-    readonly profileUser: User;
+    readonly userProfile: UserProfile;
 
     constructor(ctx: Context) {
         this.currentUser = ctx.currentUser;
-        this.profileUser = ctx.profileUser;
+        this.userProfile = ctx.userProfile;
     }
 
     static Init(p: Presenter): ProfilePresenter {
         const pr = p as ProfilePresenter;
         return new ProfilePresenter({
             currentUser: pr.currentUser,
-            profileUser: pr.profileUser
+            userProfile: pr.userProfile
         });
     }
 
-
-    static Empty(currentUser: User): ProfilePresenter {
+    static Empty(uid: string, currentUser: User): ProfilePresenter {
         return new ProfilePresenter({
             currentUser: currentUser,
-            profileUser: User.signedOut()
+            userProfile: userProfileBuilder.empty(uid),
         })
     }
 
@@ -53,7 +53,7 @@ export class ProfilePresenter implements Presenter {
             isPresenter: this.isPresenter,
             path:        this.path,
             currentUser: this.currentUser,
-            profileUser: this.profileUser
+            userProfile: this.userProfile
         };
     }
 }

@@ -1,8 +1,7 @@
 import * as admin from "firebase-admin";
 import { GetContext, Result, profilePath } from '../shared/domain/profile'
 import { ProfilePresenter } from "../shared/presenter/profile";
-// TODO: should be the user_profile instead of user.
-import { UserContext, User } from "../shared/data/user";
+import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 
 export interface Context {
@@ -26,22 +25,22 @@ export class Profile {
             const doc = await this.db.doc(profile).get();
             if (!doc.exists) {
                 const { code, err } = domainNotFound(profile);
-                const p = ProfilePresenter.Empty(ctx.currentUser);
+                const p = ProfilePresenter.Empty(ctx.uid, ctx.currentUser);
                 return { code: code, presenter: p, err: err };
             }
-            const u = doc.data() as User;
-            const p = new ProfilePresenter({ currentUser: ctx.currentUser, profileUser: u });
+            const up = userProfileBuilder.fromDB(doc.data() as UserProfile);
+            const p = new ProfilePresenter({ currentUser: ctx.currentUser, userProfile: up });
             return { code: statusCode.OK, presenter: p, err: null };
         } catch (e) {
             const { code, err } = domainInternalError(profile, e.message);
-            const p = ProfilePresenter.Empty(ctx.currentUser);
+            const p = ProfilePresenter.Empty(ctx.uid, ctx.currentUser);
             return { code: code, presenter: p, err: err };
         }
     }
 
-    async set(user: UserContext): Promise<ProfileSet> {
+    async set(data: UserProfile): Promise<ProfileSet> {
         try {
-            await this.db.doc(profilePath(user.uid)).set(user);
+            await this.db.doc(profilePath(data.uid)).set(data);
             return { profileError: null };
         } catch (e) {
             return { profileError: e.message };

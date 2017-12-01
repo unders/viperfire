@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import { Claims, defaultClaims } from "../shared/data/user";
+import { Claims } from "../shared/data/user";
 
 export interface Context {
     readonly admin: admin.app.App;
@@ -13,10 +13,6 @@ export class Auth {
 
     constructor(ctx: Context) {
         this.admin = ctx.admin;
-    }
-
-    async setDefaultClaims(uid: string): Promise<SetClaimsResult> {
-        return this.setClaims(uid, defaultClaims)
     }
 
     async setClaims(uid: string, claims: Claims): Promise<SetClaimsResult> {

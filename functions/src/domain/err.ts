@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import { ErrorContext, Error } from "../shared/data/error";
+import { ErrorContext, errorBuilder } from "../shared/data/error";
 import { errorCollection } from "../shared/domain/error";
 
 export interface Context {
@@ -14,11 +14,12 @@ export class Err {
     }
 
     async log(ctx: ErrorContext): Promise<void> {
-        const error = new Error(ctx);
+        const data = errorBuilder.Data(ctx);
         try {
-            const x = await this.db.collection(errorCollection).add(error.toData());
+            const x = await this.db.collection(errorCollection).add(data);
+            console.error(`Error (see errors collection): ${errorBuilder.toJSON(data)}`);
         } catch(e) {
-            console.error(`Could not save error: ${error.toJSON()}; error: ${e.message}`);
+            console.error(`Could not save error: ${errorBuilder.toJSON(data)}; error: ${e.message}`);
         }
     }
 }

@@ -11,6 +11,11 @@ class Context {
     view: View;
 }
 
+interface Result {
+    body: string;
+    pageError: string|null;
+}
+
 export class Page {
     private readonly view: View;
 
@@ -18,29 +23,50 @@ export class Page {
         this.view = ctx.view;
     }
 
-    articleList(p: ArticleListPresenter): string {
-        const html = this.view.renderArticleList(wire(), p);
-        const ctx = { title: p.title, html: html, initialState: p.toJSON() };
-        return renderMainPageLayout(wire(), ctx);
+    articleList(p: ArticleListPresenter): Result {
+        return this.renderPage(p.currentUser, (): string =>  {
+            const html = this.view.renderArticleList(wire(), p);
+            const ctx = { title: p.title, html: html, initialState: p.toJSON() };
+            return renderMainPageLayout(wire(), ctx);
+        });
     }
 
-    profile(p: ProfilePresenter): string {
-        const html = this.view.renderProfile(wire(), p);
-        const ctx = { title: p.title, html: html, initialState: p.toJSON() };
-        return renderMainPageLayout(wire(), ctx);
+    profile(p: ProfilePresenter): Result {
+        return this.renderPage(p.currentUser, (): string => {
+            const html = this.view.renderProfile(wire(), p);
+            const ctx = {title: p.title, html: html, initialState: p.toJSON()};
+            return renderMainPageLayout(wire(), ctx);
+        });
     }
 
-    about(p: AboutPresenter): string {
-        const html = this.view.renderAbout(wire(), p);
-        const ctx = { title: p.title, html: html, initialState: p.toJSON() };
-        return renderMainPageLayout(wire(), ctx);
+    about(p: AboutPresenter): Result {
+        return this.renderPage(p.currentUser, (): string => {
+            const html = this.view.renderAbout(wire(), p);
+            const ctx = {title: p.title, html: html, initialState: p.toJSON()};
+            return renderMainPageLayout(wire(), ctx);
+        });
     }
 
     error(code: number, currentUser: User): string {
-        const p = ErrorPresenter.FromCode(code, currentUser);
-        const html = this.view.renderError(wire(), p);
-        const ctx = { title: p.title, html: html, initialState: p.toJSON() };
-        return renderMainPageLayout(wire(), ctx);
+        try {
+            const p = ErrorPresenter.FromCode(code, currentUser);
+            const html = this.view.renderError(wire(), p);
+            const ctx = { title: p.title, html: html, initialState: p.toJSON() };
+            return renderMainPageLayout(wire(), ctx);
+        } catch(e) {
+            console.error(`page.error() failed; error=${e.message}`);
+            return "Internal Error";
+        }
     }
+
+    private renderPage = (currentUser: User, callback: () => string): Result => {
+        try {
+            return { body: callback(), pageError: null };
+        } catch(e) {
+            return { body: this.error(500, currentUser), pageError: e.message };
+        }
+    };
+
 }
+
 

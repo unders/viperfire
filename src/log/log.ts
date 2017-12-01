@@ -1,4 +1,4 @@
-import { User } from "../shared/data/user";
+import { User, userBuilder } from "../shared/data/user";
 
 interface viper {
     user: User;
@@ -7,7 +7,7 @@ interface viper {
 declare global {
     interface Window { __VIPER__: viper; }
 }
-window.__VIPER__ = window.__VIPER__ || { user: User.signedOut() };
+window.__VIPER__ = window.__VIPER__ || { user: userBuilder.signedOut() };
 
 
 export interface Logger {

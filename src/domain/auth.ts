@@ -1,5 +1,5 @@
 import * as firebase from "firebase";
-import { User, ResultClaims } from "../shared/data/user";
+import { User, userBuilder, ResultClaims } from "../shared/data/user";
 
 export class Auth {
     private readonly firebase: firebase.app.App;
@@ -12,7 +12,7 @@ export class Auth {
 
     async getClaims(user: firebase.User): Promise<ResultClaims> {
         const t = await user.getIdToken(true);
-        return User.parseIdToken(t);
+        return userBuilder.parseIdToken(t);
     }
 
     onAuthStatChanged(callback: (user: firebase.User) => void): void {
@@ -53,7 +53,7 @@ class CurrentUserCache {
         }
         try {
             const u = JSON.parse(text) as firebase.UserInfo;
-            return { currentUser: User.fromFirebase(u), err: "" };
+            return { currentUser: userBuilder.fromFirebase(u), err: "" };
         } catch(e) {
             return { currentUser: null, err: `local storage JSON.parse(text); test=${text}; error=${e.message}` };
         }
@@ -78,7 +78,7 @@ class SignInWithPopup {
         try {
             const result = await this.firebase.auth().signInWithPopup(this.provider);
             const u = result.user as firebase.UserInfo;
-            return { currentUser: User.fromFirebase(u), err: "" };
+            return { currentUser: userBuilder.fromFirebase(u), err: "" };
         } catch (e) {
             const err = e as firebase.auth.Error;
             return { currentUser: null, err: err.message}

@@ -8,9 +8,10 @@ export class Profile {
         this.html = wire(this);
     }
 
-    render(ctx: ProfilePresenter): string {
+    render(p: ProfilePresenter): string {
         return this.html`
-            <p>${ctx.profileUser.name}</p>
+            <h2>${p.userProfile.name}</h2>
+            <p>Admin? ${p.userProfile.admin}</p>
         `;
     }
 }

@@ -1,5 +1,5 @@
 import * as firebase from "firebase";
-import { User } from "../shared/data/user";
+import { userBuilder } from "../shared/data/user";
 import { Presenter } from "../shared/presenter/presenter";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
@@ -38,19 +38,23 @@ export class App {
     rootVisit() { this.root("rootVisit"); }
     rootBack() { this.root("rootBack"); }
     root(msg: string) {
-        this.updatePageCounter(msg);
-        const p = this.domain.article().all({ currentUser: this.presenter.currentUser });
-        this.presenter = p;
-        this.page.articleList(p);
+        const counter = this.updatePageCounter(msg);
+        const presenter = this.domain.article().all({ currentUser: this.presenter.currentUser });
+        this.renderPage(counter, (): Presenter => {
+            this.page.articleList(presenter);
+            return presenter;
+        });
     }
 
     aboutVisit() { this.about("aboutVisit"); }
     aboutBack()  { this.about("aboutBack"); }
     about(msg: string) {
-        this.updatePageCounter(msg);
-        const p = this.domain.about(this.presenter.currentUser);
-        this.presenter = p;
-        this.page.about(p);
+        const counter = this.updatePageCounter(msg);
+        const presenter = this.domain.about(this.presenter.currentUser);
+        this.renderPage(counter, (): Presenter => {
+            this.page.about(presenter);
+            return presenter;
+        });
     }
 
     profileVisit(uid: string) { this.profile(uid, "profileVisit"); }
@@ -63,16 +67,26 @@ export class App {
             return;
         }
 
-        if (counter === this.pageCounter) {
-            this.presenter = presenter;
+        this.renderPage(counter, (): Presenter => {
             this.page.profile(presenter);
-        } else {
-            this.logger.info(`${counter} !== ${this.pageCounter}`);
+            return presenter;
+        });
+    }
+
+    private renderPage(counter: number, callback: () => Presenter): void {
+        try {
+            if (counter === this.pageCounter) {
+                this.presenter = callback();
+            } else {
+                this.logger.info(`${counter} !== ${this.pageCounter}`);
+            }
+        } catch(e) {
+            this.renderError(counter, 500, e.message);
         }
     }
 
     private renderError(pageCounter: number, code: number, err: string): void {
-        this.logger.info(`renderError: code=${code}; error=${err}`);
+        this.logger.error(`renderError: code=${code}; error=${err}`);
         if (pageCounter === this.pageCounter) {
             const p = ErrorPresenter.FromCode(code, this.presenter.currentUser);
             this.presenter = p;
@@ -92,9 +106,9 @@ export class App {
     // State Changes
     //
     async onUserStateChanged(user: firebase.User): Promise<void> {
-        let currentUser = User.signedOut();
+        let currentUser = userBuilder.signedOut();
         if (user) {
-            currentUser = User.fromFirebase(user);
+            currentUser = userBuilder.fromFirebase(user);
             this.logger.info(`signed in as: ${currentUser.name}`);
             this.presenter.currentUser = currentUser;
             this.domain.profile().subscribe(user.uid);
@@ -112,7 +126,7 @@ export class App {
             if (err) {
                 this.logger.error(err);
             }
-            this.presenter.currentUser = this.presenter.currentUser.withClaims(claims);
+            this.presenter.currentUser = userBuilder.withClaims(this.presenter.currentUser, claims);
         }
 
         this.render();
