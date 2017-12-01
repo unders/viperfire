@@ -1,39 +1,38 @@
 import * as admin from "firebase-admin";
-import { Profile } from "./profile";
-import { Article } from "./article";
-import { Err } from "./err";
-import { Auth } from "./auth";
+import { ProfileDomain } from "./profile_domain";
+import { ArticleDomain } from "./article_domain";
+import { ErrorDomain } from "./error_domain";
+import { AuthDomain } from "./auth_domain";
 import { User } from "../shared/data/user";
-import { AboutPresenter } from "../shared/presenter/about";
+import { AboutPresenter } from "../shared/presenter/about_presenter";
 
 interface Context {
-    readonly firestore: admin.firestore.Firestore;
     readonly admin: admin.app.App;
 }
 
 export class Domain {
-    private readonly firestore: admin.firestore.Firestore;
     private readonly admin: admin.app.App;
+    private readonly firestore: admin.firestore.Firestore;
 
     constructor(ctx: Context) {
-        this.firestore = ctx.firestore;
         this.admin = ctx.admin;
+        this.firestore = ctx.admin.firestore();
     }
 
-    err(): Err {
-        return new Err({ firestore: this.firestore });
+    err(): ErrorDomain {
+        return new ErrorDomain({ firestore: this.firestore });
     }
 
-    auth(): Auth {
-        return new Auth({ admin: this.admin });
+    auth(): AuthDomain {
+        return new AuthDomain({ admin: this.admin });
     }
 
-    article(): Article {
-        return new Article({ firestore: this.firestore });
+    article(): ArticleDomain {
+        return new ArticleDomain({ firestore: this.firestore });
     }
 
-    profile(): Profile {
-        return new Profile({ firestore: this.firestore });
+    profile(): ProfileDomain {
+        return new ProfileDomain({ firestore: this.firestore });
     }
 
     about(currentUser: User): AboutPresenter {

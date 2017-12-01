@@ -7,10 +7,10 @@ import { Profile } from "./profile";
 import { Error } from "./error";
 import { Footer } from "./footer";
 import { newProfilePath } from "../path/path";
-import { ProfilePresenter } from "../presenter/profile";
-import { AboutPresenter } from "../presenter/about";
-import { ArticleListPresenter } from "../presenter/article_list";
-import { ErrorPresenter } from "../presenter/error";
+import { ProfilePresenter } from "../presenter/profile_presenter";
+import { AboutPresenter } from "../presenter/about_presenter";
+import { ArticleListPresenter } from "../presenter/article_list_presenter";
+import { ErrorPresenter } from "../presenter/error_presenter";
 
 interface Context {
     header: Header;

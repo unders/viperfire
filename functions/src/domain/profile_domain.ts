@@ -1,10 +1,10 @@
 import * as admin from "firebase-admin";
 import { GetContext, Result, profilePath } from '../shared/domain/profile'
-import { ProfilePresenter } from "../shared/presenter/profile";
+import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 
-export interface Context {
+interface Context {
     firestore: admin.firestore.Firestore;
 }
 
@@ -12,7 +12,7 @@ interface ProfileSet {
     profileError: string|null;
 }
 
-export class Profile {
+export class ProfileDomain {
     private readonly db: admin.firestore.Firestore;
 
     constructor(ctx: Context) {

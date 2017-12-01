@@ -1,5 +1,5 @@
 import { wire } from "../../dom/dom";
-import { ArticleListPresenter } from "../presenter/article_list";
+import { ArticleListPresenter } from "../presenter/article_list_presenter";
 
 export class ArticleList {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
@@ -8,9 +8,11 @@ export class ArticleList {
         this.html = wire(this);
     }
 
-    render(ctx: ArticleListPresenter): string {
+    render(p: ArticleListPresenter): string {
         return this.html`
-            <p>${ctx.message}</p>
+            <a href="/article/kalle">Kalle</a></br>
+            <a href="/profile/yuaTMIc27MMFAV2z19K1gySGw3k1">My profile</a>
+            <p>${p.message}</p>
         `;
     }
 }

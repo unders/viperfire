@@ -9,8 +9,7 @@ import { fromUserRecord } from "./lib/user";
 import { userProfileBuilder } from "./shared/data/user_profile";
 import { userBuilder } from "./shared/data/user";
 
-const adminApp = admin.initializeApp(functions.config().firebase);
-const domain = new Domain({ firestore: adminApp.firestore(), admin: adminApp });
+const domain = new Domain({ admin: admin.initializeApp(functions.config().firebase) });
 const app = express();
 const config = getServerConfig();
 const page = new Page({ view: config.view });

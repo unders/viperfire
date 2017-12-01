@@ -1,16 +1,16 @@
 import * as firebase from "firebase";
 import { GetContext, Result, profilePath } from '../shared/domain/profile'
-import { ProfilePresenter } from "../shared/presenter/profile";
+import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 import { Logger } from "../log/log";
 import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";
 
-export interface Context {
+interface Context {
     firestore: firebase.firestore.Firestore;
     logger: Logger
 }
 
-export class Profile {
+export class ProfileDomain {
     private readonly db: firebase.firestore.Firestore;
     private readonly logger: Logger;
     private readonly cache: CacheProfile;

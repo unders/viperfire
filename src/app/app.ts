@@ -4,10 +4,10 @@ import { Presenter } from "../shared/presenter/presenter";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
 import { articleListPath, aboutPath, profilePath, errorPath } from '../shared/path/path';
-import { ArticleListPresenter } from '../shared/presenter/article_list';
-import { AboutPresenter } from '../shared/presenter/about';
-import { ProfilePresenter } from "../shared/presenter/profile";
-import { ErrorPresenter } from "../shared/presenter/error";
+import { ArticleListPresenter } from '../shared/presenter/article_list_presenter';
+import { AboutPresenter } from '../shared/presenter/about_presenter';
+import { ProfilePresenter } from "../shared/presenter/profile_presenter";
+import { ErrorPresenter } from "../shared/presenter/error_presenter";
 import { Page } from "../page/page";
 
 class Context {

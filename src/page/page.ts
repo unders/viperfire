@@ -1,9 +1,9 @@
 import { bind, wireRender } from "../dom/dom";
 import { View } from "../shared/view/view";
-import { ArticleListPresenter } from "../shared/presenter/article_list";
-import { ProfilePresenter } from "../shared/presenter/profile";
-import { AboutPresenter } from "../shared/presenter/about";
-import { ErrorPresenter } from "../shared/presenter/error";
+import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
+import { ProfilePresenter } from "../shared/presenter/profile_presenter";
+import { AboutPresenter } from "../shared/presenter/about_presenter";
+import { ErrorPresenter } from "../shared/presenter/error_presenter";
 
 class Context {
     readonly body: Element;

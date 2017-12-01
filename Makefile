@@ -62,6 +62,11 @@ help-closure: ## shows closure compiler options
 tree: ## lists the projects file structure
 	tree -I 'dist|node_modules|build|public'
 
+.PHONY: stag-log
+stag-log: ## show staging log
+	@firebase use viperfire-stag
+	@firebase functions:log --only appV1,createUserProfile
+
 .PHONY: log
 log: ## show git log
 	@git log --graph --oneline --decorate

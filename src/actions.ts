@@ -1,8 +1,7 @@
 import { Logger } from "./log/log";
 import * as firebase from "firebase";
-import { User } from "./shared/data/user";
 import { App } from "./app/app";
-import { Auth } from "./domain/auth";
+import { AuthDomain } from "./domain/auth_domain";
 import { Domain } from "./domain/domain";
 
 
@@ -17,7 +16,7 @@ const name: string = "data-action";
 export class ActionHandler {
     private readonly app: App;
     private readonly logger: Logger;
-    private readonly auth: Auth;
+    private readonly auth: AuthDomain;
 
     [key: string]: any;
 
@@ -58,7 +57,7 @@ export class ActionHandler {
 
         const { currentUser, err } = await this.auth.GooglePopup().signInWithPopup();
         if (currentUser === null) {
-            this.logger.error(err);
+            this.logger.error(`signInWithGoogleOnclick failed; error=${err}`);
             // TODO: post an error notice: SnackBar
         }
     }
@@ -68,7 +67,7 @@ export class ActionHandler {
 
         const ok = await this.auth.GooglePopup().signOut();
         if (!ok) {
-            this.logger.error("signOut failed!");
+            this.logger.error("signOutOnclick failed!");
             // TODO: post error notice: SignOut failed.
         }
     }

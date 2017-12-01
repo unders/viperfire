@@ -18,13 +18,13 @@ export class Footer {
         this.links = ctx.links;
     }
 
-    render(ctx: FooterContext): string {
+    render(p: FooterContext): string {
         return this.html`
             <ul class="footer-list">
                 ${this.links.map( (link, index) => wire(link)`
                     <li class="footer-list-item"><a href="${link.url}">${link.name}</a></li>`)}
                 
-                ${ctx.links.map( (link, index) => wire(link)`
+                ${p.links.map( (link, index) => wire(link)`
                     <li class="footer-list-item"><a href="${link.url}">${link.name}</a></li>`)}
             </ul>`;
     }

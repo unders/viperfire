@@ -1,7 +1,7 @@
 import * as firebase from "firebase";
 import { User, userBuilder, ResultClaims } from "../shared/data/user";
 
-export class Auth {
+export class AuthDomain {
     private readonly firebase: firebase.app.App;
     private readonly cache: CurrentUserCache;
 
@@ -11,8 +11,12 @@ export class Auth {
     }
 
     async getClaims(user: firebase.User): Promise<ResultClaims> {
-        const t = await user.getIdToken(true);
-        return userBuilder.parseIdToken(t);
+        try {
+            const t = await user.getIdToken();
+            return userBuilder.parseIdToken(t);
+        } catch(e) {
+            return { claims: userBuilder.defaultClaims, err: e.message }
+        }
     }
 
     onAuthStatChanged(callback: (user: firebase.User) => void): void {

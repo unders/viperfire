@@ -2,11 +2,11 @@ import * as admin from "firebase-admin";
 import { ErrorContext, errorBuilder } from "../shared/data/error";
 import { errorCollection } from "../shared/domain/error";
 
-export interface Context {
+interface Context {
     firestore: admin.firestore.Firestore;
 }
 
-export class Err {
+export class ErrorDomain {
     private readonly db: admin.firestore.Firestore;
 
     constructor(ctx: Context) {

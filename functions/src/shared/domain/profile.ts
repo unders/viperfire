@@ -1,4 +1,4 @@
-import { ProfilePresenter } from "../presenter/profile";
+import { ProfilePresenter } from "../presenter/profile_presenter";
 import { User } from "../data/user";
 import { statusCode } from "./domain";
 

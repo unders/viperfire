@@ -1,8 +1,8 @@
 import * as admin from "firebase-admin";
-import { ArticleListPresenter } from "../shared/presenter/article_list";
+import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
 import { User } from "../shared/data/user";
 
-export interface Context {
+interface Context {
     firestore: admin.firestore.Firestore;
 }
 
@@ -10,7 +10,7 @@ interface AllContext {
     readonly currentUser: User;
 }
 
-export class Article {
+export class ArticleDomain {
     private readonly db: admin.firestore.Firestore;
 
     constructor(ctx: Context) {

@@ -1,10 +1,10 @@
 import { wire } from '../dom/dom'
 import { View } from "../shared/view/view";
 import { renderMainPageLayout } from "../shared/view/layout";
-import { ProfilePresenter } from "../shared/presenter/profile";
-import { AboutPresenter } from "../shared/presenter/about";
-import { ArticleListPresenter } from "../shared/presenter/article_list";
-import { ErrorPresenter } from "../shared/presenter/error";
+import { ProfilePresenter } from "../shared/presenter/profile_presenter";
+import { AboutPresenter } from "../shared/presenter/about_presenter";
+import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
+import { ErrorPresenter } from "../shared/presenter/error_presenter";
 import { User } from "../shared/data/user";
 
 class Context {

@@ -1,5 +1,5 @@
 import { wire } from "../../dom/dom";
-import { ErrorPresenter } from "../presenter/error";
+import { ErrorPresenter } from "../presenter/error_presenter";
 
 export class Error {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
@@ -8,10 +8,10 @@ export class Error {
         this.html = wire(this);
     }
 
-    render(ctx: ErrorPresenter): string {
+    render(p: ErrorPresenter): string {
         return this.html`
             <div class="page-error">
-                <p>${ctx.message}</p>
+                <p>${p.message}</p>
             </div>
         `;
     }

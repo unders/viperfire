@@ -1,5 +1,5 @@
 import { wire } from "../../dom/dom";
-import { ProfilePresenter } from "../presenter/profile";
+import { ProfilePresenter } from "../presenter/profile_presenter";
 
 export class Profile {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;

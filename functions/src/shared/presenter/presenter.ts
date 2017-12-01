@@ -1,9 +1,9 @@
 import { User } from "../data/user";
 import { aboutPath, profilePath, articleListPath, errorPath } from "../path/path";
-import { ProfilePresenter } from "./profile";
-import { AboutPresenter } from "./about";
-import { ArticleListPresenter } from "./article_list";
-import { ErrorPresenter } from "./error";
+import { ProfilePresenter } from "./profile_presenter";
+import { AboutPresenter } from "./about_presenter";
+import { ArticleListPresenter } from "./article_list_presenter";
+import { ErrorPresenter } from "./error_presenter";
 
 declare global {
     interface Window { __INITIAL_STATE__: string; }

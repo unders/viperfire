@@ -1,14 +1,14 @@
 import * as admin from "firebase-admin";
 import { Claims } from "../shared/data/user";
 
-export interface Context {
+interface Context {
     readonly admin: admin.app.App;
 }
 interface SetClaimsResult {
     claimError: string|null
 }
 
-export class Auth {
+export class AuthDomain {
     private readonly admin: admin.app.App;
 
     constructor(ctx: Context) {
