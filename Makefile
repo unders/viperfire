@@ -14,7 +14,6 @@ install: ## installs dependencis
 
 .PHONY: start
 start: ## starts dev environment
-	@cp support/config.env.dev.ts functions/src/shared/config/env.ts
 	@modd -f support/modd.conf
 
 .PHONY: test
