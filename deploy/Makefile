@@ -1,5 +1,7 @@
 PROD-PROJECT := viperfire-prod
+PROD-SITE := https://$(PROD-PROJECT).firebaseapp.com
 STAG-PROJECT := viperfire-stag
+STAG-SITE := https://$(STAG-PROJECT).firebaseapp.com
 
 .PHONY: help
 help:
@@ -26,19 +28,19 @@ stag/deploy:
 
 .PHONY: stag/check
 stag/check:
-	curl -i https://$(STAG-PROJECT).firebaseapp.com/
-	curl -i https://$(STAG-PROJECT).firebaseapp.com/404-not-there
-	curl -i https://$(STAG-PROJECT).firebaseapp.com/deployed-version.txt
+	curl -i $(STAG-SITE)/
+	curl -i $(STAG-SITE)/404-not-there
+	curl -i $(STAG-SITE)/deployed-version.txt
 
 .PHONY: stag/version
 stag/version:
-	curl https://$(STAG-PROJECT).firebaseapp.com/deployed-version.txt
-
+	curl $(STAG-SITE)/deployed-version.txt
 
 .PHONY: stag/log
 stag/log:
 	@firebase use $(STAG_PROJECT)
 	@firebase functions:log --only appV1,createUserProfile
+
 
 
 ##
@@ -52,14 +54,13 @@ prod/deploy:
 
 .PHONY: prod/check
 prod/check:
-	curl -i https://$(PROD-PROJECT).firebaseapp.com/
-	curl -i https://$(PROD-PROJECT).firebaseapp.com/404-not-there
-	curl -i https://$(PROD-PROJECT).firebaseapp.com/deployed-version.txt
+	curl -i $(PROD-SITE)/
+	curl -i $(PROD-SITE)/404-not-there
+	curl -i $(PROD-SITE)/deployed-version.txt
 
 .PHONY: prod/version
 prod/version:
-	curl https://$(PROD-PROJECT).firebaseapp.com/deployed-version.txt
-
+	curl $(PROD-SITE)/deployed-version.txt
 
 .PHONY: prod/log
 prod/log:
