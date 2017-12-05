@@ -9,7 +9,10 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
  git push
  git tag -a v0.0.1 -m "write a release message"
  git push origin v0.0.1
+ make release
  cd deploy && make stag/deploy
+ git commit -m "deploy version v0.0.1 to env"
+ git push
 ```
 
 ### TODO
