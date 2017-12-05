@@ -1,64 +1,67 @@
 #!/usr/bin/env bash
 ##
-## hasher adds the hash of the content to the filename
+## hasher adds the hash of the content to the filename of each asset file, i.e.
+## when a file change also its filename change witch makes the file chachable.
 ##
+updateFile() {
+    local file=$1
+    local public=$2
+    local assets=${public}/assets
 
-function update() {
-    local old=$1
-    local new=$2
-
-    for file in $(find dist/assets);
+    for asset in $(find ${assets});
     do
-        if [ -f "$file" ];then
-            sed -i oldx "s|$old|$new|g" ${file}
-            rm ${file}oldx
-        fi
-    done
-
-    for file in $(find functions/build/shared);
-    do
-        if [ -f "$file" ];then
-            sed -i oldx "s|$old|$new|g" ${file}
-            rm ${file}oldx
-        fi
-    done
-}
-
-function updateFiles() {
-    for file in $(find dist/assets);
-    do
-        if [ -f "$file" ];then
-            local hash=$(openssl sha1 ${file} | awk '{print $2}')
-            local path=${file#*dist/}
+        if [ -f "$asset" ];then
+            local hash=$(openssl sha1 ${asset} | awk '{print $2}')
+            local path=${asset#*${public}/}
             local base=$(basename ${path})
             local dir=$(dirname ${path})
-            update ${path} "$dir/$hash-$base"
+
+            local old=${path}
+            local new="$dir/$hash-$base"
+
+            sed -i orig "s|$old|$new|g" ${file}
+            rm ${file}orig
         fi
     done
 }
 
-function rename() {
-    local old=$1
-    local new=$2
+updateViewFiles() {
+    local dir=$1
+    local public=$2
 
-    mv ${old} ${new}
- }
+    for file in $(find ${dir}/*/*.ts);
+    do
+        if [ -f "$file" ]; then
+            updateFile ${file} ${public}
+        fi
+    done
+}
 
-renameFiles() {
-    for file in $(find dist/assets);
+renameAssets() {
+    local assets=$1
+
+    for file in $(find ${assets});
     do
         if [ -f "$file" ];then
             local hash=$(openssl sha1 ${file} | awk '{print $2}')
             local base=$(basename ${file})
             local dir=$(dirname ${file})
-            rename ${file} "$dir/$hash-$base"
+            mv ${file} "$dir/$hash-$base"
         fi
     done
 }
 
 main() {
-    updateFiles
-    renameFiles
+    local public=deploy/public
+    local assets=${public}/assets
+
+    updateFile ${assets}/js/bundle.js ${public}
+    updateFile ${assets}/css/main.css ${public}
+    updateViewFiles deploy/functions/src/shared ${public}
+    ## TODO: update preload JS and CSS files.
+    ## updateFile deploy/firebase.json ${public}
+    renameAssets ${assets}
 }
 
 main
+
