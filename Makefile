@@ -46,7 +46,7 @@ prod-deploy: dist ## deploys app firebase: viperfire-prod
 	@#firebase use viperfire-prod
 	@cp support/firebase.prod.json firebase.json
 	@./bin/deploy.sh
-	@#firebase use viperfire-stag
+	@#firebase use viperfire-prod
 	@cp support/firebase.dev.json firebase.json
 
 .PHONY: list
@@ -59,7 +59,7 @@ help-closure: ## shows closure compiler options
 
 .PHONY: tree
 tree: ## lists the projects file structure
-	tree -I 'dist|node_modules|build|public'
+	tree -I 'dist|node_modules|build|public|deploy'
 
 .PHONY: stag-log
 stag-log: ## show staging log
