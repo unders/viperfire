@@ -16,7 +16,7 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="viperfire starter app">
     <title>${ctx.title}</title>
-    <link rel="stylesheet" href="/assets/css/3bcc7f14351681599bf2cf80b0da19b6802654cf-main.css">
+    <link rel="stylesheet" href="/assets/css/872fa5ae9cdef319a06276cde1fff52072eb313b-main.css">
     <script defer src="/__/firebase/4.6.0/firebase-app.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-auth.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-firestore.js"></script>

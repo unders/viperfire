@@ -17,6 +17,7 @@ install: ## installs dependencis
 	## brew install yarn --without-node
 	## go get github.com/cortesi/modd/cmd/modd
 	## npm install -g firebase-tools
+	## npm install -g postcss
 	cd functions && yarn install
 	npm install
 
@@ -39,6 +40,7 @@ release: ## creates a release
 	@rm -rf deploy/public/
 	@rsync -avz --delete --exclude 'assets/css' --exclude 'assets/js' public/ deploy/public
 	@node_modules/.bin/node-sass --output-style compressed --output ./deploy/public/assets/css ./sass
+	@postcss --use autoprefixer -r deploy/public/assets/css/main.css
 	@node_modules/.bin/webpack --config support/webpack.dev.config.js
 	@node_modules/.bin/webpack --config support/webpack.prod.config.js
 	@cp $(VERSION) $(PREVIOUS)
