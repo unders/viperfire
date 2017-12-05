@@ -19,7 +19,7 @@ export const getClientConfig = function(): Config {
 };
 
 const getConfig = function(): Config {
-    const logo = { name: "Viperfire", url: env.host };
+    const logo = { name: "Viperfire", url: "/" };
 
     const ctx = {
         header: new HeaderView({ logo: logo }),
