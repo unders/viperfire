@@ -4,7 +4,7 @@ const ClosureCompilerPlugin = require('webpack-closure-compiler');
 module.exports = {
     entry: './public/assets/js/bundle.js',
     output: {
-        path: path.resolve('./dist/assets/js'),
+        path: path.resolve('./deploy/public/assets/js'),
         filename: 'bundle.js'
     },
     plugins: [
