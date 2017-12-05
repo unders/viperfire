@@ -1,5 +1,17 @@
 # viperfire
 
+## Deploy
+Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
+
+```
+ make release
+ git commit -m "bump to version: v0.0.1"
+ git push
+ git tag -a v0.0.1 -m "write a release message"
+ git push origin v0.0.1
+ cd deploy && make stag/deploy
+```
+
 ### TODO
 - [ X ] Setup ViperHTML for server rendering
 - [ X ] Sign In With Google Provider
