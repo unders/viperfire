@@ -1,3 +1,11 @@
+GITTAG :=v0.0.1
+BUILDSTAMP :=$(shell date -u '+%Y-%m-%dT%I:%M%p')
+GITHASH :=$(shell git rev-parse HEAD)
+
+VERSION := deploy/support/deployed-version.txt
+PREVIOUS := deploy/support/deployed-previous.txt
+DEPLOYED_VERSION := deploy/public/deployed-version.txt
+
 .PHONY: help
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -19,6 +27,38 @@ start: ## starts dev environment
 .PHONY: test
 test: ## runs tests
 	node_modules/.bin/jest
+
+.PHONY: release
+release: ## creates a release
+	##
+	## Build Client
+	##
+	@rm -rf src/shared
+	@cp support/config.env.prod.ts functions/src/shared/config/env.ts
+	@rsync -avz --delete functions/src/shared/ src/shared/
+	@rm -rf deploy/public/
+	@rsync -avz --delete --exclude 'assets/css' --exclude 'assets/js' public/ deploy/public
+	@node_modules/.bin/node-sass --output-style compressed --output ./deploy/public/assets/css ./sass
+	@node_modules/.bin/webpack --config support/webpack.dev.config.js
+	@node_modules/.bin/webpack --config support/webpack.prod.config.js
+	@cp $(VERSION) $(PREVIOUS)
+	@echo tag:$(GITTAG) time:$(BUILDSTAMP) githash:$(GITHASH) > $(VERSION)
+	@cp $(VERSION) $(DEPLOYED_VERSION)
+	##
+	## Build functions
+	##
+	@rm -rf deploy/functions/src
+	@rm -rf deploy/functions/build
+	@cp functions/package.json deploy/functions/package.json
+	@cp functions/tsconfig.json deploy/functions/tsconfig.json
+	@cp functions/yarn.lock deploy/functions/yarn.lock
+	@rsync -avz --delete functions/src/ deploy/functions/src
+	@cp support/config.env.dev.ts functions/src/shared/config/env.ts
+	##
+	## Fingerprint assets
+	##
+	@./bin/hasher.sh
+	@cd deploy/functions && yarn install && tsc
 
 .PHONY: dist
 dist: ## creates a release
