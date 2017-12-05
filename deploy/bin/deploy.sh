@@ -8,7 +8,7 @@ while true; do
     read -p "Yes | No ? " yn
     echo ""
     case ${yn} in
-        [Yy]* ) echo "deploy to prod"; break;;
+        [Yy]* ) echo "deploy to prod"; break;; ## firebase deploy
         [Nn]* ) exit;;
         * ) exit;;
     esac
