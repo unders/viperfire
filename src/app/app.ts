@@ -38,7 +38,7 @@ export class App {
     rootVisit() { this.root("rootVisit"); }
     rootBack() { this.root("rootBack"); }
     root(msg: string) {
-        const counter = this.updatePageCounter(msg, PageLoader.Loading);
+        const counter = this.updatePageCounter(msg);
         const articleList = this.domain.article().all({ size: 30 } );
         this.renderPage(counter, (): Presenter => {
             const presenter = ArticleListPresenter.Next(this.presenter, articleList);
@@ -50,7 +50,7 @@ export class App {
     aboutVisit() { this.about("aboutVisit"); }
     aboutBack()  { this.about("aboutBack"); }
     about(msg: string) {
-        const counter = this.updatePageCounter(msg, PageLoader.Loading);
+        const counter = this.updatePageCounter(msg);
         this.renderPage(counter, (): Presenter => {
             const presenter = AboutPresenter.Init(this.presenter);
             this.page.about(presenter);
@@ -61,7 +61,7 @@ export class App {
     profileVisit(uid: string) { this.profile(uid, "profileVisit"); }
     profileBack(uid: string)  { this.profile(uid, "profileBack"); }
     async profile(uid: string, msg: string) {
-        const counter = this.updatePageCounter(msg, PageLoader.Loading);
+        const counter = this.updatePageCounter(msg);
         const { code, userProfile, err } = await this.domain.profile().get({ uid: uid });
         if (err) {
             this.renderError(counter, code, err);
@@ -104,8 +104,8 @@ export class App {
         }
     }
 
-    private updatePageCounter(msg: string, pageLoader: PageLoader): number {
-        this.setPageLoader(pageLoader);
+    private updatePageCounter(msg: string): number {
+        this.setLoadingPageLoader();
 
         this.pageCounter++;
         this.logger.info(`${msg}; visitCount=${this.pageCounter}`);
@@ -126,10 +126,10 @@ export class App {
             this.render();
         }
     }
-    setPageLoader(pageLoader: PageLoader): void {
+    setLoadingPageLoader(): void {
         this.resetPageLoader();
 
-        this.presenter.pageLoader = pageLoader;
+        this.presenter.pageLoader = PageLoader.Loading;
         this.render();
     }
     setDonePageLoader(): void {
