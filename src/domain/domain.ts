@@ -3,9 +3,6 @@ import { ProfileDomain } from "./profile_domain";
 import { ArticleDomain } from "./article_domain";
 import { AuthDomain } from "./auth_domain";
 import { Logger } from "../log/log";
-import { User } from "../shared/data/user";
-import { ErrorPresenter } from "../shared/presenter/error_presenter";
-import { AboutPresenter } from "../shared/presenter/about_presenter";
 
 interface Context {
     readonly logger: Logger;
@@ -25,12 +22,4 @@ export class Domain {
     auth(): AuthDomain { return this.authDomain; }
     article(): ArticleDomain { return this.articleDomain; }
     profile(): ProfileDomain { return this.profileDomain; }
-
-    about(currentUser: User): AboutPresenter {
-         return new AboutPresenter({ currentUser: currentUser});
-     }
-
-     error(code: number, currentUser: User): ErrorPresenter {
-         return ErrorPresenter.FromCode(code, currentUser);
-     }
 }

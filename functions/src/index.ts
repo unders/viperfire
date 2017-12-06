@@ -17,8 +17,8 @@ const page = new Page({ view: config.view });
 app.get("/", (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
-    const presenter = domain.article().all({ currentUser: userBuilder.signedOut() });
-    const { body, pageError } = page.articleList(presenter);
+    const articleList = domain.article().all({ size: 30 });
+    const { body, pageError } = page.articleList(articleList, userBuilder.signedOut());
     if (pageError) {
         res.status(500).send(body);
         console.error(pageError);
@@ -32,8 +32,7 @@ app.get("/", (req, res) => {
 app.get(aboutPath, (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
-    const presenter = domain.about(userBuilder.signedOut());
-    const { body, pageError } = page.about(presenter);
+    const { body, pageError } = page.about(userBuilder.signedOut());
     if (pageError) {
         res.status(500).send(body);
         console.error(pageError);
@@ -48,8 +47,7 @@ app.get("/article/:id", async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
     // TODO: fetch article from firestore.
-    const presenter = domain.about(userBuilder.signedOut());
-    const { body, pageError } = page.about(presenter);
+    const { body, pageError } = page.about(userBuilder.signedOut());
     if (pageError) {
         res.status(500).send(body);
         console.error(pageError);
@@ -64,15 +62,15 @@ app.get("/article/:id", async (req, res) => {
 app.get(profilePath, async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
-    const ctx = { uid: req.params.uid, currentUser: userBuilder.signedOut() };
-    const { code, presenter, err } = await domain.profile().get(ctx);
+    const ctx = { uid: req.params.uid };
+    const { code, userProfile, err } = await domain.profile().get(ctx);
     if (err) {
         res.status(code).send(page.error(code, userBuilder.signedOut()));
         console.error(err);
         return;
     }
 
-    const { body, pageError } = page.profile(presenter);
+    const { body, pageError } = page.profile(userProfile, userBuilder.signedOut());
     if (pageError) {
         res.status(500).send(body);
         console.error(pageError);

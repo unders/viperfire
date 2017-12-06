@@ -6,6 +6,9 @@ import { AboutPresenter } from "../shared/presenter/about_presenter";
 import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
 import { ErrorPresenter } from "../shared/presenter/error_presenter";
 import { User } from "../shared/data/user";
+import { ArticleList } from "../shared/data/article_list";
+import { PageLoader } from "../shared/presenter/presenter";
+import { UserProfile } from "../shared/data/user_profile";
 
 class Context {
     view: View;
@@ -23,7 +26,12 @@ export class Page {
         this.view = ctx.view;
     }
 
-    articleList(p: ArticleListPresenter): Result {
+    articleList(articleList: ArticleList, currentUser: User): Result {
+        const p = new ArticleListPresenter({
+            pageLoader: PageLoader.Neutral,
+            currentUser: currentUser,
+            message: articleList.message,
+        });
         return this.renderPage(p.currentUser, (): string =>  {
             const html = this.view.renderArticleList(wire(), p);
             const ctx = { title: p.title, html: html, initialState: p.toJSON() };
@@ -31,7 +39,13 @@ export class Page {
         });
     }
 
-    profile(p: ProfilePresenter): Result {
+    profile(userProfile: UserProfile, currentUser: User): Result {
+        const p = new ProfilePresenter({
+            pageLoader: PageLoader.Neutral,
+            userProfile: userProfile,
+            currentUser: currentUser
+        });
+
         return this.renderPage(p.currentUser, (): string => {
             const html = this.view.renderProfile(wire(), p);
             const ctx = {title: p.title, html: html, initialState: p.toJSON()};
@@ -39,7 +53,11 @@ export class Page {
         });
     }
 
-    about(p: AboutPresenter): Result {
+    about(currentUser: User): Result {
+        const p = new AboutPresenter({
+            pageLoader: PageLoader.Neutral,
+            currentUser: currentUser,
+        });
         return this.renderPage(p.currentUser, (): string => {
             const html = this.view.renderAbout(wire(), p);
             const ctx = {title: p.title, html: html, initialState: p.toJSON()};
@@ -49,7 +67,7 @@ export class Page {
 
     error(code: number, currentUser: User): string {
         try {
-            const p = ErrorPresenter.FromCode(code, currentUser);
+            const p = ErrorPresenter.FromCode(code, currentUser, PageLoader.Neutral);
             const html = this.view.renderError(wire(), p);
             const ctx = { title: p.title, html: html, initialState: p.toJSON() };
             return renderMainPageLayout(wire(), ctx);
@@ -66,7 +84,6 @@ export class Page {
             return { body: this.error(500, currentUser), pageError: e.message };
         }
     };
-
 }
 
 

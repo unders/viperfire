@@ -1,6 +1,5 @@
 import * as firebase from "firebase";
 import { GetContext, Result, profilePath } from '../shared/domain/profile_domain'
-import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 import { Logger } from "../log/log";
 import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";
@@ -28,24 +27,22 @@ export class ProfileDomain {
         const profile = profilePath(ctx.uid);
         if (userProfile) {
             this.logger.info(`cache hit ${profile}`);
-            const p = new ProfilePresenter({ currentUser: ctx.currentUser, userProfile: userProfile });
-            return { code: statusCode.OK, presenter: p, err: null };
+            return { code: statusCode.OK, userProfile: userProfile, err: null };
         }
         this.logger.info(`cache miss ${profile}`);
         try {
             const doc = await this.db.doc(profile).get();
             if (!doc.exists) {
                 const { code, err } = domainNotFound(profile);
-                const p = ProfilePresenter.Empty(ctx.uid, ctx.currentUser);
-                return { code: code, presenter: p, err: err };
+                const userProfile =  userProfileBuilder.empty(ctx.uid);
+                return { code: code, userProfile: userProfile, err: err };
             }
             const userProfile = userProfileBuilder.fromDB(doc.data() as UserProfile);
-            const p = new ProfilePresenter({ currentUser: ctx.currentUser, userProfile: userProfile});
-            return { code: statusCode.OK, presenter: p, err: null };
+            return { code: statusCode.OK, userProfile: userProfile, err: null };
         } catch (e) {
             const { code, err } = domainInternalError(profile, e.message);
-            const p = ProfilePresenter.Empty(ctx.uid, ctx.currentUser);
-            return { code: code, presenter: p, err: err };
+            const userProfile = userProfileBuilder.empty(ctx.uid);
+            return { code: code, userProfile: userProfile, err: err };
         }
     }
 
@@ -80,10 +77,12 @@ export class ProfileDomain {
     }
 }
 
+// TODO WeakSet?
 class CacheProfile {
     [key: string]: UserProfile;
 }
 
+// TODO WeakSet?
 class Subscriptions {
     [key: string]: any;
 }

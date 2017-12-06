@@ -9,9 +9,16 @@ declare global {
     interface Window { __INITIAL_STATE__: string; }
 }
 
+export enum PageLoader {
+    Neutral = 0,
+    Loading = 1,
+    Done = 2,
+}
+
 export interface Presenter {
+    pageLoader: PageLoader;
     title: string;
-    isPresenter: boolean
+    isPresenter: boolean;
     path: string;
     currentUser: User;
     toJSON(): string
@@ -48,4 +55,4 @@ const buildPresenter = (p: Presenter): Result => {
     } catch(e) {
         return { presenter: null, errMessage: e.message };
     }
-} ;
+};

@@ -5,4 +5,7 @@ export class css {
     static readonly hide = "hide";
     static readonly show = "";
     static readonly empty = "";
+    static readonly neutral = "";
+    static readonly loading = "loading";
+    static readonly done = "done";
 }

@@ -27,8 +27,7 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     -->
 </head>
 <body>
-    <div class="viperfire-progress-bar"><div class="background-progress-bar"></div></div>
-    <div id="app" class="app">${[ctx.html]}</div>
+    <div id="app">${[ctx.html]}</div>
     <script>
         window.__INITIAL_STATE__ ='${[ctx.initialState]}';
     </script>

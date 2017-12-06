@@ -1,13 +1,12 @@
 import * as firebase from "firebase";
-import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
-import { User } from "../shared/data/user";
+import { ArticleList } from "../shared/data/article_list";
 
 interface Context {
     firestore: firebase.firestore.Firestore;
 }
 
 interface AllContext {
-    readonly currentUser: User;
+    readonly size: number;
 }
 
 export class ArticleDomain {
@@ -17,7 +16,7 @@ export class ArticleDomain {
         this.db = ctx.firestore;
     }
 
-    all(ctx: AllContext): ArticleListPresenter {
-        return new ArticleListPresenter({ currentUser: ctx.currentUser, message: "Hello World" });
+    all(ctx: AllContext): ArticleList {
+        return new ArticleList({ message: "Hello World" });
     }
 }

@@ -11,6 +11,7 @@ import { ProfilePresenter } from "../presenter/profile_presenter";
 import { AboutPresenter } from "../presenter/about_presenter";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
+import { Presenter } from "../presenter/presenter";
 
 interface Context {
     header: HeaderView;
@@ -35,31 +36,39 @@ export class View {
     }
 
     renderArticleList(html: wireRender, p: ArticleListPresenter): string {
-        return this.render(html, p.currentUser, this.articleList.render(p));
+        return this.render(html, p, this.articleList.render(p));
     }
 
     renderProfile(html: wireRender, p: ProfilePresenter): string {
-        return this.render(html, p.currentUser, this.profile.render(p))
+        return this.render(html, p, this.profile.render(p))
     }
 
     renderAbout(html: wireRender, p: AboutPresenter): string {
-        return this.render(html, p.currentUser, this.about.render())
+        return this.render(html, p, this.about.render())
     }
 
     renderError(html: wireRender, p: ErrorPresenter): string {
-        return this.render(html, p.currentUser, this.error.render(p));
+        return this.render(html, p, this.error.render(p));
     }
 
-    private render(html: wireRender, currentUser: User, main: string): string {
+    private render(html: wireRender, p: Presenter, main: string): string {
         let links = [];
+        const currentUser = p.currentUser;
         if (currentUser.signedIn) {
             links[0]= { name: "My Profile", url:  newProfilePath(currentUser.uid) };
         }
 
+        let pageProgressBar = "viperfire-progress-bar";
+
         return html`
-            <header>${[this.header.render(currentUser)]}</header>
-            <main>${[main]}</main>
-            <footer>${[this.footer.render({ links: links })]}</footer>
+            <div class="${pageProgressBar}">
+                <div class="background-progress-bar"></div>
+            </div>
+            <div class="container">
+                <header>${[this.header.render(currentUser)]}</header>
+                <main>${[main]}</main>
+                <footer>${[this.footer.render({ links: links })]}</footer>
+            </div>
         `;
     }
 }

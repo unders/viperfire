@@ -32,7 +32,7 @@ $progress-bar-duration: 2s;
     footer {
         grid-area: ft;
     }
-    .app {
+    .container {
         display: grid;
         grid-gap: 40px;
         grid-template-areas: "hd" "main" "ft";

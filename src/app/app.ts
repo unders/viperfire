@@ -39,8 +39,9 @@ export class App {
     rootBack() { this.root("rootBack"); }
     root(msg: string) {
         const counter = this.updatePageCounter(msg);
-        const presenter = this.domain.article().all({ currentUser: this.presenter.currentUser });
+        const articleList = this.domain.article().all({ size: 30 } );
         this.renderPage(counter, (): Presenter => {
+            const presenter = ArticleListPresenter.Next(this.presenter, articleList);
             this.page.articleList(presenter);
             return presenter;
         });
@@ -50,8 +51,8 @@ export class App {
     aboutBack()  { this.about("aboutBack"); }
     about(msg: string) {
         const counter = this.updatePageCounter(msg);
-        const presenter = this.domain.about(this.presenter.currentUser);
         this.renderPage(counter, (): Presenter => {
+            const presenter = AboutPresenter.Init(this.presenter);
             this.page.about(presenter);
             return presenter;
         });
@@ -61,13 +62,14 @@ export class App {
     profileBack(uid: string)  { this.profile(uid, "profileBack"); }
     async profile(uid: string, msg: string) {
         const counter = this.updatePageCounter(msg);
-        const { code, presenter, err } = await this.domain.profile().get({uid: uid, currentUser: this.presenter.currentUser});
+        const { code, userProfile, err } = await this.domain.profile().get({ uid: uid });
         if (err) {
             this.renderError(counter, code, err);
             return;
         }
 
         this.renderPage(counter, (): Presenter => {
+            const presenter = ProfilePresenter.Next(this.presenter, userProfile);
             this.page.profile(presenter);
             return presenter;
         });
@@ -76,6 +78,7 @@ export class App {
     private renderPage(counter: number, callback: () => Presenter): void {
         try {
             if (counter === this.pageCounter) {
+                // TODO: page progress: Done.
                 this.presenter = callback();
             } else {
                 this.logger.info(`${counter} !== ${this.pageCounter}`);
@@ -86,14 +89,19 @@ export class App {
     }
 
     private renderError(pageCounter: number, code: number, err: string): void {
+        // TODO: page loading done: add done.
         this.logger.error(`renderError: code=${code}; error=${err}`);
         if (pageCounter === this.pageCounter) {
-            const p = ErrorPresenter.FromCode(code, this.presenter.currentUser);
+            const currentUser = this.presenter.currentUser;
+            const pageLoader = this.presenter.pageLoader;
+            const p = ErrorPresenter.FromCode(code, currentUser, pageLoader);
             this.presenter = p;
             this.page.error(p);
         } else {
             this.logger.info(`${pageCounter} !== ${this.pageCounter}`);
         }
+
+        // TODO: reset page loading: remove loading and done..
     }
 
     private updatePageCounter(msg: string): number {

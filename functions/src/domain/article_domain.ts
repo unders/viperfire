@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
+import { ArticleList } from "../shared/data/article_list";
 import { User } from "../shared/data/user";
 
 interface Context {
@@ -7,7 +7,7 @@ interface Context {
 }
 
 interface AllContext {
-    readonly currentUser: User;
+    readonly size: number;
 }
 
 export class ArticleDomain {
@@ -17,8 +17,8 @@ export class ArticleDomain {
         this.db = ctx.firestore;
     }
 
-    all(ctx: AllContext): ArticleListPresenter {
+    all(ctx: AllContext): ArticleList {
         // TODO: fetch article from firestore.
-        return new ArticleListPresenter({ currentUser: ctx.currentUser, message: "Hello World" });
+        return new ArticleList({ message: "Hello World" });
     }
 }

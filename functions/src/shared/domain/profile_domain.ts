@@ -1,6 +1,5 @@
-import { ProfilePresenter } from "../presenter/profile_presenter";
-import { User } from "../data/user";
 import { statusCode } from "./domain";
+import { UserProfile } from "../data/user_profile";
 
 export const profileCollection = "profiles";
 export const profilePath = (uid: string): string => {
@@ -9,13 +8,12 @@ export const profilePath = (uid: string): string => {
 
 export interface Result {
     code: statusCode;
-    presenter: ProfilePresenter;
+    userProfile: UserProfile;
     err: string|null;
 }
 
 export interface GetContext {
     readonly uid: string;
-    readonly currentUser: User;
 }
 
 
