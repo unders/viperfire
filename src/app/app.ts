@@ -50,7 +50,7 @@ export class App {
     aboutVisit() { this.about("aboutVisit"); }
     aboutBack()  { this.about("aboutBack"); }
     about(msg: string) {
-        const counter = this.updatePageCounter(msg, PageLoader.Neutral);
+        const counter = this.updatePageCounter(msg, PageLoader.Loading);
         this.renderPage(counter, (): Presenter => {
             const presenter = AboutPresenter.Init(this.presenter);
             this.page.about(presenter);
@@ -133,9 +133,18 @@ export class App {
         this.render();
     }
     setDonePageLoader(): void {
-        if (this.presenter.pageLoader === PageLoader.Loading) {
-            this.presenter.pageLoader = PageLoader.Done;
-        }
+        const done = (pageCounter: number): void => {
+            if (this.pageCounter !== pageCounter) {
+                return;
+            }
+
+            if (this.presenter.pageLoader === PageLoader.Loading) {
+                this.presenter.pageLoader = PageLoader.Done;
+            }
+            this.render();
+        };
+
+        setTimeout(done, 100, this.pageCounter);
     }
 
     //
