@@ -1,5 +1,4 @@
 import { wireRender } from "../../dom/dom";
-import { User } from "../data/user";
 import { HeaderView } from "./header_view";
 import { ArticleListView } from "./article_list_view";
 import { AboutView } from "./about_view";
@@ -11,7 +10,8 @@ import { ProfilePresenter } from "../presenter/profile_presenter";
 import { AboutPresenter } from "../presenter/about_presenter";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
-import { Presenter } from "../presenter/presenter";
+import { PageLoader, Presenter} from "../presenter/presenter";
+import { css } from "../css";
 
 interface Context {
     header: HeaderView;
@@ -59,6 +59,12 @@ export class View {
         }
 
         let pageProgressBar = "viperfire-progress-bar";
+        if (p.pageLoader === PageLoader.Loading) {
+            pageProgressBar = `${pageProgressBar} ${css.loading}`;
+        }
+        if (p.pageLoader === PageLoader.Done) {
+            pageProgressBar = `${pageProgressBar} ${css.loading} ${css.done}`;
+        }
 
         return html`
             <div class="${pageProgressBar}">

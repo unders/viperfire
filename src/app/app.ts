@@ -1,6 +1,6 @@
 import * as firebase from "firebase";
 import { userBuilder } from "../shared/data/user";
-import { Presenter } from "../shared/presenter/presenter";
+import { Presenter, PageLoader } from "../shared/presenter/presenter";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
 import { articleListPath, aboutPath, profilePath, errorPath } from '../shared/path/path';
@@ -38,7 +38,7 @@ export class App {
     rootVisit() { this.root("rootVisit"); }
     rootBack() { this.root("rootBack"); }
     root(msg: string) {
-        const counter = this.updatePageCounter(msg);
+        const counter = this.updatePageCounter(msg, PageLoader.Loading);
         const articleList = this.domain.article().all({ size: 30 } );
         this.renderPage(counter, (): Presenter => {
             const presenter = ArticleListPresenter.Next(this.presenter, articleList);
@@ -50,7 +50,7 @@ export class App {
     aboutVisit() { this.about("aboutVisit"); }
     aboutBack()  { this.about("aboutBack"); }
     about(msg: string) {
-        const counter = this.updatePageCounter(msg);
+        const counter = this.updatePageCounter(msg, PageLoader.Neutral);
         this.renderPage(counter, (): Presenter => {
             const presenter = AboutPresenter.Init(this.presenter);
             this.page.about(presenter);
@@ -61,7 +61,7 @@ export class App {
     profileVisit(uid: string) { this.profile(uid, "profileVisit"); }
     profileBack(uid: string)  { this.profile(uid, "profileBack"); }
     async profile(uid: string, msg: string) {
-        const counter = this.updatePageCounter(msg);
+        const counter = this.updatePageCounter(msg, PageLoader.Loading);
         const { code, userProfile, err } = await this.domain.profile().get({ uid: uid });
         if (err) {
             this.renderError(counter, code, err);
@@ -78,8 +78,9 @@ export class App {
     private renderPage(counter: number, callback: () => Presenter): void {
         try {
             if (counter === this.pageCounter) {
-                // TODO: page progress: Done.
+                this.setDonePageLoader();
                 this.presenter = callback();
+                this.delayResetPageLoader();
             } else {
                 this.logger.info(`${counter} !== ${this.pageCounter}`);
             }
@@ -89,25 +90,52 @@ export class App {
     }
 
     private renderError(pageCounter: number, code: number, err: string): void {
-        // TODO: page loading done: add done.
         this.logger.error(`renderError: code=${code}; error=${err}`);
         if (pageCounter === this.pageCounter) {
+            this.setDonePageLoader();
             const currentUser = this.presenter.currentUser;
             const pageLoader = this.presenter.pageLoader;
             const p = ErrorPresenter.FromCode(code, currentUser, pageLoader);
             this.presenter = p;
             this.page.error(p);
+            this.delayResetPageLoader();
         } else {
             this.logger.info(`${pageCounter} !== ${this.pageCounter}`);
         }
-
-        // TODO: reset page loading: remove loading and done..
     }
 
-    private updatePageCounter(msg: string): number {
+    private updatePageCounter(msg: string, pageLoader: PageLoader): number {
+        this.setPageLoader(pageLoader);
+
         this.pageCounter++;
         this.logger.info(`${msg}; visitCount=${this.pageCounter}`);
         return this.pageCounter;
+    }
+    delayResetPageLoader(): void {
+        const reset = (pageCounter: number): void => {
+            if (this.pageCounter === pageCounter) {
+                this.resetPageLoader();
+            }
+        };
+
+        setTimeout(reset, 300, this.pageCounter);
+    }
+    resetPageLoader(): void {
+        if (this.presenter.pageLoader !== PageLoader.Neutral) {
+            this.presenter.pageLoader = PageLoader.Neutral;
+            this.render();
+        }
+    }
+    setPageLoader(pageLoader: PageLoader): void {
+        this.resetPageLoader();
+
+        this.presenter.pageLoader = pageLoader;
+        this.render();
+    }
+    setDonePageLoader(): void {
+        if (this.presenter.pageLoader === PageLoader.Loading) {
+            this.presenter.pageLoader = PageLoader.Done;
+        }
     }
 
     //
