@@ -1,12 +1,23 @@
 @import "space";
 @import "link";
 @import "palette";
+@import "progess";
 
 //
 //       CONSTANTS
 //
 $font-size-body: 20px;
 $breakpoint-small: 460px;
+$progress-bar-duration: 2s;
+
+//
+// PROGRESS
+//
+@include progress-bar(
+                $primary-color-light,
+                $primary-color-dark,
+                $primary-color,
+                $progress-bar-duration)
 
 //
 //         LAYOUT

@@ -1,0 +1,65 @@
+//
+// START:
+// add: "loading"
+// add: "done"
+//
+// RESET:
+// remove: "loading"
+// remove: "done"
+//
+@mixin progress-bar($loader, $container, $background, $duration) {
+  @keyframes loading {
+    0% { width: 0; }
+    2% { width: 30%; }
+    40% { width: 50%; }
+    60% { width: 70%; }
+    100% { width: 80%; }
+  }
+
+  @keyframes done {
+    0% { background: $loader; }
+    50% { background: $loader; }
+    100% { background: $background; }
+  }
+
+  .viperfire-progress-bar {
+    z-index: 9999;
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    opacity: 1;
+
+    pointer-events: none;
+  }
+
+  .viperfire-progress-bar.loading {
+    display: block;
+    width: 80%;
+    background-color: $loader;
+    animation-duration: $duration;
+    animation-name: loading;
+  }
+
+  .viperfire-progress-bar.loading.done {
+    width: 100%;
+    animation-duration: 0.8s;
+    animation-name: done;
+    background: $background;
+  }
+
+  .background-progress-bar {
+    z-index: 9998;
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background-color: $container;
+    opacity: 0.2;
+  }
+}
+
