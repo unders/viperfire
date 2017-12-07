@@ -3,12 +3,10 @@ import { userBuilder } from "../shared/data/user";
 import { Presenter, PageLoader } from "../shared/presenter/presenter";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
-import { ErrorPresenter } from "../shared/presenter/error_presenter";
 import { Page } from "../page/page";
 
 class Context {
     readonly page: Page;
-    readonly presenter: Presenter;
     readonly logger: Logger;
     readonly domain: Domain
 }
@@ -17,12 +15,10 @@ export class App {
     private readonly page: Page;
     private readonly logger: Logger;
     private readonly domain: Domain;
-    private presenter: Presenter;
     private pageCounter: number = 0;
 
     constructor(ctx: Context) {
         this.page = ctx.page;
-        this.presenter = ctx.presenter;
         this.logger = ctx.logger;
         this.domain = ctx.domain;
     }
@@ -37,7 +33,7 @@ export class App {
         const counter = this.updatePageCounter(msg);
         const articleList = this.domain.article().all({ size: 30 } );
         this.renderPage(counter, (): Presenter => {
-            return this.page.articleList(this.presenter, articleList);
+            return this.page.articleList(this.page.presenter, articleList);
         });
     }
 
@@ -46,7 +42,7 @@ export class App {
     about(msg: string) {
         const counter = this.updatePageCounter(msg);
         this.renderPage(counter, (): Presenter => {
-            return this.page.about(this.presenter);
+            return this.page.about(this.page.presenter);
         });
     }
 
@@ -61,7 +57,7 @@ export class App {
         }
 
         this.renderPage(counter, (): Presenter => {
-            return this.page.profile(this.presenter, userProfile);
+            return this.page.profile(this.page.presenter, userProfile);
         });
     }
 
@@ -69,7 +65,7 @@ export class App {
         try {
             if (counter === this.pageCounter) {
                 this.setDonePageLoader();
-                this.presenter = callback();
+                this.page.presenter = callback();
                 this.delayResetPageLoader();
             } else {
                 this.logger.info(`skipping render page => ${counter} !== ${this.pageCounter}`);
@@ -83,7 +79,7 @@ export class App {
         this.logger.error(`render page error; code=${code}; error=${err}`);
         if (pageCounter === this.pageCounter) {
             this.setDonePageLoader();
-            this.presenter = this.page.error(this.presenter, code);
+            this.page.presenter = this.page.error(this.page.presenter, code);
             this.delayResetPageLoader();
         } else {
             this.logger.info(`skipping render page error => ${pageCounter} !== ${this.pageCounter}`);
@@ -107,15 +103,15 @@ export class App {
         setTimeout(reset, 300, this.pageCounter);
     }
     private resetPageLoader(): void {
-        if (this.presenter.pageLoader !== PageLoader.Neutral) {
-            this.presenter.pageLoader = PageLoader.Neutral;
+        if (this.page.presenter.pageLoader !== PageLoader.Neutral) {
+            this.page.presenter.pageLoader = PageLoader.Neutral;
             this.render();
         }
     }
     private setLoadingPageLoader(): void {
         this.resetPageLoader();
 
-        this.presenter.pageLoader = PageLoader.Loading;
+        this.page.presenter.pageLoader = PageLoader.Loading;
         this.render();
     }
     private setDonePageLoader(): void {
@@ -124,8 +120,8 @@ export class App {
                 return;
             }
 
-            if (this.presenter.pageLoader === PageLoader.Loading) {
-                this.presenter.pageLoader = PageLoader.Done;
+            if (this.page.presenter.pageLoader === PageLoader.Loading) {
+                this.page.presenter.pageLoader = PageLoader.Done;
             }
             this.render();
         };
@@ -141,12 +137,12 @@ export class App {
         if (user) {
             currentUser = userBuilder.fromFirebase(user);
             this.logger.info(`signed in as: ${currentUser.name}`);
-            this.presenter.currentUser = currentUser;
+            this.page.presenter.currentUser = currentUser;
             this.domain.profile().subscribe(user.uid);
         } else {
             this.logger.info("signed out");
-            const uid = this.presenter.currentUser.uid;
-            this.presenter.currentUser = currentUser;
+            const uid = this.page.presenter.currentUser.uid;
+            this.page.presenter.currentUser = currentUser;
             this.domain.profile().unsubscribe(uid);
         }
         this.render();
@@ -157,20 +153,20 @@ export class App {
             if (err) {
                 this.logger.error(err);
             }
-            this.presenter.currentUser = userBuilder.withClaims(this.presenter.currentUser, claims);
+            this.page.presenter.currentUser = userBuilder.withClaims(this.page.presenter.currentUser, claims);
         }
 
         this.render();
-        this.logger.setUser(this.presenter.currentUser);
+        this.logger.setUser(this.page.presenter.currentUser);
     }
 
     //
     // Render current page
     //
     render() {
-        const path = this.presenter.path;
+        const path = this.page.presenter.path;
 
-        if (this.page.render(this.presenter)) {
+        if (this.page.render(this.page.presenter)) {
             this.logger.info(`render path=${path}`);
         } else {
             this.logger.info(`failed to render path=${path}`);

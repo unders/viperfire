@@ -11,16 +11,19 @@ import { UserProfile } from "../shared/data/user_profile";
 
 class Context {
     readonly body: Element;
-    view: View;
+    readonly view: View;
+    readonly presenter: Presenter;
 }
 
 export class Page {
     private readonly renderBody: wireRender;
     private readonly view: View;
+    presenter: Presenter;
 
     constructor(ctx: Context) {
         this.renderBody = bind(ctx.body);
         this.view = ctx.view;
+        this.presenter = ctx.presenter;
     }
 
     articleList(p: Presenter, articleList: ArticleList): Presenter {
