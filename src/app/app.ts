@@ -30,10 +30,13 @@ export class App {
     rootVisit() { this.root("rootVisit"); }
     rootBack() { this.root("rootBack"); }
     root(msg: string) {
+        // const pageNumber = this.page.visit(msg);
+        // const articleList = this.domain.article().all({ size: 30 } );
+        // this.page.showArticleList(pageNumber, articleList);
         const counter = this.updatePageCounter(msg);
         const articleList = this.domain.article().all({ size: 30 } );
-        this.renderPage(counter, (): Presenter => {
-            return this.page.articleList(this.page.presenter, articleList);
+        this.renderPage(counter, (): void => {
+            this.page.articleList(articleList);
         });
     }
 
@@ -41,8 +44,8 @@ export class App {
     aboutBack()  { this.about("aboutBack"); }
     about(msg: string) {
         const counter = this.updatePageCounter(msg);
-        this.renderPage(counter, (): Presenter => {
-            return this.page.about(this.page.presenter);
+        this.renderPage(counter, (): void => {
+            this.page.about();
         });
     }
 
@@ -56,16 +59,16 @@ export class App {
             return;
         }
 
-        this.renderPage(counter, (): Presenter => {
-            return this.page.profile(this.page.presenter, userProfile);
+        this.renderPage(counter, (): void => {
+            return this.page.profile(userProfile);
         });
     }
 
-    private renderPage(counter: number, callback: () => Presenter): void {
+    private renderPage(counter: number, callback: () => void): void {
         try {
             if (counter === this.pageCounter) {
                 this.setDonePageLoader();
-                this.page.presenter = callback();
+                callback();
                 this.delayResetPageLoader();
             } else {
                 this.logger.info(`skipping render page => ${counter} !== ${this.pageCounter}`);
@@ -79,7 +82,7 @@ export class App {
         this.logger.error(`render page error; code=${code}; error=${err}`);
         if (pageCounter === this.pageCounter) {
             this.setDonePageLoader();
-            this.page.presenter = this.page.error(this.page.presenter, code);
+            this.page.error(code);
             this.delayResetPageLoader();
         } else {
             this.logger.info(`skipping render page error => ${pageCounter} !== ${this.pageCounter}`);
@@ -166,7 +169,7 @@ export class App {
     render() {
         const path = this.page.presenter.path;
 
-        if (this.page.render(this.page.presenter)) {
+        if (this.page.render()) {
             this.logger.info(`render path=${path}`);
         } else {
             this.logger.info(`failed to render path=${path}`);

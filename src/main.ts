@@ -34,7 +34,7 @@ const main = () => {
 
     const app = new App({
         domain: domain,
-        page: new Page({ view: config.view, body: root, presenter: presenter }),
+        page: new Page({ view: config.view, body: root, presenter: presenter, logger: logger }),
         logger: logger
     });
     app.render();
