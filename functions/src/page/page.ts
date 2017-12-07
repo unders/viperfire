@@ -67,7 +67,7 @@ export class Page {
 
     error(code: number, currentUser: User): string {
         try {
-            const p = ErrorPresenter.FromCode(code, currentUser, PageLoader.Neutral);
+            const p = ErrorPresenter.FromCode(code, { currentUser: currentUser, pageLoader: PageLoader.Neutral });
             const html = this.view.renderError(wire(), p);
             const ctx = { title: p.title, html: html, initialState: p.toJSON() };
             return renderMainPageLayout(wire(), ctx);

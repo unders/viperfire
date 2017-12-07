@@ -18,6 +18,11 @@ interface Serialize {
     readonly message: string;
 }
 
+interface FromCode {
+    readonly pageLoader: PageLoader;
+    readonly currentUser: User;
+}
+
 export class ErrorPresenter implements Presenter {
     readonly pageLoader: PageLoader;
     readonly title: string;
@@ -33,20 +38,20 @@ export class ErrorPresenter implements Presenter {
         this.message = ctx.message;
     }
 
-    static FromCode(code: number, currentUser: User, pageLoader: PageLoader) {
+    static FromCode(code: number, ctx: FromCode) {
         switch (code) {
             case 404:
                 return new ErrorPresenter({
-                    pageLoader: pageLoader,
+                    pageLoader: ctx.pageLoader,
                     title: "Not Found",
                     message: "Page Not Found",
-                    currentUser: currentUser});
+                    currentUser: ctx.currentUser});
             default:
                 return new ErrorPresenter({
-                    pageLoader: pageLoader,
+                    pageLoader: ctx.pageLoader,
                     title: "Internal Error",
                     message: "Internal Error",
-                    currentUser: currentUser});
+                    currentUser: ctx.currentUser});
         }
     }
 

@@ -32,12 +32,9 @@ const main = () => {
         presenter.currentUser = currentUser;
     }
 
-    const app = new App({
-        domain: domain,
-        page: new Page({ view: config.view, body: root, presenter: presenter, logger: logger }),
-        logger: logger
-    });
-    app.render();
+    const page = new Page({ view: config.view, body: root, presenter: presenter, logger: logger });
+    page.render();
+    const app = new App({ domain: domain, page: page, logger: logger });
     new ActionHandler({ app: app, domain: domain, logger: logger });
     router(app);
 

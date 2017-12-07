@@ -9,6 +9,7 @@ import { Presenter } from "../shared/presenter/presenter";
 import { articleListPath, aboutPath, profilePath, errorPath } from '../shared/path/path';
 import { UserProfile } from "../shared/data/user_profile";
 import { Logger } from "../log/log";
+import { loader }  from "./loader"
 
 class Context {
     readonly body: Element;
@@ -22,7 +23,7 @@ export class Page {
     private readonly renderBody: wireRender;
     private readonly view: View;
     presenter: Presenter;
-    private pageNumber: number = 0;
+    pageNumber: number = 0;
 
     constructor(ctx: Context) {
         this.renderBody = bind(ctx.body);
@@ -31,74 +32,113 @@ export class Page {
         this.logger = ctx.logger;
     }
 
-    // visit(msg: string): number {
-    //     // this.setLoadingPageLoader();
-    //
-    //     this.pageNumber++;
-    //     this.logger.info(`nextPage(${this.pageNumber})=${msg}`);
-    //     return this.pageNumber;
-    // }
-    //
-    // showArticleList(pageNumber: number, articleList: ArticleList): void {
-    //
-    // }
-
-    articleList(articleList: ArticleList): void {
-        const p = ArticleListPresenter.Next(this.presenter, articleList);
-        this.articleListP(p);
+    loading(msg: string): number {
+        loader.start(this);
+        this.pageNumber++;
+        this.logger.info(`loading(${this.pageNumber})=${msg}`);
+        return this.pageNumber;
     }
-    private articleListP(p: ArticleListPresenter): void {
+
+    showArticleList(pageNumber: number, articleList: ArticleList): void {
+        const show = (): void => {
+            const p = ArticleListPresenter.Next(this.presenter, articleList);
+            this.renderArticleList(p);
+        };
+
+        this.showPage(pageNumber, show);
+    }
+
+    private renderArticleList(p: ArticleListPresenter): void {
         document.title = p.title;
         this.view.renderArticleList(this.renderBody, p);
         this.presenter = p;
     }
 
-    profile(userProfile: UserProfile): void {
-        const p = ProfilePresenter.Next(this.presenter, userProfile);
-        this.profileP(p);
-    }
-    private profileP(p: ProfilePresenter): void {
-        document.title = p.title;
-        this.view.renderProfile(this.renderBody, p);
-        this.presenter = p
+    showProfile(pageNumber: number, userProfile: UserProfile): void {
+        const show = (): void => {
+            const p = ProfilePresenter.Next(this.presenter, userProfile);
+            this.renderProfile(p);
+        };
+
+        this.showPage(pageNumber, show);
     }
 
-    about(): void {
+    private renderProfile(p: ProfilePresenter): void {
+        document.title = p.title;
+        this.view.renderProfile(this.renderBody, p);
+        this.presenter = p;
+    }
+
+    showAbout(pageNumber: number): void {
+        const show = (): void => {
+            this.renderAbout();
+        };
+
+        this.showPage(pageNumber, show)
+    }
+
+    renderAbout(): void {
         const p = AboutPresenter.Init(this.presenter);
         this.view.renderAbout(this.renderBody, p);
         document.title = p.title;
         this.presenter = p;
     }
 
-    error(code: number): void {
-        const p = ErrorPresenter.FromCode(code, this.presenter.currentUser, this.presenter.pageLoader);
-        this.errorP(p);
+    private showPage(pageNumber: number, show: () => void): void {
+        try {
+            if (pageNumber === this.pageNumber) {
+                loader.done(this);
+                show();
+                loader.reset(this);
+            } else {
+                this.logger.info(`cancel visit => ${pageNumber} !== ${this.pageNumber}`);
+            }
+        } catch(e) {
+            this.showError(pageNumber, 500, e.message);
+        }
     }
-    private errorP(p: ErrorPresenter): void {
+
+    showError(pageNumber: number, code: number, err: string): void {
+        this.logger.error(`visit error; code=${code}; error=${err}`);
+        if (pageNumber === this.pageNumber) {
+            loader.done(this);
+            const p = ErrorPresenter.FromCode(code, this.presenter);
+            this.renderError(p);
+            loader.reset(this);
+        } else {
+            this.logger.info(`cancel error visit => ${pageNumber} !== ${this.pageNumber}`);
+        }
+    }
+
+    private renderError(p: ErrorPresenter): void {
         this.view.renderError(this.renderBody, p);
         document.title = p.title;
         this.presenter = p;
     }
 
-    render(): boolean {
+    render(): void {
         const presenter =  this.presenter;
         const path = presenter.path;
 
-        switch(path) {
-            case articleListPath:
-                this.articleListP(presenter as ArticleListPresenter);
-                return true;
-            case aboutPath:
-                this.about();
-                return true;
-            case profilePath:
-                this.profileP(presenter as ProfilePresenter);
-                return true;
-            case errorPath:
-                this.errorP(presenter as ErrorPresenter);
-                return true;
-            default:
-                return false;
+        try {
+            switch(path) {
+                case articleListPath:
+                    this.renderArticleList(presenter as ArticleListPresenter);
+                    break;
+                case aboutPath:
+                    this.renderAbout();
+                    break;
+                case profilePath:
+                    this.renderProfile(presenter as ProfilePresenter);
+                    break;
+                case errorPath:
+                    this.renderError(presenter as ErrorPresenter);
+                    break;
+                default:
+                    throw new Error(`path=${path} not found`);
+            }
+        } catch(e) {
+            this.logger.error(`page.Render() failed; error=${e.message}`);
         }
     }
 }
