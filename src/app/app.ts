@@ -3,10 +3,6 @@ import { userBuilder } from "../shared/data/user";
 import { Presenter, PageLoader } from "../shared/presenter/presenter";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
-import { articleListPath, aboutPath, profilePath, errorPath } from '../shared/path/path';
-import { ArticleListPresenter } from '../shared/presenter/article_list_presenter';
-import { AboutPresenter } from '../shared/presenter/about_presenter';
-import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { ErrorPresenter } from "../shared/presenter/error_presenter";
 import { Page } from "../page/page";
 
@@ -41,9 +37,7 @@ export class App {
         const counter = this.updatePageCounter(msg);
         const articleList = this.domain.article().all({ size: 30 } );
         this.renderPage(counter, (): Presenter => {
-            const presenter = ArticleListPresenter.Next(this.presenter, articleList);
-            this.page.articleList(presenter);
-            return presenter;
+            return this.page.articleList(this.presenter, articleList);
         });
     }
 
@@ -52,9 +46,7 @@ export class App {
     about(msg: string) {
         const counter = this.updatePageCounter(msg);
         this.renderPage(counter, (): Presenter => {
-            const presenter = AboutPresenter.Init(this.presenter);
-            this.page.about(presenter);
-            return presenter;
+            return this.page.about(this.presenter);
         });
     }
 
@@ -69,9 +61,7 @@ export class App {
         }
 
         this.renderPage(counter, (): Presenter => {
-            const presenter = ProfilePresenter.Next(this.presenter, userProfile);
-            this.page.profile(presenter);
-            return presenter;
+            return this.page.profile(this.presenter, userProfile);
         });
     }
 
@@ -82,7 +72,7 @@ export class App {
                 this.presenter = callback();
                 this.delayResetPageLoader();
             } else {
-                this.logger.info(`${counter} !== ${this.pageCounter}`);
+                this.logger.info(`skipping render page => ${counter} !== ${this.pageCounter}`);
             }
         } catch(e) {
             this.renderError(counter, 500, e.message);
@@ -90,17 +80,13 @@ export class App {
     }
 
     private renderError(pageCounter: number, code: number, err: string): void {
-        this.logger.error(`renderError: code=${code}; error=${err}`);
+        this.logger.error(`render page error; code=${code}; error=${err}`);
         if (pageCounter === this.pageCounter) {
             this.setDonePageLoader();
-            const currentUser = this.presenter.currentUser;
-            const pageLoader = this.presenter.pageLoader;
-            const p = ErrorPresenter.FromCode(code, currentUser, pageLoader);
-            this.presenter = p;
-            this.page.error(p);
+            this.presenter = this.page.error(this.presenter, code);
             this.delayResetPageLoader();
         } else {
-            this.logger.info(`${pageCounter} !== ${this.pageCounter}`);
+            this.logger.info(`skipping render page error => ${pageCounter} !== ${this.pageCounter}`);
         }
     }
 
@@ -111,7 +97,7 @@ export class App {
         this.logger.info(`${msg}; visitCount=${this.pageCounter}`);
         return this.pageCounter;
     }
-    delayResetPageLoader(): void {
+    private delayResetPageLoader(): void {
         const reset = (pageCounter: number): void => {
             if (this.pageCounter === pageCounter) {
                 this.resetPageLoader();
@@ -120,19 +106,19 @@ export class App {
 
         setTimeout(reset, 300, this.pageCounter);
     }
-    resetPageLoader(): void {
+    private resetPageLoader(): void {
         if (this.presenter.pageLoader !== PageLoader.Neutral) {
             this.presenter.pageLoader = PageLoader.Neutral;
             this.render();
         }
     }
-    setLoadingPageLoader(): void {
+    private setLoadingPageLoader(): void {
         this.resetPageLoader();
 
         this.presenter.pageLoader = PageLoader.Loading;
         this.render();
     }
-    setDonePageLoader(): void {
+    private setDonePageLoader(): void {
         const done = (pageCounter: number): void => {
             if (this.pageCounter !== pageCounter) {
                 return;
@@ -183,23 +169,11 @@ export class App {
     //
     render() {
         const path = this.presenter.path;
-        this.logger.info(`render path=${path}`);
 
-        switch(path) {
-            case articleListPath:
-                this.page.articleList(this.presenter as ArticleListPresenter);
-                break;
-            case aboutPath:
-                this.page.about(this.presenter as AboutPresenter);
-                break;
-            case profilePath:
-                this.page.profile(this.presenter as ProfilePresenter);
-                break;
-            case errorPath:
-                this.page.error(this.presenter as ErrorPresenter);
-                break;
-            default:
-                this.logger.error(`app.render() failed; path=${path}  -  Not Found`);
+        if (this.page.render(this.presenter)) {
+            this.logger.info(`render path=${path}`);
+        } else {
+            this.logger.info(`failed to render path=${path}`);
         }
     }
 }
