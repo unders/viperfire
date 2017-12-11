@@ -1,12 +1,12 @@
 import { PageLoader, Presenter } from "./presenter";
 import { User } from "../data/user";
 import { articleListPath } from "../path/path";
-import { ArticleList } from "../data/article_list";
+import { ArticleList } from "../domain/article_domain";
 
 interface Context {
     readonly pageLoader: PageLoader;
     readonly currentUser: User;
-    readonly message: string;
+    readonly articleList: ArticleList;
 }
 
 interface Serialize {
@@ -15,7 +15,7 @@ interface Serialize {
     readonly isPresenter: boolean;
     readonly path: string;
     readonly currentUser: User;
-    readonly message: string;
+    readonly articleList: ArticleList;
 }
 
 export class ArticleListPresenter implements Presenter {
@@ -24,19 +24,19 @@ export class ArticleListPresenter implements Presenter {
     readonly isPresenter: boolean = true;
     readonly path: string = articleListPath;
     readonly currentUser: User;
-    readonly message: string;
+    readonly articleList: ArticleList;
 
     constructor(ctx: Context) {
         this.pageLoader = ctx.pageLoader;
         this.currentUser = ctx.currentUser;
-        this.message = ctx.message;
+        this.articleList = ctx.articleList;
     }
 
     static Next(p: Presenter, articleList: ArticleList): ArticleListPresenter {
         return new ArticleListPresenter({
             pageLoader: p.pageLoader,
             currentUser: p.currentUser,
-            message: articleList.message
+            articleList: articleList
         });
     }
 
@@ -45,7 +45,7 @@ export class ArticleListPresenter implements Presenter {
         return new ArticleListPresenter({
             pageLoader: p.pageLoader,
             currentUser: pr.currentUser,
-            message: pr.message
+            articleList: pr.articleList
         });
     }
 
@@ -60,7 +60,7 @@ export class ArticleListPresenter implements Presenter {
             isPresenter: this.isPresenter,
             path:        this.path,
             currentUser: this.currentUser,
-            message:      this.message
+            articleList: this.articleList,
         };
     }
 }

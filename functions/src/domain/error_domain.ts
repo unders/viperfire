@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import { ErrorContext, errorBuilder } from "../shared/data/error";
-import { errorCollection } from "../shared/domain/error_domain";
+import { path } from "../shared/db/path";
 
 interface Context {
     firestore: admin.firestore.Firestore;
@@ -16,7 +16,7 @@ export class ErrorDomain {
     async log(ctx: ErrorContext): Promise<void> {
         const data = errorBuilder.Data(ctx);
         try {
-            const x = await this.db.collection(errorCollection).add(data);
+            await this.db.collection(path.errors).add(data);
             console.error(`Error (see errors collection): ${errorBuilder.toJSON(data)}`);
         } catch(e) {
             console.error(`Could not save error: ${errorBuilder.toJSON(data)}; error: ${e.message}`);

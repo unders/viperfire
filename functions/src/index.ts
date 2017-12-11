@@ -14,10 +14,18 @@ const app = express();
 const config = getServerConfig();
 const page = new Page({ view: config.view });
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
-    const articleList = domain.article().all({ size: 30 });
+    const query = domain.article().queryPublished(req.params.page_token);
+    const { articleList, domainError } = await domain.article().all(query);
+    if (domainError) {
+        const body = page.error(500, userBuilder.signedOut());
+        res.status(500).send(body);
+        console.error(domainError);
+        return;
+    }
+
     const { body, pageError } = page.articleList(articleList, userBuilder.signedOut());
     if (pageError) {
         res.status(500).send(body);

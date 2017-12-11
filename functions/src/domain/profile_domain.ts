@@ -1,5 +1,6 @@
 import * as admin from "firebase-admin";
-import { GetContext, Result, profilePath } from '../shared/domain/profile_domain'
+import { GetContext, Result, } from '../shared/domain/profile_domain'
+import { path } from '../shared/db/path'
 import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 
@@ -19,7 +20,7 @@ export class ProfileDomain {
     }
 
     async get(ctx: GetContext): Promise<Result> {
-        const profile = profilePath(ctx.uid);
+        const profile = path.profile(ctx.uid);
         try {
             const doc = await this.db.doc(profile).get();
             if (!doc.exists) {
@@ -38,7 +39,7 @@ export class ProfileDomain {
 
     async set(data: UserProfile): Promise<ProfileSet> {
         try {
-            await this.db.doc(profilePath(data.uid)).set(data);
+            await this.db.doc(path.profile(data.uid)).set(data);
             return { profileError: null };
         } catch (e) {
             return { profileError: e.message };

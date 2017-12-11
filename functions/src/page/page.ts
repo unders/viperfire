@@ -6,9 +6,9 @@ import { AboutPresenter } from "../shared/presenter/about_presenter";
 import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
 import { ErrorPresenter } from "../shared/presenter/error_presenter";
 import { User } from "../shared/data/user";
-import { ArticleList } from "../shared/data/article_list";
 import { PageLoader } from "../shared/presenter/presenter";
 import { UserProfile } from "../shared/data/user_profile";
+import { ArticleList } from "../shared/domain/article_domain";
 
 class Context {
     view: View;
@@ -30,7 +30,7 @@ export class Page {
         const p = new ArticleListPresenter({
             pageLoader: PageLoader.Neutral,
             currentUser: currentUser,
-            message: articleList.message,
+            articleList: articleList,
         });
         return this.renderPage(p.currentUser, (): string =>  {
             const html = this.view.renderArticleList(wire(), p);

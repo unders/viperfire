@@ -1,5 +1,6 @@
 import * as firebase from "firebase";
-import { GetContext, Result, profilePath } from '../shared/domain/profile_domain'
+import { GetContext, Result } from '../shared/domain/profile_domain'
+import { path } from "../shared/db/path"
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 import { Logger } from "../log/log";
 import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";
@@ -24,7 +25,7 @@ export class ProfileDomain {
 
     async get(ctx: GetContext): Promise<Result> {
         const userProfile = this.cache[ctx.uid];
-        const profile = profilePath(ctx.uid);
+        const profile = path.profile(ctx.uid);
         if (userProfile) {
             this.logger.info(`cache hit ${profile}`);
             return { code: statusCode.OK, userProfile: userProfile, err: null };
@@ -47,7 +48,7 @@ export class ProfileDomain {
     }
 
     subscribe(uid: string) {
-        const profile = profilePath(uid);
+        const profile = path.profile(uid);
         this.logger.info(`subscribe to ${profile}`);
         this.subscriptions[uid] = this.db.doc(profile).onSnapshot((doc) => {
             if (!doc.exists) {
@@ -63,7 +64,7 @@ export class ProfileDomain {
 
     unsubscribe(uid: string) {
         if (uid === "") { return; }
-        const profile = profilePath(uid);
+        const profile = path.profile(uid);
 
         this.logger.info(`unsubscribe to ${profile}`);
         delete this.cache[uid];

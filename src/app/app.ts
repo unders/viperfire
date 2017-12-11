@@ -27,9 +27,15 @@ export class App {
 
     rootVisit() { this.root("rootVisit"); }
     rootBack() { this.root("rootBack"); }
-    root(msg: string) {
+    async root(msg: string) {
         const pageNumber = this.page.loading(msg);
-        const articleList = this.domain.article().all({ size: 30 } );
+        const query = this.domain.article().queryPublished(this.page.nextArticlePageToken());
+        const { articleList, domainError } = await this.domain.article().all(query);
+        if (domainError) {
+            this.page.showError(pageNumber, 500, domainError);
+            return;
+        }
+
         this.page.showArticleList(pageNumber, articleList);
     }
 

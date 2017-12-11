@@ -1,7 +1,6 @@
 import { bind, wireRender } from "../dom/dom";
 import { View } from "../shared/view/view";
 import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
-import { ArticleList } from "../shared/data/article_list";
 import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { AboutPresenter } from "../shared/presenter/about_presenter";
 import { ErrorPresenter } from "../shared/presenter/error_presenter";
@@ -10,6 +9,7 @@ import { articleListPath, aboutPath, profilePath, errorPath } from '../shared/pa
 import { UserProfile } from "../shared/data/user_profile";
 import { Logger } from "../log/log";
 import { loader }  from "./loader"
+import { ArticleList } from "../shared/domain/article_domain";
 
 class Context {
     readonly body: Element;
@@ -84,6 +84,15 @@ export class Page {
         this.presenter = p;
     }
 
+    nextArticlePageToken(): string {
+        try {
+            const al = (this.presenter as ArticleListPresenter).articleList;
+            return al.pageToken;
+        } catch(e) {
+            return "";
+        }
+    }
+
     private showPage(pageNumber: number, show: () => void): void {
         try {
             if (pageNumber === this.pageNumber) {
@@ -135,7 +144,7 @@ export class Page {
                     this.renderError(presenter as ErrorPresenter);
                     break;
                 default:
-                    throw new Error(`path=${path} not found`);
+                    this.logger.error(`page.Render() failed; error=path=${path} not found`);
             }
         } catch(e) {
             this.logger.error(`page.Render() failed; error=${e.message}`);

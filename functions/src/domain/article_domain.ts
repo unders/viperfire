@@ -1,24 +1,124 @@
 import * as admin from "firebase-admin";
-import { ArticleList } from "../shared/data/article_list";
-import { User } from "../shared/data/user";
+import { Article, articleBuilder, Status, Attributes } from "../shared/data/article";
+import { AllContext, AllResult, CreateResult, GetResult } from "../shared/domain/article_domain";
+import { path } from "../shared/db/path";
+import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 
 interface Context {
     firestore: admin.firestore.Firestore;
-}
-
-interface AllContext {
-    readonly size: number;
+    limit: number;
 }
 
 export class ArticleDomain {
     private readonly db: admin.firestore.Firestore;
+    private readonly limit: number;
 
     constructor(ctx: Context) {
         this.db = ctx.firestore;
+        this.limit = ctx.limit;
+        if (this.limit < 1) {
+            this.limit = 3;
+        }
+        if (this.limit > 30) {
+            this.limit = 30;
+        }
     }
 
-    all(ctx: AllContext): ArticleList {
-        // TODO: fetch article from firestore.
-        return new ArticleList({ message: "Hello World" });
+    async create(article: Article): Promise<CreateResult> {
+        const attributes = articleBuilder.toDB(article);
+        try {
+            const err = articleBuilder.hasError(attributes);
+            if (err) {
+                return { id: "", error: err };
+            }
+
+            const doc = await this.db.collection(path.articles).add(attributes);
+            return { id: doc.id , error: null };
+
+        } catch(e) {
+            return { id: "" , error: e.message };
+        }
+    }
+
+    async get(id: string): Promise<GetResult> {
+        const article = path.article(id);
+        try {
+            const doc = await this.db.doc(article).get();
+            if (!doc.exists) {
+                const { code, err } = domainNotFound(article);
+                return { code: code, article: articleBuilder.empty(id), error: err };
+            }
+            const a = articleBuilder.fromDB(id, doc.data() as Attributes);
+            return { code: statusCode.OK, article: a, error: null };
+
+        } catch(e) {
+            const { code, err } = domainInternalError(article, e.message);
+            return { code: code, article: articleBuilder.empty(id), error: err };
+        }
+    }
+
+    //
+    // Queries
+    //
+
+    queryDraft(pageToken: string|null): AllContext {
+        return {
+            status: Status.Draft,
+            limit: this.limit,
+            pageToken: pageToken || ""
+        };
+    }
+
+    queryPublished(pageToken: string|null): AllContext {
+        return {
+            status: Status.Published,
+            limit: this.limit,
+            pageToken: pageToken || ""
+        };
+    }
+
+    async all(ctx: AllContext): Promise<AllResult> {
+        let query = this.db
+            .collection(path.articles)
+            .where("status", "==", `${ctx.status}`)
+            .limit(ctx.limit);
+
+        if (ctx.pageToken !== "") {
+            query = query.startAfter(ctx.pageToken);
+        }
+
+        if (ctx.status === Status.Draft) {
+            query = query.orderBy('createTime', 'desc')
+        } else {
+            query = query.orderBy('publishTime', 'desc')
+        }
+
+
+        let result: AllResult = {
+            articleList: { length: 0, pageToken: "", articles: [] } ,
+            domainError: null
+        };
+        try {
+            const snapshot = await query.get();
+            if (snapshot.empty) {
+                return result;
+            }
+
+            result.articleList.length = snapshot.docs.length;
+
+            if (result.articleList.length >= ctx.limit) {
+                result.articleList.pageToken = snapshot.docs[result.articleList.length - 1].id;
+            }
+
+            for (const doc of snapshot.docs) {
+                const articles = articleBuilder.fromDB(doc.id, doc.data() as Attributes);
+                result.articleList.articles.push(articles);
+            }
+            return result;
+
+        } catch(e) {
+            result.domainError = `query article.all() failed; error=${e.message}`;
+            return result;
+        }
     }
 }

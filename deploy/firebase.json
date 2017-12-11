@@ -31,5 +31,9 @@
         "value" : "max-age=300"
       } ]
     } ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }

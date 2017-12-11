@@ -7,6 +7,7 @@ STAG-SITE := https://$(STAG-PROJECT).firebaseapp.com
 help:
 	@echo "Staging"
 	@echo "  stag/deploy           ## deploy to firebase project: $(STAG-PROJECT)"
+	@echo "  stag/deploy/index     ## deployed only index"
 	@echo "  stag/check            ## check deployment"
 	@echo "  stag/version          ## check deployed version"
 	@echo "  stag/log              ## show log"
@@ -25,6 +26,11 @@ help:
 stag/deploy:
 	@firebase use $(STAG-PROJECT)
 	@firebase deploy
+
+.PHONY: stag/deploy/index
+stag/deploy/index:
+	@firebase use $(STAG-PROJECT)
+	@firebase deploy --only firestore:indexes
 
 .PHONY: stag/check
 stag/check:
