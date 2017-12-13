@@ -11,7 +11,23 @@
       "collectionId": "articles",
       "fields": [
         { "fieldPath": "status", "mode": "ASCENDING" },
+        { "fieldPath": "publishTime", "mode": "DESCENDING" },
+        { "fieldPath": "sortID", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "articles",
+      "fields": [
+        { "fieldPath": "status", "mode": "ASCENDING" },
         { "fieldPath": "createTime", "mode": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionId": "articles",
+      "fields": [
+        { "fieldPath": "status", "mode": "ASCENDING" },
+        { "fieldPath": "createTime", "mode": "DESCENDING" },
+        { "fieldPath": "sortID", "mode": "ASCENDING" }
       ]
     }
   ]

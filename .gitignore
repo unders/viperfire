@@ -63,7 +63,8 @@ src/shared
 functions/build
 public/assets/js
 public/assets/css
-dist
 deploy/functions/build/
+support/service-account-key.json
+
 
 

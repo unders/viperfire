@@ -29,7 +29,7 @@ export class App {
     rootBack() { this.root("rootBack"); }
     async root(msg: string) {
         const pageNumber = this.page.loading(msg);
-        const query = this.domain.article().queryPublished(this.page.nextArticlePageToken());
+        const query = this.domain.article().queryDraft(this.page.nextArticlePageToken());
         const { articleList, domainError } = await this.domain.article().all(query);
         if (domainError) {
             this.page.showError(pageNumber, 500, domainError);

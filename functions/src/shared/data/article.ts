@@ -4,6 +4,7 @@ export enum Status {
 }
 
 export interface Attributes {
+    readonly sortID: string;
     readonly title: string;
     readonly bodyText: string;
     readonly author: string;
@@ -19,9 +20,26 @@ export interface Article extends Attributes {
 }
 
 export class articleBuilder {
+    static setSortID(data: Article, sortID: string): Article {
+        return {
+            id: data.id,
+            sortID: sortID,
+            title: data.title,
+            bodyText:  data.bodyText,
+            author:data.author,
+            commentCount: data.commentCount,
+            status: data.status,
+            publishTime: data.publishTime,
+            createTime: data.createTime,
+            updateTime: data.updateTime
+        }
+    }
+
+
     static empty(id: string): Article {
         return {
             id: id,
+            sortID: "",
             title: "",
             bodyText:  "",
             author: "",
@@ -35,6 +53,7 @@ export class articleBuilder {
 
     static toDB(data: Article): Attributes {
         return {
+            sortID: data.sortID,
             title: data.title,
             bodyText:  data.bodyText,
             author:data.author,
@@ -49,6 +68,7 @@ export class articleBuilder {
     static fromDB(id: string, data: Attributes): Article {
         return {
             id: id,
+            sortID: data.sortID,
             title: data.title,
             bodyText:  data.bodyText,
             author:data.author,

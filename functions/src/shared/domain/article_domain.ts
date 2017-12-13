@@ -1,6 +1,44 @@
 import { Article, Status } from "../data/article";
 import { statusCode } from "./domain";
 
+export const newPageToken = (time: number, sortID: string): string => {
+    return `${time}-${sortID}`;
+};
+
+interface PageToken {
+    time: number;
+    sortID: string;
+}
+
+interface ResultPageToken {
+    pageToken: PageToken;
+    pageTokenError: null|string;
+}
+
+export const parsePageToken = (pageToken: string): ResultPageToken => {
+    try {
+        const a = pageToken.split("-");
+
+        const time = parseInt(a[0], 10);
+
+        return {
+            pageToken: {
+                time: time,
+                sortID: a[1]
+            },
+            pageTokenError: null
+        }
+    } catch(e) {
+        return {
+            pageToken: {
+                time: 1,
+                sortID: ""
+            },
+            pageTokenError: e.message
+        }
+    }
+};
+
 export interface AllContext {
     readonly status: Status;
     readonly limit: number;

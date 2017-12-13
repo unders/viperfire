@@ -16,18 +16,18 @@ export class ArticleListView {
         return this.html`
             <div class="articles">
                 ${haveArticles ?
-                    `<ul>
+                    wire()`<ul>
                         ${p.articleList.articles.map( (a) => wire(a)`
                             <li>
-                                <a href="${article(a.id)}">${a.title}</a>
-                                <span>published at ${a.publishTime}</span>
+                                <a href="${article(a.id)}">${a.id}</a>
+                                <span>Created at: ${a.createTime}</span>
                             </li>
                         `)}
                     </ul>
-                    ${hasMore ? `<a href="${path}">More</a>` : "" }
+                    ${hasMore ? wire()`<a href="${path}">More</a>` : "" }
                     `
                     :
-                    wire(this, ":notFound")`<p>Found no articles.</p>` }
+                    wire()`<p>Found no articles.</p>` }
             </div>
         `;
     }

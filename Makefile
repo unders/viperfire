@@ -25,10 +25,6 @@ install: ## installs dependencis
 start: ## starts dev environment
 	@modd -f support/modd.conf
 
-.PHONY: test
-test: ## runs tests
-	node_modules/.bin/jest
-
 .PHONY: release
 release: ## creates a release
 	##

@@ -17,7 +17,7 @@ const page = new Page({ view: config.view });
 app.get("/", async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
-    const query = domain.article().queryPublished(req.params.page_token);
+    const query = domain.article().queryDraft(req.query.page_token);
     const { articleList, domainError } = await domain.article().all(query);
     if (domainError) {
         const body = page.error(500, userBuilder.signedOut());
