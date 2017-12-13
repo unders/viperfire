@@ -25,11 +25,11 @@ export class App {
     // Page transitions
     //
 
-    rootVisit() { this.root("rootVisit"); }
-    rootBack() { this.root("rootBack"); }
-    async root(msg: string) {
+    rootVisit(pageToken: string) { this.root(pageToken, "rootVisit"); }
+    rootBack(pageToken: string) { this.root(pageToken, "rootBack"); }
+    async root(pageToken: string, msg: string) {
         const pageNumber = this.page.loading(msg);
-        const query = this.domain.article().queryDraft(this.page.nextArticlePageToken());
+        const query = this.domain.article().queryDraft(pageToken);
         const { articleList, domainError } = await this.domain.article().all(query);
         if (domainError) {
             this.page.showError(pageNumber, 500, domainError);

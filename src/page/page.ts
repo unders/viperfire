@@ -84,15 +84,6 @@ export class Page {
         this.presenter = p;
     }
 
-    nextArticlePageToken(): string {
-        try {
-            const al = (this.presenter as ArticleListPresenter).articleList;
-            return al.pageToken;
-        } catch(e) {
-            return "";
-        }
-    }
-
     private showPage(pageNumber: number, show: () => void): void {
         try {
             if (pageNumber === this.pageNumber) {

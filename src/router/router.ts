@@ -1,5 +1,6 @@
 import hyperApp = require('hyperhtml-app');
 import { App } from '../app/app';
+import { url } from "../lib/url";
 
 interface router {
     (): Router;
@@ -23,10 +24,12 @@ export const router = (app: App): void => {
     const visit  = "pushstate";
 
     route.get("/", function(ctx: Context) {
+        const pageToken  = url.Query()("page_token");
+
         if (ctx.type === visit) {
-            app.rootVisit();
+            app.rootVisit(pageToken);
         } else {
-            app.rootBack();
+            app.rootBack(pageToken);
         }
     });
 
