@@ -3,6 +3,7 @@ import { path } from "../path/url";
 import { ProfilePresenter } from "./profile_presenter";
 import { AboutPresenter } from "./about_presenter";
 import { ArticleListPresenter } from "./article_list_presenter";
+import { ArticlePresenter } from "./article_presenter";
 import { ErrorPresenter } from "./error_presenter";
 
 declare global {
@@ -39,10 +40,13 @@ export const getPresenter = function(): Result {
 };
 
 const buildPresenter = (p: Presenter): Result => {
+    // Note: update src/page/page.ts. also.
     try {
         switch(p.path) {
             case path.articles:
                 return { presenter: ArticleListPresenter.Init(p), errMessage: "" };
+            case path.articleRegExp:
+                return { presenter: ArticlePresenter.Init(p), errMessage: "" };
             case path.profileReqExp:
                 return { presenter: ProfilePresenter.Init(p), errMessage: "" };
             case path.about:

@@ -3,6 +3,10 @@ import { time } from "./time";
 describe("time", () => {
     test(".ago().time()", () => {
         const tests = [
+            { time: 1001, want: "future", now: 1000 },
+            { time: 1000, want: "now", now: 1000 },
+
+
             { time: 1000, want: "now", now: 5000 },
             { time: 1000, want: "5 seconds ago", now: 6000 },
             { time: 1000, want: "8 seconds ago", now: 9000 },

@@ -1,7 +1,11 @@
 import * as firebase from "firebase";
 import { articleBuilder, Attributes, Status } from "../shared/data/article";
-import { AllContext, AllResult, newPageToken, parsePageToken } from "../shared/domain/article_domain";
 import { path } from "../shared/path/db";
+import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
+import {
+    AllContext, AllResult, GetResult, newPageToken,
+    parsePageToken
+} from "../shared/domain/article_domain";
 
 interface Context {
     firestore: firebase.firestore.Firestore;
@@ -14,6 +18,24 @@ export class ArticleDomain {
     constructor(ctx: Context) {
         this.db = ctx.firestore;
     }
+
+    async get(id: string): Promise<GetResult> {
+        const article = path.article(id);
+        try {
+            const doc = await this.db.doc(article).get();
+            if (!doc.exists) {
+                const { code, err } = domainNotFound(article);
+                return { code: code, article: articleBuilder.empty(id), error: err };
+            }
+
+            const a = articleBuilder.fromDB(id, doc.data() as Attributes);
+            return { code: statusCode.OK, article: a, error: null };
+        } catch(e) {
+            const { code, err } = domainInternalError(article, e.message);
+            return { code: code, article: articleBuilder.empty(id), error: err };
+        }
+    }
+
 
     //
     // Queries

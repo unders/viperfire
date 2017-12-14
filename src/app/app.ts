@@ -39,6 +39,19 @@ export class App {
         this.page.showArticleList(pageNumber, articleList);
     }
 
+    articleVisit(id: string) { this.article(id, "articleVisit"); }
+    articleBack(id: string)  { this.article(id, "articleBack"); }
+    async article(id: string, msg: string) {
+        const pageNumber = this.page.loading(msg);
+        const { code, article, error } = await this.domain.article().get(id);
+        if (error) {
+            this.page.showError(pageNumber, code, error);
+            return;
+        }
+
+        this.page.showArticle(pageNumber, article);
+    }
+
     aboutVisit() { this.about("aboutVisit"); }
     aboutBack()  { this.about("aboutBack"); }
     about(msg: string) {

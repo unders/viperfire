@@ -10,6 +10,8 @@ import { UserProfile } from "../shared/data/user_profile";
 import { Logger } from "../log/log";
 import { loader }  from "./loader"
 import { ArticleList } from "../shared/domain/article_domain";
+import { Article } from "../shared/data/article";
+import { ArticlePresenter } from "../shared/presenter/article_presenter";
 
 class Context {
     readonly body: Element;
@@ -51,6 +53,21 @@ export class Page {
     private renderArticleList(p: ArticleListPresenter): void {
         document.title = p.title;
         this.view.renderArticleList(this.renderBody, p);
+        this.presenter = p;
+    }
+
+    showArticle(pageNumber: number, article: Article): void {
+        const show = (): void => {
+            const p = ArticlePresenter.Next(this.presenter, article);
+            this.renderArticle(p);
+        };
+
+        this.showPage(pageNumber, show);
+    }
+
+    private renderArticle(p: ArticlePresenter): void {
+        document.title = p.title;
+        this.view.renderArticle(this.renderBody, p);
         this.presenter = p;
     }
 
@@ -117,27 +134,29 @@ export class Page {
     }
 
     render(): void {
-        const presenter =  this.presenter;
-        const p = presenter.path;
-
+        // Note: update presenter/presenter.ts also.
         try {
-            switch(p) {
+            switch(this.presenter.path) {
                 case path.articles:
-                    this.renderArticleList(presenter as ArticleListPresenter);
+                    this.renderArticleList(this.presenter as ArticleListPresenter);
+                    break;
+                case path.articleRegExp:
+                    this.renderArticle(this.presenter as ArticlePresenter);
                     break;
                 case path.about:
                     this.renderAbout();
                     break;
                 case path.profileReqExp:
-                    this.renderProfile(presenter as ProfilePresenter);
+                    this.renderProfile(this.presenter as ProfilePresenter);
                     break;
                 case path.error:
-                    this.renderError(presenter as ErrorPresenter);
+                    this.renderError(this.presenter as ErrorPresenter);
                     break;
                 default:
                     this.logger.error(`page.Render() failed; error=path=${path} not found`);
             }
         } catch(e) {
+            // TODO: show an popup error message.
             this.logger.error(`page.Render() failed; error=${e.message}`);
         }
     }

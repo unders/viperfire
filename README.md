@@ -30,8 +30,8 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 - [ X ] Add a global loading like Youtube on the top.
 - [ X ] all() Fetch articles from firestore
 - [ X ] Fix pagination
-- [ ] merge db/path and path/path ...
-- [ ] get() Fetch article from firestore
+- [ X ] merge db/path and path/path ...
+- [ X ] get() Fetch article from firestore
 - [ ] Add centered message (when we cannot sing in due to network error...)
 - [ ] Add snackbar (to show error messages etc.)
 - [ ] Reporting error to stackdriver

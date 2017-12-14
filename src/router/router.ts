@@ -1,6 +1,7 @@
 import hyperApp = require('hyperhtml-app');
 import { App } from '../app/app';
 import { url } from "../lib/url";
+import { path } from "../shared/path/url"
 
 interface router {
     (): Router;
@@ -15,8 +16,8 @@ interface Context{
     params: object
 }
 
-interface UID {
-    uid: string
+interface ID {
+    id: string
 }
 
 export const router = (app: App): void => {
@@ -33,6 +34,15 @@ export const router = (app: App): void => {
         }
     });
 
+    route.get(path.articleRegExp, function(ctx: Context) {
+        const id = (ctx.params as ID).id;
+        if (ctx.type === visit) {
+            app.articleVisit(id);
+        } else {
+            app.articleBack(id);
+        }
+    });
+
     route.get("/about", function(ctx: Context) {
         if (ctx.type === visit) {
             app.aboutVisit();
@@ -41,12 +51,12 @@ export const router = (app: App): void => {
         }
     });
 
-    route.get("/profile/:uid", function(ctx: Context) {
-        const uid = (ctx.params as UID).uid;
+    route.get(path.profileReqExp, function(ctx: Context) {
+        const id = (ctx.params as ID).id;
         if (ctx.type === visit) {
-            app.profileVisit(uid);
+            app.profileVisit(id);
         } else {
-            app.profileBack(uid);
+            app.profileBack(id);
         }
     });
 

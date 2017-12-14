@@ -27,6 +27,7 @@ class Ago {
 
     time(ms: number) {
         const timeAgo  = (this.now - ms) / 1000; // convert to seconds
+        if (timeAgo < 0) return "future";
         if (timeAgo < 5) return "now";
 
         for (let unit of units) {

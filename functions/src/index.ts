@@ -54,8 +54,14 @@ app.get(path.about, (req, res) => {
 app.get(path.articleRegExp, async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
-    // TODO: fetch article from firestore.
-    const { body, pageError } = page.about(userBuilder.signedOut());
+    const { code, article, error } = await domain.article().get(req.params.id);
+    if (error) {
+        res.status(code).send(page.error(code, userBuilder.signedOut()));
+        console.error(error);
+        return;
+    }
+
+    const { body, pageError } = page.article(article, userBuilder.signedOut());
     if (pageError) {
         res.status(500).send(body);
         console.error(pageError);

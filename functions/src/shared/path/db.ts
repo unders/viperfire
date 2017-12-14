@@ -1,16 +1,16 @@
 export class path {
     static readonly profiles = "profiles";
-    static profile(uid: string): string {
-        return `${path.profiles}/${uid}`;
+    static profile(id: string): string {
+        return `${path.profiles}/${id}`;
     }
 
     static readonly errors = "errors";
-    static error(uid: string): string {
-        return `${path.errors}/${uid}`;
+    static error(id: string): string {
+        return `${path.errors}/${id}`;
     }
 
     static readonly articles = "articles";
-    static article(uid: string): string {
-        return `${path.articles}/${uid}`;
+    static article(id: string): string {
+        return `${path.articles}/${id}`;
     }
 }

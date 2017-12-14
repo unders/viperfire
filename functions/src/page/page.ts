@@ -8,7 +8,9 @@ import { ErrorPresenter } from "../shared/presenter/error_presenter";
 import { User } from "../shared/data/user";
 import { PageLoader } from "../shared/presenter/presenter";
 import { UserProfile } from "../shared/data/user_profile";
+import { Article } from "../shared/data/article";
 import { ArticleList } from "../shared/domain/article_domain";
+import { ArticlePresenter } from "../shared/presenter/article_presenter";
 
 class Context {
     view: View;
@@ -34,6 +36,19 @@ export class Page {
         });
         return this.renderPage(p.currentUser, (): string =>  {
             const html = this.view.renderArticleList(wire(), p);
+            const ctx = { title: p.title, html: html, initialState: p.toJSON() };
+            return renderMainPageLayout(wire(), ctx);
+        });
+    }
+
+    article(article: Article, currentUser: User): Result {
+        const p = new ArticlePresenter({
+            pageLoader: PageLoader.Neutral,
+            currentUser: currentUser,
+            article: article,
+        });
+        return this.renderPage(p.currentUser, (): string =>  {
+            const html = this.view.renderArticle(wire(), p);
             const ctx = { title: p.title, html: html, initialState: p.toJSON() };
             return renderMainPageLayout(wire(), ctx);
         });
