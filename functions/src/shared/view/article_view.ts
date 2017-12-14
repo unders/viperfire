@@ -16,8 +16,8 @@ export class ArticleView {
             <div class="article">
                 <h1>${p.article.title}</h1>
                 <p>${p.article.bodyText}</p>
-                <span>${ago.time(p.article.createTime)}</span>
-                <span>${ago.time(p.article.publishTime)}</span>
+                <div>Created: ${ago.time(p.article.createTime)}</div>
+                <div>Published: ${ago.time(p.article.publishTime)}</div>
             </div>
         `;
     }
