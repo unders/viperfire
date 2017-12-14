@@ -1,6 +1,6 @@
 import { PageLoader, Presenter } from "./presenter";
 import { User } from "../data/user";
-import { aboutPath } from "../path/path";
+import { path } from "../path/url";
 
 interface Context {
     readonly pageLoader: PageLoader;
@@ -19,7 +19,7 @@ export class AboutPresenter implements Presenter {
     readonly pageLoader: PageLoader;
     readonly title: string = "About";
     readonly isPresenter: boolean = true;
-    readonly path: string = aboutPath;
+    readonly path: string = path.about;
     readonly currentUser: User;
 
     constructor(ctx: Context) {

@@ -33,7 +33,6 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 - [ ] merge db/path and path/path ...
 - [ ] get() Fetch article from firestore
 - [ ] Add centered message (when we cannot sing in due to network error...)
-
 - [ ] Add snackbar (to show error messages etc.)
 - [ ] Reporting error to stackdriver
 - [ ] add public/404.html page

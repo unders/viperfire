@@ -1,6 +1,6 @@
 import { PageLoader, Presenter } from "./presenter";
 import { User } from "../data/user";
-import { articleListPath } from "../path/path";
+import { path } from "../path/url";
 import { ArticleList } from "../domain/article_domain";
 
 interface Context {
@@ -22,7 +22,7 @@ export class ArticleListPresenter implements Presenter {
     readonly pageLoader: PageLoader;
     readonly title: string = "Articles";
     readonly isPresenter: boolean = true;
-    readonly path: string = articleListPath;
+    readonly path: string = path.articles;
     readonly currentUser: User;
     readonly articleList: ArticleList;
 

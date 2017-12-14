@@ -5,7 +5,7 @@ import { AboutView } from "./about_view";
 import { ProfileView } from "./profile_view";
 import { ErrorView } from "./error_view";
 import { FooterView } from "./footer_view";
-import { newProfilePath } from "../path/path";
+import { path } from "../path/url";
 import { ProfilePresenter } from "../presenter/profile_presenter";
 import { AboutPresenter } from "../presenter/about_presenter";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
@@ -55,7 +55,7 @@ export class View {
         let links = [];
         const currentUser = p.currentUser;
         if (currentUser.signedIn) {
-            links[0]= { name: "My Profile", url:  newProfilePath(currentUser.uid) };
+            links[0]= { name: "My Profile", url:  path.profile(currentUser.uid) };
         }
 
         let pageProgressBar = "viperfire-progress-bar";

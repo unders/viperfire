@@ -1,6 +1,6 @@
 import { PageLoader, Presenter} from "./presenter";
 import { User } from "../data/user";
-import { profilePath } from "../path/path";
+import { path } from "../path/url";
 import { UserProfile } from "../data/user_profile";
 
 interface Context {
@@ -22,7 +22,7 @@ export class ProfilePresenter implements Presenter {
     readonly pageLoader: PageLoader;
     readonly title: string = "Profile";
     readonly isPresenter: boolean = true;
-    readonly path: string = profilePath;
+    readonly path: string = path.profileReqExp;
     readonly currentUser: User;
     readonly userProfile: UserProfile;
 

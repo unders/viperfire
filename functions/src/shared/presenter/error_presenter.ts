@@ -1,5 +1,5 @@
 import { PageLoader, Presenter} from "./presenter";
-import { errorPath } from "../path/path";
+import { path } from "../path/url";
 import { User } from "../data/user";
 
 interface Context {
@@ -27,7 +27,7 @@ export class ErrorPresenter implements Presenter {
     readonly pageLoader: PageLoader;
     readonly title: string;
     readonly isPresenter: boolean = true;
-    readonly path: string = errorPath;
+    readonly path: string = path.error;
     readonly currentUser: User;
     readonly message: string;
 

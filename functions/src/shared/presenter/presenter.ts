@@ -1,5 +1,5 @@
 import { User } from "../data/user";
-import { aboutPath, profilePath, articleListPath, errorPath } from "../path/path";
+import { path } from "../path/url";
 import { ProfilePresenter } from "./profile_presenter";
 import { AboutPresenter } from "./about_presenter";
 import { ArticleListPresenter } from "./article_list_presenter";
@@ -41,13 +41,13 @@ export const getPresenter = function(): Result {
 const buildPresenter = (p: Presenter): Result => {
     try {
         switch(p.path) {
-            case articleListPath:
+            case path.articles:
                 return { presenter: ArticleListPresenter.Init(p), errMessage: "" };
-            case profilePath:
+            case path.profileReqExp:
                 return { presenter: ProfilePresenter.Init(p), errMessage: "" };
-            case aboutPath:
+            case path.about:
                 return { presenter: AboutPresenter.Init(p), errMessage: "" };
-            case errorPath:
+            case path.error:
                 return { presenter: ErrorPresenter.Init(p), errMessage: "" };
             default:
                 return { presenter: null, errMessage: `${p.path} not found` };

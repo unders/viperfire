@@ -4,7 +4,7 @@ import * as express from "express";
 import { getServerConfig } from "./shared/config/config";
 import { Page } from "./page/page";
 import { Domain } from "./domain/domain";
-import { aboutPath, newProfilePath, profilePath } from "./shared/path/path";
+import { path } from "./shared/path/url";
 import { fromUserRecord } from "./lib/user";
 import { userProfileBuilder } from "./shared/data/user_profile";
 import { userBuilder } from "./shared/data/user";
@@ -14,7 +14,7 @@ const app = express();
 const config = getServerConfig();
 const page = new Page({ view: config.view });
 
-app.get("/", async (req, res) => {
+app.get(path.articles, async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
     const query = domain.article().queryDraft(req.query.page_token);
@@ -37,7 +37,7 @@ app.get("/", async (req, res) => {
     res.status(200).send(body);
 });
 
-app.get(aboutPath, (req, res) => {
+app.get(path.about, (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
     const { body, pageError } = page.about(userBuilder.signedOut());
@@ -51,7 +51,7 @@ app.get(aboutPath, (req, res) => {
     res.status(200).send(body);
 });
 
-app.get("/article/:id", async (req, res) => {
+app.get(path.articleRegExp, async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
     // TODO: fetch article from firestore.
@@ -67,10 +67,10 @@ app.get("/article/:id", async (req, res) => {
 
 });
 
-app.get(profilePath, async (req, res) => {
+app.get(path.profileReqExp, async (req, res) => {
     res.set("Content-Type", "text/html; charset=utf-8");
 
-    const ctx = { uid: req.params.uid };
+    const ctx = { uid: req.params.id };
     const { code, userProfile, err } = await domain.profile().get(ctx);
     if (err) {
         res.status(code).send(page.error(code, userBuilder.signedOut()));

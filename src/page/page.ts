@@ -5,7 +5,7 @@ import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { AboutPresenter } from "../shared/presenter/about_presenter";
 import { ErrorPresenter } from "../shared/presenter/error_presenter";
 import { Presenter } from "../shared/presenter/presenter";
-import { articleListPath, aboutPath, profilePath, errorPath } from '../shared/path/path';
+import { path } from '../shared/path/url';
 import { UserProfile } from "../shared/data/user_profile";
 import { Logger } from "../log/log";
 import { loader }  from "./loader"
@@ -118,20 +118,20 @@ export class Page {
 
     render(): void {
         const presenter =  this.presenter;
-        const path = presenter.path;
+        const p = presenter.path;
 
         try {
-            switch(path) {
-                case articleListPath:
+            switch(p) {
+                case path.articles:
                     this.renderArticleList(presenter as ArticleListPresenter);
                     break;
-                case aboutPath:
+                case path.about:
                     this.renderAbout();
                     break;
-                case profilePath:
+                case path.profileReqExp:
                     this.renderProfile(presenter as ProfilePresenter);
                     break;
-                case errorPath:
+                case path.error:
                     this.renderError(presenter as ErrorPresenter);
                     break;
                 default:
