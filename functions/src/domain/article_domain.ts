@@ -4,7 +4,7 @@ import {
     AllContext, AllResult, CreateResult, GetResult, newPageToken,
     parsePageToken
 } from "../shared/domain/article_domain";
-import { path } from "../shared/db/path";
+import { path } from "../shared/path/db";
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 
 interface Context {

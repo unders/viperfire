@@ -1,6 +1,6 @@
 import * as firebase from "firebase";
 import { GetContext, Result } from '../shared/domain/profile_domain'
-import { path } from "../shared/db/path"
+import { path } from "../shared/path/db"
 import { domainInternalError, domainNotFound, statusCode } from "../shared/domain/domain";
 import { Logger } from "../log/log";
 import { UserProfile, userProfileBuilder } from "../shared/data/user_profile";

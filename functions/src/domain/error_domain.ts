@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import { ErrorContext, errorBuilder } from "../shared/data/error";
-import { path } from "../shared/db/path";
+import { path } from "../shared/path/db";
 
 interface Context {
     firestore: admin.firestore.Firestore;

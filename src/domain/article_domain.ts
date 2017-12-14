@@ -1,7 +1,7 @@
 import * as firebase from "firebase";
 import { articleBuilder, Attributes, Status } from "../shared/data/article";
 import { AllContext, AllResult, newPageToken, parsePageToken } from "../shared/domain/article_domain";
-import { path } from "../shared/db/path";
+import { path } from "../shared/path/db";
 
 interface Context {
     firestore: firebase.firestore.Firestore;
