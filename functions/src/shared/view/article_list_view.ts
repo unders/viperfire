@@ -1,6 +1,7 @@
 import { wire } from "../../dom/dom";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { article, nextArticleListPath } from "../path/path"
+import { time } from "../lib/time";
 
 export class ArticleListView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
@@ -13,6 +14,8 @@ export class ArticleListView {
         const { hasMore, path } = nextArticleListPath(p.articleList.pageToken);
         const haveArticles = p.articleList.length > 0;
 
+        const ago = time.ago();
+
         return this.html`
             <div class="articles">
                 ${haveArticles ?
@@ -20,7 +23,7 @@ export class ArticleListView {
                         ${p.articleList.articles.map( (a) => wire(a)`
                             <li>
                                 <a href="${article(a.id)}">${a.id}</a>
-                                <span>Created at: ${a.createTime}</span>
+                                <span>${ago.time(a.createTime)}</span>
                             </li>
                         `)}
                     </ul>
