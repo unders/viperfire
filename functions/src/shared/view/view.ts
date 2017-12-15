@@ -12,8 +12,8 @@ import { AboutPresenter } from "../presenter/about_presenter";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
 import { ArticlePresenter } from "../presenter/article_presenter";
-import { PageLoader, Presenter} from "../presenter/presenter";
-import { css } from "../css";
+import { Presenter} from "../presenter/presenter";
+import { PageLoaderView } from "./page_loader_view";
 
 interface Context {
     header: HeaderView;
@@ -23,6 +23,7 @@ interface Context {
 }
 
 export class View {
+    private readonly pageLoader: PageLoaderView = new PageLoaderView();
     private readonly header: HeaderView;
     private readonly articleList: ArticleListView;
     private readonly article: ArticleView = new ArticleView();
@@ -65,18 +66,8 @@ export class View {
             links[0]= { name: "My Profile", url:  path.profile(currentUser.uid) };
         }
 
-        let pageProgressBar = "viperfire-progress-bar";
-        if (p.pageLoader === PageLoader.Loading) {
-            pageProgressBar = `${pageProgressBar} ${css.loading}`;
-        }
-        if (p.pageLoader === PageLoader.Done) {
-            pageProgressBar = `${pageProgressBar} ${css.loading} ${css.done}`;
-        }
-
         return html`
-            <div class="${pageProgressBar}">
-                <div class="background-progress-bar"></div>
-            </div>
+            ${[this.pageLoader.render(p)]}
             <div class="container">
                 <header>${[this.header.render(currentUser)]}</header>
                 <main>${[main]}</main>

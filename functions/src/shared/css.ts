@@ -1,4 +1,5 @@
 export class css {
+    static readonly pageProgressBar = "viperfire-progress-bar";
     static readonly errHighlight = "error-highlight";
     static readonly highlight = "highlight";
     static readonly error = "error";
