@@ -1,5 +1,7 @@
 import { wire } from "../../dom/dom";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
+import { path } from "../path/url"
+import { time } from "../lib/time";
 
 export class ArticleListView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
@@ -9,10 +11,26 @@ export class ArticleListView {
     }
 
     render(p: ArticleListPresenter): string {
+        const haveArticles = p.articleList.length > 0;
+        const { hasMore, nextArticlesPath } = path.nextArticles(p.articleList.pageToken);
+        const ago = time.ago();
+
         return this.html`
-            <a href="/article/kalle">Kalle</a></br>
-            <a href="/profile/yuaTMIc27MMFAV2z19K1gySGw3k1">My profile</a>
-            <p>${p.message}</p>
+            <div class="articles">
+                ${haveArticles ?
+                    wire()`<ul>
+                        ${p.articleList.articles.map( (a) => wire(a)`
+                            <li>
+                                <a href="${path.article(a.id)}">${a.id}</a>
+                                <span>${ago.time(a.createTime)}</span>
+                            </li>
+                        `)}
+                    </ul>
+                    ${hasMore ? wire()`<a href="${nextArticlesPath}">More</a>` : "" }
+                    `
+                    :
+                    wire()`<p>Found no articles.</p>` }
+            </div>
         `;
     }
 }

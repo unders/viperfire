@@ -16,7 +16,7 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="viperfire starter app">
     <title>${ctx.title}</title>
-    <link rel="stylesheet" href="/assets/css/872fa5ae9cdef319a06276cde1fff52072eb313b-main.css">
+    <link rel="stylesheet" href="/assets/css/12c0412c3f1c7497873a7812122de66a5bb6ffc9-main.css">
     <script defer src="/__/firebase/4.6.0/firebase-app.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-auth.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-firestore.js"></script>
@@ -27,11 +27,11 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     -->
 </head>
 <body>
-    <div id="app" class="app">${[ctx.html]}</div>
+    <div id="app">${[ctx.html]}</div>
     <script>
         window.__INITIAL_STATE__ ='${[ctx.initialState]}';
     </script>
-    <script defer src="/assets/js/7a3d4e43d2ec8cf779a82ce1b3232aaf15dbaab1-bundle.js"></script>
+    <script defer src="/assets/js/58894c4f9aad2803968500d8c902d798df7c65b3-bundle.js"></script>
 </body>
 </html>`;
 };

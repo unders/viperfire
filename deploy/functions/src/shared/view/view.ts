@@ -1,16 +1,19 @@
 import { wireRender } from "../../dom/dom";
-import { User } from "../data/user";
 import { HeaderView } from "./header_view";
 import { ArticleListView } from "./article_list_view";
+import { ArticleView } from "./article_view";
 import { AboutView } from "./about_view";
 import { ProfileView } from "./profile_view";
 import { ErrorView } from "./error_view";
 import { FooterView } from "./footer_view";
-import { newProfilePath } from "../path/path";
+import { path } from "../path/url";
 import { ProfilePresenter } from "../presenter/profile_presenter";
 import { AboutPresenter } from "../presenter/about_presenter";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
+import { ArticlePresenter } from "../presenter/article_presenter";
+import { Presenter} from "../presenter/presenter";
+import { PageLoaderView } from "./page_loader_view";
 
 interface Context {
     header: HeaderView;
@@ -20,8 +23,10 @@ interface Context {
 }
 
 export class View {
+    private readonly pageLoader: PageLoaderView = new PageLoaderView();
     private readonly header: HeaderView;
     private readonly articleList: ArticleListView;
+    private readonly article: ArticleView = new ArticleView();
     private readonly about: AboutView;
     private readonly profile: ProfileView = new ProfileView();
     private readonly error: ErrorView = new ErrorView();
@@ -35,31 +40,39 @@ export class View {
     }
 
     renderArticleList(html: wireRender, p: ArticleListPresenter): string {
-        return this.render(html, p.currentUser, this.articleList.render(p));
+        return this.render(html, p, this.articleList.render(p));
+    }
+
+    renderArticle(html: wireRender, p: ArticlePresenter): string {
+        return this.render(html, p, this.article.render(p));
     }
 
     renderProfile(html: wireRender, p: ProfilePresenter): string {
-        return this.render(html, p.currentUser, this.profile.render(p))
+        return this.render(html, p, this.profile.render(p))
     }
 
     renderAbout(html: wireRender, p: AboutPresenter): string {
-        return this.render(html, p.currentUser, this.about.render())
+        return this.render(html, p, this.about.render())
     }
 
     renderError(html: wireRender, p: ErrorPresenter): string {
-        return this.render(html, p.currentUser, this.error.render(p));
+        return this.render(html, p, this.error.render(p));
     }
 
-    private render(html: wireRender, currentUser: User, main: string): string {
+    private render(html: wireRender, p: Presenter, main: string): string {
         let links = [];
+        const currentUser = p.currentUser;
         if (currentUser.signedIn) {
-            links[0]= { name: "My Profile", url:  newProfilePath(currentUser.uid) };
+            links[0]= { name: "My Profile", url:  path.profile(currentUser.uid) };
         }
 
         return html`
-            <header>${[this.header.render(currentUser)]}</header>
-            <main>${[main]}</main>
-            <footer>${[this.footer.render({ links: links })]}</footer>
+            ${[this.pageLoader.render(p)]}
+            <div class="container">
+                <header>${[this.header.render(currentUser)]}</header>
+                <main>${[main]}</main>
+                <footer>${[this.footer.render({ links: links })]}</footer>
+            </div>
         `;
     }
 }
