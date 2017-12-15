@@ -1,4 +1,5 @@
 import { wireRender } from "../../dom/dom";
+import { PageLoaderView } from "./page_loader_view";
 import { HeaderView } from "./header_view";
 import { ArticleListView } from "./article_list_view";
 import { ArticleView } from "./article_view";
@@ -13,7 +14,6 @@ import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
 import { ArticlePresenter } from "../presenter/article_presenter";
 import { Presenter} from "../presenter/presenter";
-import { PageLoaderView } from "./page_loader_view";
 
 interface Context {
     header: HeaderView;
@@ -60,6 +60,7 @@ export class View {
     }
 
     private render(html: wireRender, p: Presenter, main: string): string {
+        // TODO: the code below should be moved to header and footer view
         let links = [];
         const currentUser = p.currentUser;
         if (currentUser.signedIn) {
@@ -68,6 +69,22 @@ export class View {
 
         return html`
             ${[this.pageLoader.render(p)]}
+            <div class="modal">
+                <div class="modal-overlay"></div>
+                <div class="modal-container">
+                    <div class="modal-center">
+                        <h3 class="modal-header">Ops, something went wrong</h3>
+                        <div class="modal-separator"></div>
+                        <p class="modal-main">
+                            The last changes might not have been saved.
+                        </p>
+                        <div class="modal-separator"></div>
+                        <div class="modal-footer">
+                            <button type="btn" tabindex="1">ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="container">
                 <header>${[this.header.render(currentUser)]}</header>
                 <main>${[main]}</main>
