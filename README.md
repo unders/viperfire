@@ -1,5 +1,8 @@
 # viperfire
 
+## Deployed
+* [staging v0.0.3](https://viperfire-stag.firebaseapp.com)
+
 ## Deploy
 Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 
