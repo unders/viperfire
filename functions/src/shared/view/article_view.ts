@@ -10,7 +10,7 @@ export class ArticleView {
     }
 
     render(p: ArticlePresenter): string {
-        const ago = time.ago();
+        const ago = p.ago;
 
         return this.html`
             <div class="article">

@@ -2,11 +2,13 @@ import { PageLoader, Presenter } from "./presenter";
 import { User } from "../data/user";
 import { path } from "../path/url";
 import { Article } from "../data/article";
+import {time, Ago } from "../lib/time";
 
 interface Context {
     readonly pageLoader: PageLoader;
     readonly currentUser: User;
     readonly article: Article;
+    readonly ago: Ago;
 }
 
 interface Serialize {
@@ -25,18 +27,21 @@ export class ArticlePresenter implements Presenter {
     readonly path: string = path.articleRegExp;
     readonly currentUser: User;
     readonly article: Article;
+    readonly ago: Ago;
 
     constructor(ctx: Context) {
         this.pageLoader = ctx.pageLoader;
         this.currentUser = ctx.currentUser;
         this.article = ctx.article;
+        this.ago = ctx.ago;
     }
 
     static Next(p: Presenter, article: Article): ArticlePresenter {
         return new ArticlePresenter({
             pageLoader: p.pageLoader,
             currentUser: p.currentUser,
-            article: article
+            article: article,
+            ago: time.ago()
         });
     }
 
@@ -45,7 +50,8 @@ export class ArticlePresenter implements Presenter {
         return new ArticlePresenter({
             pageLoader: p.pageLoader,
             currentUser: pr.currentUser,
-            article: pr.article
+            article: pr.article,
+            ago: time.ago()
         });
     }
 

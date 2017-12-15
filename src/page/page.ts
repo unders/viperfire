@@ -95,7 +95,7 @@ export class Page {
     }
 
     renderAbout(): void {
-        const p = AboutPresenter.Init(this.presenter);
+        const p = AboutPresenter.Next(this.presenter);
         this.view.renderAbout(this.renderBody, p);
         document.title = p.title;
         this.presenter = p;

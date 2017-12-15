@@ -1,12 +1,14 @@
-import { PageLoader, Presenter} from "./presenter";
+import { PageLoader, Presenter } from "./presenter";
 import { path } from "../path/url";
 import { User } from "../data/user";
+import { time, Ago } from "../lib/time";
 
 interface Context {
     readonly pageLoader: PageLoader;
     readonly currentUser: User;
     readonly title: string;
     readonly message: string;
+    readonly ago: Ago;
 }
 
 interface Serialize {
@@ -30,12 +32,14 @@ export class ErrorPresenter implements Presenter {
     readonly path: string = path.error;
     readonly currentUser: User;
     readonly message: string;
+    readonly ago: Ago;
 
     constructor(ctx: Context) {
         this.pageLoader = ctx.pageLoader;
         this.currentUser = ctx.currentUser;
         this.title = ctx.title;
         this.message = ctx.message;
+        this.ago = ctx.ago;
     }
 
     static FromCode(code: number, ctx: FromCode) {
@@ -45,13 +49,15 @@ export class ErrorPresenter implements Presenter {
                     pageLoader: ctx.pageLoader,
                     title: "Not Found",
                     message: "Page Not Found",
-                    currentUser: ctx.currentUser});
+                    currentUser: ctx.currentUser,
+                    ago: time.ago()});
             default:
                 return new ErrorPresenter({
                     pageLoader: ctx.pageLoader,
                     title: "Internal Error",
                     message: "Internal Error",
-                    currentUser: ctx.currentUser});
+                    currentUser: ctx.currentUser,
+                    ago: time.ago()});
         }
     }
 
@@ -61,7 +67,8 @@ export class ErrorPresenter implements Presenter {
             pageLoader: pr.pageLoader,
             title: pr.title,
             currentUser: pr.currentUser,
-            message: pr.message
+            message: pr.message,
+            ago: time.ago()
         });
     }
 

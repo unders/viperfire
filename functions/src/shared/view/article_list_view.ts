@@ -1,7 +1,6 @@
 import { wire } from "../../dom/dom";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { path } from "../path/url"
-import { time } from "../lib/time";
 
 export class ArticleListView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
@@ -13,7 +12,7 @@ export class ArticleListView {
     render(p: ArticleListPresenter): string {
         const haveArticles = p.articleList.length > 0;
         const { hasMore, nextArticlesPath } = path.nextArticles(p.articleList.pageToken);
-        const ago = time.ago();
+        const ago = p.ago;
 
         return this.html`
             <div class="articles">

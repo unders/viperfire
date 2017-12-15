@@ -5,6 +5,7 @@ import { AboutPresenter } from "./about_presenter";
 import { ArticleListPresenter } from "./article_list_presenter";
 import { ArticlePresenter } from "./article_presenter";
 import { ErrorPresenter } from "./error_presenter";
+import { Ago } from "../lib/time";
 
 declare global {
     interface Window { __INITIAL_STATE__: string; }
@@ -23,6 +24,7 @@ export interface Presenter {
     path: string;
     currentUser: User;
     toJSON(): string
+    ago: Ago;
 }
 
 interface Result {

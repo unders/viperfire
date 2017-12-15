@@ -11,6 +11,7 @@ import { UserProfile } from "../shared/data/user_profile";
 import { Article } from "../shared/data/article";
 import { ArticleList } from "../shared/domain/article_domain";
 import { ArticlePresenter } from "../shared/presenter/article_presenter";
+import { time } from "../shared/lib/time";
 
 class Context {
     view: View;
@@ -33,6 +34,7 @@ export class Page {
             pageLoader: PageLoader.Neutral,
             currentUser: currentUser,
             articleList: articleList,
+            ago: time.ago()
         });
         return this.renderPage(p.currentUser, (): string =>  {
             const html = this.view.renderArticleList(wire(), p);
@@ -46,6 +48,7 @@ export class Page {
             pageLoader: PageLoader.Neutral,
             currentUser: currentUser,
             article: article,
+            ago: time.ago()
         });
         return this.renderPage(p.currentUser, (): string =>  {
             const html = this.view.renderArticle(wire(), p);
@@ -58,7 +61,8 @@ export class Page {
         const p = new ProfilePresenter({
             pageLoader: PageLoader.Neutral,
             userProfile: userProfile,
-            currentUser: currentUser
+            currentUser: currentUser,
+            ago: time.ago()
         });
 
         return this.renderPage(p.currentUser, (): string => {
@@ -72,6 +76,7 @@ export class Page {
         const p = new AboutPresenter({
             pageLoader: PageLoader.Neutral,
             currentUser: currentUser,
+            ago: time.ago()
         });
         return this.renderPage(p.currentUser, (): string => {
             const html = this.view.renderAbout(wire(), p);
