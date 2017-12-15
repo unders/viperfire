@@ -1,0 +1,88 @@
+@mixin modal($z-overlay, $z-modal, $bg-modal, $bg-divider,
+             $button-color, $modal-min-width, $breakpoint-small) {
+  .modal {
+    display: none;
+  }
+
+  .modal.active {
+    display: block;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: $z-overlay;
+    background-color: rgba(0,0,0,0.5); /*dim the background*/
+  }
+
+  .modal-container {
+    background: transparent;
+    position: absolute;
+    z-index: $z-modal;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+  }
+
+  .modal-center {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background: $bg-modal;
+    box-shadow: rgba(0,0,0,0.2) 0 27px 24px 0;
+  }
+
+  @media only screen and (min-width: $breakpoint-small) {
+    .modal-container {
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-center {
+      border-radius: 4px;
+      min-width: $modal-min-width;
+    }
+  }
+
+  .modal-separator {
+    background: $bg-divider;
+    height: 1px;
+    width: 100%;
+  }
+
+  .modal-header {
+    color: rgba(0,0,0,0.87);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 22px;
+    padding: 20px 24px;
+    margin:0;
+  }
+
+  .modal-main {
+    font-size: 20px;
+    margin: 0;
+    padding: 40px 24px;
+  }
+
+  .modal-footer {
+    padding: 15px 14px;
+    float: right;
+  }
+
+  .modal-footer button {
+    background: $bg-modal;
+    padding: 5px 10px;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: $button-color;
+    border: 0;
+    cursor: pointer;
+    letter-spacing: 0.7px;
+  }
+}
