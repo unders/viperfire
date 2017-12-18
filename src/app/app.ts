@@ -3,6 +3,7 @@ import { userBuilder } from "../shared/data/user";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
 import { Page } from "../page/page";
+import { ErrorPopup, HiddenPopup, ContextError } from "../shared/presenter/popup";
 
 class Context {
     readonly page: Page;
@@ -101,5 +102,17 @@ export class App {
 
         this.page.render();
         this.logger.setUser(this.page.presenter.currentUser);
+    }
+
+    hidePopup(): void {
+        this.logger.info("app.closePopup()");
+        this.page.presenter.popup = new HiddenPopup();
+        this.page.render();
+    }
+
+    showPopup(ctx: ContextError): void {
+        this.logger.info("app.showPopup()");
+        this.page.presenter.popup = new ErrorPopup(ctx);
+        this.page.render();
     }
 }

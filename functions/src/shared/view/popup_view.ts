@@ -11,14 +11,7 @@ export class PopupView {
 
     render(p: Presenter): string {
         let modal = `modal ${css.hide}`;
-
-        // const popup = p.popup;
-        const popup = {
-            show : false,
-            title: "Ops, something went wrong",
-            main: "<p>The last change might not have been saved.</p>",
-            footer: '<button type="btn" tabindex="1">ok</button>'
-        };
+        const popup = p.popup;
 
         if (popup.show) {
              modal = "modal";

@@ -5,13 +5,15 @@ import { AuthDomain } from "./domain/auth_domain";
 import { Domain } from "./domain/domain";
 
 
+const name: string = "data-action";
+
+
 interface Context {
     readonly app: App;
     readonly domain: Domain;
     readonly logger: Logger;
 }
 
-const name: string = "data-action";
 
 export class ActionHandler {
     private readonly app: App;
@@ -44,9 +46,18 @@ export class ActionHandler {
             this.logger.error(e);
         }
     }
+    //
+    // Popup begin
+    //
+    closePopupOnclick(event: Event) {
+        this.app.hidePopup();
+    }
+    //
+    // Popup end
+    //
 
     //
-    // Authentication start
+    // Authentication begin
     //
     OnAuthStateChanged(user: firebase.User): void {
         this.app.onUserStateChanged(user);
@@ -58,7 +69,10 @@ export class ActionHandler {
         const { currentUser, err } = await this.auth.GooglePopup().signInWithPopup();
         if (currentUser === null) {
             this.logger.error(`signInWithGoogleOnclick failed; error=${err}`);
-            // TODO: post an error notice: SnackBar
+            this.app.showPopup({
+                title: "Sign in failed",
+                main: "We could not sign you in with Google Provider"
+            });
         }
     }
 
@@ -67,12 +81,15 @@ export class ActionHandler {
 
         const ok = await this.auth.GooglePopup().signOut();
         if (!ok) {
+            this.app.showPopup({
+                title: "Sign out failed",
+                main: "We could not sign you out"
+            });
             this.logger.error("signOutOnclick failed!");
-            // TODO: post error notice: SignOut failed.
         }
     }
     //
-    // Authentication stop
+    // Authentication end
     //
 
     cleanup() {
