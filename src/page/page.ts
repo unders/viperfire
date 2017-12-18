@@ -1,10 +1,10 @@
 import { bind, wireRender } from "../dom/dom";
 import { View } from "../shared/view/view";
+import { Presenter } from "../shared/presenter/base";
 import { ArticleListPresenter } from "../shared/presenter/article_list_presenter";
 import { ProfilePresenter } from "../shared/presenter/profile_presenter";
 import { AboutPresenter } from "../shared/presenter/about_presenter";
 import { ErrorPresenter } from "../shared/presenter/error_presenter";
-import { Presenter } from "../shared/presenter/presenter";
 import { path } from '../shared/path/url';
 import { UserProfile } from "../shared/data/user_profile";
 import { Logger } from "../log/log";

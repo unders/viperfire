@@ -1,47 +1,32 @@
-import { PageLoader, Presenter } from "./presenter";
-import { User } from "../data/user";
+import { ContextPresenter, SerializePresenter } from "./presenter";
 import { path } from "../path/url";
 import { Article } from "../data/article";
-import {time, Ago } from "../lib/time";
+import { time } from "../lib/time";
+import { Presenter } from "./base";
 
-interface Context {
-    readonly pageLoader: PageLoader;
-    readonly currentUser: User;
-    readonly article: Article;
-    readonly ago: Ago;
-}
-
-interface Serialize {
-    readonly pageLoader: PageLoader;
-    readonly title: string;
-    readonly isPresenter: boolean;
-    readonly path: string;
-    readonly currentUser: User;
+interface Context extends ContextPresenter {
     readonly article: Article;
 }
 
-export class ArticlePresenter implements Presenter {
-    readonly pageLoader: PageLoader;
-    readonly title: string = "Article";
-    readonly isPresenter: boolean = true;
-    readonly path: string = path.articleRegExp;
-    readonly currentUser: User;
+interface Serialize extends SerializePresenter {
     readonly article: Article;
-    readonly ago: Ago;
+}
+
+export class ArticlePresenter extends Presenter {
+    readonly article: Article;
 
     constructor(ctx: Context) {
-        this.pageLoader = ctx.pageLoader;
-        this.currentUser = ctx.currentUser;
+        super(ctx);
+        super.init({ title: "Article", path: path.articleRegExp });
         this.article = ctx.article;
-        this.ago = ctx.ago;
     }
 
     static Next(p: Presenter, article: Article): ArticlePresenter {
         return new ArticlePresenter({
             pageLoader: p.pageLoader,
             currentUser: p.currentUser,
-            article: article,
-            ago: time.ago()
+            ago: time.ago(),
+            article: article
         });
     }
 
@@ -50,8 +35,8 @@ export class ArticlePresenter implements Presenter {
         return new ArticlePresenter({
             pageLoader: p.pageLoader,
             currentUser: pr.currentUser,
-            article: pr.article,
-            ago: time.ago()
+            ago: time.ago(),
+            article: pr.article
         });
     }
 

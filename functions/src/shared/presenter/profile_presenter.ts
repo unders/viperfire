@@ -1,47 +1,32 @@
-import { PageLoader, Presenter} from "./presenter";
-import { User } from "../data/user";
+import { ContextPresenter, SerializePresenter } from "./presenter";
 import { path } from "../path/url";
 import { UserProfile } from "../data/user_profile";
-import { time, Ago } from "../lib/time";
+import { time } from "../lib/time";
+import { Presenter } from "./base";
 
-interface Context {
-    readonly pageLoader: PageLoader;
-    readonly currentUser: User;
-    readonly userProfile: UserProfile;
-    readonly ago: Ago;
-}
-
-interface Serialize {
-    readonly pageLoader: PageLoader;
-    readonly title: string;
-    readonly isPresenter: boolean;
-    readonly path: string;
-    readonly currentUser: User;
+interface Context extends  ContextPresenter {
     readonly userProfile: UserProfile;
 }
 
-export class ProfilePresenter implements Presenter {
-    readonly pageLoader: PageLoader;
-    readonly title: string = "Profile";
-    readonly isPresenter: boolean = true;
-    readonly path: string = path.profileReqExp;
-    readonly currentUser: User;
+interface Serialize extends SerializePresenter {
     readonly userProfile: UserProfile;
-    readonly ago: Ago;
+}
+
+export class ProfilePresenter extends Presenter {
+    readonly userProfile: UserProfile;
 
     constructor(ctx: Context) {
-        this.pageLoader = ctx.pageLoader;
-        this.currentUser = ctx.currentUser;
+        super(ctx);
+        super.init({ title: "Profile", path: path.profileReqExp });
         this.userProfile = ctx.userProfile;
-        this.ago = ctx.ago;
     }
 
     static Next(p: Presenter, userProfile: UserProfile): ProfilePresenter {
         return new ProfilePresenter({
             pageLoader: p.pageLoader,
             currentUser: p.currentUser,
-            userProfile: userProfile,
-            ago: time.ago()
+            ago: time.ago(),
+            userProfile: userProfile
         });
     }
 
@@ -50,8 +35,8 @@ export class ProfilePresenter implements Presenter {
         return new ProfilePresenter({
             pageLoader: pr.pageLoader,
             currentUser: pr.currentUser,
-            userProfile: pr.userProfile,
-            ago: time.ago()
+            ago: time.ago(),
+            userProfile: pr.userProfile
         });
     }
 

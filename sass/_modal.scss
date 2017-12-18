@@ -1,11 +1,11 @@
 @mixin modal($z-overlay, $z-modal, $bg-modal, $bg-divider,
              $button-color, $modal-min-width, $breakpoint-small) {
   .modal {
-    display: none;
+    display: block;
   }
 
-  .modal.active {
-    display: block;
+  .modal.hide {
+    display: none;
   }
 
   .modal-overlay {
@@ -67,7 +67,7 @@
   .modal-main {
     font-size: 20px;
     margin: 0;
-    padding: 40px 24px;
+    padding: 20px 24px;
   }
 
   .modal-footer {

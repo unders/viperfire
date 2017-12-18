@@ -1,5 +1,6 @@
 import { wireRender } from "../../dom/dom";
 import { PageLoaderView } from "./page_loader_view";
+import { PopupView } from "./popup_view";
 import { HeaderView } from "./header_view";
 import { ArticleListView } from "./article_list_view";
 import { ArticleView } from "./article_view";
@@ -13,7 +14,7 @@ import { AboutPresenter } from "../presenter/about_presenter";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
 import { ArticlePresenter } from "../presenter/article_presenter";
-import { Presenter} from "../presenter/presenter";
+import { Presenter } from "../presenter/base";
 
 interface Context {
     header: HeaderView;
@@ -24,6 +25,7 @@ interface Context {
 
 export class View {
     private readonly pageLoader: PageLoaderView = new PageLoaderView();
+    private readonly popup: PopupView = new PopupView();
     private readonly header: HeaderView;
     private readonly articleList: ArticleListView;
     private readonly article: ArticleView = new ArticleView();
@@ -69,21 +71,7 @@ export class View {
 
         return html`
             ${[this.pageLoader.render(p)]}
-            <div class="modal">
-                <div class="modal-overlay"></div>
-                <div class="modal-container">
-                    <div class="modal-center">
-                        <h3 class="modal-header">Ops, something went wrong</h3>
-                        <div class="modal-separator"></div>
-                        <p class="modal-main">
-                            The last changes might not have been saved.
-                        </p>
-                        <div class="modal-separator"></div>
-                        <div class="modal-footer">
-                            <button type="btn" tabindex="1">ok</button>
-                        </div>
-                    </div>
-                </div>
+            ${[this.popup.render(p)]}
             </div>
             <div class="container">
                 <header>${[this.header.render(currentUser)]}</header>

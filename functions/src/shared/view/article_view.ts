@@ -1,6 +1,5 @@
 import { wire } from "../../dom/dom";
 import { ArticlePresenter } from "../presenter/article_presenter";
-import { time } from "../lib/time";
 
 export class ArticleView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;

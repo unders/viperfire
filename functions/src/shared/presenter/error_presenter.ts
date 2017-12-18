@@ -1,22 +1,16 @@
-import { PageLoader, Presenter } from "./presenter";
+import { PageLoader, ContextPresenter, SerializePresenter } from "./presenter";
 import { path } from "../path/url";
 import { User } from "../data/user";
-import { time, Ago } from "../lib/time";
+import { time } from "../lib/time";
+import { Presenter } from "./base";
 
-interface Context {
-    readonly pageLoader: PageLoader;
-    readonly currentUser: User;
+interface Context extends ContextPresenter {
     readonly title: string;
     readonly message: string;
-    readonly ago: Ago;
 }
 
-interface Serialize {
-    readonly pageLoader: PageLoader;
+interface Serialize extends SerializePresenter {
     readonly title: string;
-    readonly isPresenter: boolean;
-    readonly path: string;
-    readonly currentUser: User;
     readonly message: string;
 }
 
@@ -25,21 +19,13 @@ interface FromCode {
     readonly currentUser: User;
 }
 
-export class ErrorPresenter implements Presenter {
-    readonly pageLoader: PageLoader;
-    readonly title: string;
-    readonly isPresenter: boolean = true;
-    readonly path: string = path.error;
-    readonly currentUser: User;
+export class ErrorPresenter extends Presenter {
     readonly message: string;
-    readonly ago: Ago;
 
     constructor(ctx: Context) {
-        this.pageLoader = ctx.pageLoader;
-        this.currentUser = ctx.currentUser;
-        this.title = ctx.title;
+        super(ctx);
+        super.init({ title: ctx.title, path: path.error });
         this.message = ctx.message;
-        this.ago = ctx.ago;
     }
 
     static FromCode(code: number, ctx: FromCode) {
@@ -47,17 +33,19 @@ export class ErrorPresenter implements Presenter {
             case 404:
                 return new ErrorPresenter({
                     pageLoader: ctx.pageLoader,
-                    title: "Not Found",
-                    message: "Page Not Found",
                     currentUser: ctx.currentUser,
-                    ago: time.ago()});
+                    ago: time.ago(),
+                    title: "Not Found",
+                    message: "Page Not Found"
+                });
             default:
                 return new ErrorPresenter({
                     pageLoader: ctx.pageLoader,
-                    title: "Internal Error",
-                    message: "Internal Error",
                     currentUser: ctx.currentUser,
-                    ago: time.ago()});
+                    ago: time.ago(),
+                    title: "Internal Error",
+                    message: "Internal Error"
+                });
         }
     }
 
@@ -65,10 +53,10 @@ export class ErrorPresenter implements Presenter {
         const pr = p as ErrorPresenter;
         return new ErrorPresenter({
             pageLoader: pr.pageLoader,
-            title: pr.title,
             currentUser: pr.currentUser,
-            message: pr.message,
-            ago: time.ago()
+            ago: time.ago(),
+            title: pr.title,
+            message: pr.message
         });
     }
 
@@ -78,8 +66,8 @@ export class ErrorPresenter implements Presenter {
 
     private toObject(): Serialize {
         return {
-            pageLoader: this.pageLoader,
-            title: this.title,
+            pageLoader:  this.pageLoader,
+            title:       this.title,
             isPresenter: this.isPresenter,
             path:        this.path,
             currentUser: this.currentUser,
