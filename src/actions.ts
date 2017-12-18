@@ -4,16 +4,13 @@ import { App } from "./app/app";
 import { AuthDomain } from "./domain/auth_domain";
 import { Domain } from "./domain/domain";
 
-
-const name: string = "data-action";
-
+export const actionName: string = "data-action";
 
 interface Context {
     readonly app: App;
     readonly domain: Domain;
     readonly logger: Logger;
 }
-
 
 export class ActionHandler {
     private readonly app: App;
@@ -35,15 +32,19 @@ export class ActionHandler {
 
     handleEvent(event: Event): any {
         try {
-            const ct = event.target as Element;
-            if ('getAttribute' in ct) {
-                const action = ct.getAttribute(name);
-                if (action) {
-                    this[action + 'On' + event.type](event);
+            const el = event.target as Element;
+            try {
+                if ('getAttribute' in el) {
+                    const action = el.getAttribute(actionName);
+                    if (action) {
+                        this[action + 'On' + event.type](event);
+                    }
                 }
+            } catch(e) {
+                this.logger.error(`actions.handleEvent() failed; type=${event.type}, element=${el}, error=${e.message}`);
             }
         } catch(e) {
-            this.logger.error(e);
+            this.logger.error(`actions.handleEvent() failed; error=${e.message}`);
         }
     }
     //

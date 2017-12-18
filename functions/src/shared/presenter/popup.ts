@@ -1,4 +1,6 @@
-const okBtn = '<button type="btn" data-action="closePopup" tabindex="1">ok</button>';
+import { onClick } from "../actions";
+
+const okBtn = `<button type="btn" data-action="${onClick.closePopup}" tabindex="1">ok</button>`;
 
 export interface Popup {
     show: boolean;
