@@ -1,6 +1,6 @@
 import { User } from "../data/user";
 import { path } from "../path/url";
-import { Presenter } from "./base";
+import { Presenter } from "./base_presenter";
 import { ProfilePresenter } from "./profile_presenter";
 import { AboutPresenter } from "./about_presenter";
 import { ArticleListPresenter } from "./article_list_presenter";

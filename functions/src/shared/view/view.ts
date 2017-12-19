@@ -14,7 +14,7 @@ import { AboutPresenter } from "../presenter/about_presenter";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
 import { ArticlePresenter } from "../presenter/article_presenter";
-import { Presenter } from "../presenter/base";
+import { Presenter } from "../presenter/base_presenter";
 
 interface Context {
     header: HeaderView;

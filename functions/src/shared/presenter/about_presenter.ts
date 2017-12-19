@@ -1,7 +1,7 @@
 import { ContextPresenter, SerializePresenter } from "./presenter";
 import { path } from "../path/url";
 import { time } from "../lib/time";
-import { Presenter } from "./base";
+import { Presenter } from "./base_presenter";
 
 export class AboutPresenter extends Presenter {
     constructor(ctx: ContextPresenter) {

@@ -36,8 +36,10 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 - [ X ] merge db/path and path/path ...
 - [ X ] get() Fetch article from firestore
 - [ X ] set Date.now() on page load... so time is calculated relative to that...
-- [ ] Add centered message (when we cannot sing in due to network error...)
-- [ ] Add snackbar (to show error messages etc.)
+- [ X ] Add centered message (when we cannot sing in due to network error...)
+- [ X ] all action should be in one place
+- [ ] Add snackbar (to show sign in messages etc.)
+- [ ] Move code in view to header and footer view.
 - [ ] Reporting error to stackdriver
 - [ ] add public/404.html page
 - [ ] Fix hasher to work like in firestatic
@@ -98,6 +100,7 @@ https://firebase.google.com/docs/functions/reporting-errors
 * [REDbot](https://redbot.org/)
 * [Web page test](https://www.webpagetest.org/)
 * [Pingdom Website Speed Test](https://tools.pingdom.com/)
+* [Progressive checklist](https://developers.google.com/web/progressive-web-apps/checklist)
 
 ### Service Worker
 * [offline-cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/)

@@ -2,7 +2,7 @@ import { ContextPresenter, SerializePresenter } from "./presenter";
 import { path } from "../path/url";
 import { Article } from "../data/article";
 import { time } from "../lib/time";
-import { Presenter } from "./base";
+import { Presenter } from "./base_presenter";
 
 interface Context extends ContextPresenter {
     readonly article: Article;
