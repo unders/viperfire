@@ -12,6 +12,7 @@ $breakpoint-small: 460px;
 $progress-bar-duration: 2s;
 $z-index-overlay: 200;
 $z-index-modal: 400;
+$z-index-snackbar: 600;
 
 //
 // PROGRESS
@@ -27,6 +28,92 @@ $z-index-modal: 400;
 //
 @include modal($z-index-overlay, $z-index-modal, $body_color, $divider-color,
                $accent-color, 420px, $breakpoint-small);
+
+//
+// SNACKBAR
+//
+.snackbar {
+  display: block;
+}
+
+.snackbar.hide {
+  display: none;
+}
+
+.snackbar-container {
+  background: $snackbar-color;
+  z-index: $z-index-snackbar;
+  box-shadow: 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
+  line-height: 20px;
+  white-space: nowrap;
+  position: fixed;
+  font-size: 14px;
+  bottom: 0;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.snackbar-container span {
+  margin-left: 20px;
+}
+
+span.snackbar-message {
+  margin-left: 0;
+  color: $primary-color-text;
+}
+
+.snackbar-action a {
+  color: lighten($accent-color, 10%);
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+}
+
+.snackbar-action {
+  display: none;
+}
+
+.snackbar-action a:hover {
+  color: lighten($accent-color, 20%);
+}
+
+.snackbar-close svg {
+  fill: $primary-color-text;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.snackbar-close svg:hover .clear {
+  fill: darken($primary-color-text, 20%);
+}
+
+@media only screen and (max-width: $breakpoint-small) {
+  .snackbar-close {
+    min-width: 40px;
+    margin-right: 20px;
+  }
+  .snackbar-message {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .snackbar-container {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: $breakpoint-small) {
+  .snackbar-container {
+    border-radius: 3px;
+    margin-right: auto;
+    margin-left: 20px;
+    bottom: 20px;
+  }
+}
+
+
 
 //
 //         LAYOUT
