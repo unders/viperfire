@@ -63,6 +63,9 @@ https://firebase.google.com/docs/functions/reporting-errors
 * [viper news](https://github.com/WebReflection/viper-news)
 * [create-viperhtml-app](https://github.com/WebReflection/create-viperhtml-app)
 
+### Icons
+* [Material Icons](https://material.io/icons/)
+
 ### Firebase
 * [Config](https://firebase.google.com/docs/hosting/full-config)
 
