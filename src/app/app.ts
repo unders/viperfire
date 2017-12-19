@@ -3,6 +3,7 @@ import { userBuilder } from "../shared/data/user";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
 import { Page } from "../page/page";
+import { SnackbarHelper } from "./snackbar";
 import { ErrorPopup, HiddenPopup, ContextError } from "../shared/presenter/popup";
 
 class Context {
@@ -12,6 +13,7 @@ class Context {
 }
 
 export class App {
+    private readonly snackbar: SnackbarHelper;
     private readonly page: Page;
     private readonly domain: Domain;
     private readonly logger: Logger;
@@ -20,6 +22,7 @@ export class App {
         this.page = ctx.page;
         this.domain = ctx.domain;
         this.logger = ctx.logger;
+        this.snackbar = new SnackbarHelper({ page: this.page, logger: this.logger });
     }
 
     //
@@ -83,13 +86,13 @@ export class App {
             this.logger.info(`signed in as: ${currentUser.name}`);
             this.page.presenter.currentUser = currentUser;
             this.domain.profile().subscribe(user.uid);
+            this.snackbar.showSignedIn(currentUser.email);
         } else {
             this.logger.info("signed out");
             const uid = this.page.presenter.currentUser.uid;
             this.page.presenter.currentUser = currentUser;
             this.domain.profile().unsubscribe(uid);
         }
-        this.page.render();
 
         if (currentUser.signedIn) {
             this.logger.info("getClaims()");
@@ -105,9 +108,7 @@ export class App {
     }
 
     hideSnackbar(): void {
-        this.logger.info("app.closeSnackbar()");
-        // this.page.presenter.snackbar = new HiddenSnackbar();
-        // this.page.render();
+        this.snackbar.hide();
     }
 
     hidePopup(): void {

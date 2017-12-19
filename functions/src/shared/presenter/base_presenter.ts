@@ -4,7 +4,6 @@ import { Snackbar, HiddenSnackbar } from "./snackbar_presenter";
 import { Ago } from "../lib/time";
 import { User } from "../data/user";
 
-
 export class Presenter {
     snackbar: Snackbar;
     popup: Popup;
@@ -18,7 +17,7 @@ export class Presenter {
     toJSON(): string { throw "must be implemented in subclass."; }
 
     constructor(ctx: ContextPresenter) {
-        this.snackbar = new HiddenSnackbar();
+        this.snackbar = new HiddenSnackbar(1);
         this.popup = new HiddenPopup();
         this.pageLoader = ctx.pageLoader;
         this.currentUser = ctx.currentUser;
