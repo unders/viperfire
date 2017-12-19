@@ -104,6 +104,12 @@ export class App {
         this.logger.setUser(this.page.presenter.currentUser);
     }
 
+    hideSnackbar(): void {
+        this.logger.info("app.closeSnackbar()");
+        // this.page.presenter.snackbar = new HiddenSnackbar();
+        // this.page.render();
+    }
+
     hidePopup(): void {
         this.logger.info("app.closePopup()");
         this.page.presenter.popup = new HiddenPopup();

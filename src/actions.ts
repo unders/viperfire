@@ -47,6 +47,17 @@ export class ActionHandler {
             this.logger.error(`actions.handleEvent() failed; error=${e.message}`);
         }
     }
+
+    //
+    // Snackbar begin
+    //
+    closeSnackbarOnclick(event: Event) {
+        this.app.hideSnackbar();
+    }
+    //
+    // Snackbar end
+    //
+
     //
     // Popup begin
     //

@@ -86,6 +86,10 @@ span.snackbar-message {
   cursor: pointer;
 }
 
+.snackbar-close svg:hover {
+  background: darken($snackbar-color, 4%);
+}
+
 .snackbar-close svg:hover .clear {
   fill: darken($primary-color-text, 20%);
 }
