@@ -1,6 +1,7 @@
 import { css } from "../css";
 import { wire } from "../../dom/dom";
 import { onClick } from "../actions";
+import { Presenter } from "../presenter/base_presenter";
 
 interface Context {
     readonly logo: Logo
@@ -25,12 +26,12 @@ export class HeaderView {
         this.html = wire(this);
     }
 
-    render(user: User): string {
+    render(p: Presenter): string {
         const logo = this.logo;
 
         let signOutKlass = "";
         let signInKlass = "";
-        if (user.signedIn) {
+        if (p.currentUser.signedIn) {
             signInKlass = `header-account-link ${css.hide}`;
             signOutKlass = `header-account-link`;
         } else {

@@ -38,8 +38,8 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 - [ X ] set Date.now() on page load... so time is calculated relative to that...
 - [ X ] Add centered message (when we cannot sing in due to network error...)
 - [ X ] all action should be in one place
+- [ X ] Move code in view to header and footer view.
 - [ ] Add snackbar (to show sign in messages etc.)
-- [ ] Move code in view to header and footer view.
 - [ ] Reporting error to stackdriver
 - [ ] add public/404.html page
 - [ ] Fix hasher to work like in firestatic

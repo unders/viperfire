@@ -62,21 +62,14 @@ export class View {
     }
 
     private render(html: wireRender, p: Presenter, main: string): string {
-        // TODO: the code below should be moved to header and footer view
-        let links = [];
-        const currentUser = p.currentUser;
-        if (currentUser.signedIn) {
-            links[0]= { name: "My Profile", url:  path.profile(currentUser.uid) };
-        }
-
         return html`
             ${[this.pageLoader.render(p)]}
             ${[this.popup.render(p)]}
             </div>
             <div class="container">
-                <header>${[this.header.render(currentUser)]}</header>
+                <header>${[this.header.render(p)]}</header>
                 <main>${[main]}</main>
-                <footer>${[this.footer.render({ links: links })]}</footer>
+                <footer>${[this.footer.render(p)]}</footer>
             </div>
         `;
     }
