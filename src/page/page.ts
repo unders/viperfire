@@ -88,14 +88,14 @@ export class Page {
 
     showAbout(pageNumber: number): void {
         const show = (): void => {
-            this.renderAbout();
+            const p = AboutPresenter.Next(this.presenter);
+            this.renderAbout(p);
         };
 
         this.showPage(pageNumber, show)
     }
 
-    renderAbout(): void {
-        const p = AboutPresenter.Next(this.presenter);
+    renderAbout(p: AboutPresenter): void {
         this.view.renderAbout(this.renderBody, p);
         document.title = p.title;
         this.presenter = p;
@@ -144,7 +144,7 @@ export class Page {
                     this.renderArticle(this.presenter as ArticlePresenter);
                     break;
                 case path.about:
-                    this.renderAbout();
+                    this.renderAbout(this.presenter as AboutPresenter);
                     break;
                 case path.profileReqExp:
                     this.renderProfile(this.presenter as ProfilePresenter);

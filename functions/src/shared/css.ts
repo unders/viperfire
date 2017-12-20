@@ -9,4 +9,9 @@ export class css {
     static readonly neutral = "";
     static readonly loading = "loading";
     static readonly done = "done";
+
+    // animations
+    static readonly blink = "blink";
+    static readonly slideInBottom = "slide-in-bottom";
+    static readonly slideOutBottom = "slide-out-bottom";
 }

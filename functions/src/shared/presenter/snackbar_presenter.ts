@@ -1,6 +1,14 @@
+export enum state {
+    slideIN = "slide-in",
+    blink = "blink",       // when snackbar is already visible.
+    clear = "clear",       // clear animation classes (so we can blink again).
+    slideOut = "slide-out",
+    hide = "hide",        // add display: none  (only after slideOut or always on server).
+}
+
 export interface Snackbar {
     version: number;
-    show: boolean;
+    state: state;
     text: string;
     showAction: boolean;
     actionText: string; // Undo
@@ -9,7 +17,7 @@ export interface Snackbar {
 
 export class HiddenSnackbar implements Snackbar {
     readonly version: number;
-    readonly show: boolean = false;
+    state: state = state.hide;
     readonly text: string = "";
     readonly showAction: boolean = false;
     readonly actionText: string = "";
@@ -22,12 +30,11 @@ export class HiddenSnackbar implements Snackbar {
 
 export interface ContextSignedIn {
     email: string;
-    version: number
 }
 
 export class SignedInSnackbar implements Snackbar {
     version: number;
-    readonly show: boolean = true;
+    state: state;
     readonly text: string;
     readonly showAction: boolean = false;
     readonly actionText: string = "";
@@ -35,6 +42,5 @@ export class SignedInSnackbar implements Snackbar {
 
     constructor(ctx: ContextSignedIn) {
         this.text = `You are signed in as ${ctx.email}`;
-        this.version = ctx.version;
     }
 }

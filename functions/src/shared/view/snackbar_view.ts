@@ -1,6 +1,7 @@
 import { wire } from "../../dom/dom";
 import { css } from "../css";
 import { Presenter } from "../presenter/base_presenter";
+import { state } from "../presenter/snackbar_presenter";
 import { onClick } from "../actions";
 
 export class SnackbarView {
@@ -11,21 +12,35 @@ export class SnackbarView {
     }
 
     render(p: Presenter): string {
-        let compKlass = `snackbar ${css.hide}`;
-        let actionKlass = `snackbar-action ${css.hide}`;
         const snackbar = p.snackbar;
 
+        let compKlass = 'snackbar';
+        let containerKlass = 'snackbar-container'; // default: state.clear => no animations.
+        switch (snackbar.state) {
+            case state.hide:
+                compKlass = `${compKlass} ${css.hide}`;
+                break;
+            case state.clear: // default
+                break;
+            case state.blink:
+                containerKlass = `${containerKlass} ${css.blink}`;
+                break;
+            case state.slideIN:
+                containerKlass = `${containerKlass} ${css.slideInBottom}`;
+                break;
+            case state.slideOut:
+                containerKlass = `${containerKlass} ${css.slideOutBottom}`;
+                break;
+        }
+
+        let actionKlass = `snackbar-action ${css.hide}`;
         if (snackbar.showAction) {
             actionKlass = "snackbar-action";
         }
 
-        if (snackbar.show) {
-            compKlass = "snackbar";
-        }
-
         return this.html`
             <div class="${compKlass}">
-                <div class="snackbar-container slide-in-bottom">
+                <div class="${containerKlass}">
                     <span class="snackbar-message">${snackbar.text}</span>
                     <span class="${actionKlass}">
                         <a href="#" class="hide">${snackbar.actionText}</a>

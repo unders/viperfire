@@ -108,7 +108,7 @@ export class App {
     }
 
     hideSnackbar(): void {
-        this.snackbar.hide();
+        this.snackbar.close();
     }
 
     hidePopup(): void {

@@ -4,9 +4,11 @@ import { path } from "../path/url"
 
 export class ArticleListView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
+    private readonly list: (template: TemplateStringsArray, ...args : any[]) => string;
 
     constructor() {
         this.html = wire(this);
+        this.list = wire({});
     }
 
     render(p: ArticleListPresenter): string {
@@ -17,7 +19,7 @@ export class ArticleListView {
         return this.html`
             <div class="articles">
                 ${haveArticles ?
-                    wire()`<ul>
+                    this.list`<ul>
                         ${p.articleList.articles.map( (a) => wire(a)`
                             <li>
                                 <a href="${path.article(a.id)}">${a.id}</a>
