@@ -25,7 +25,7 @@ export class SnackbarView {
 
         return this.html`
             <div class="${compKlass}">
-                <div class="snackbar-container">
+                <div class="snackbar-container slide-in-bottom">
                     <span class="snackbar-message">${snackbar.text}</span>
                     <span class="${actionKlass}">
                         <a href="#" class="hide">${snackbar.actionText}</a>
