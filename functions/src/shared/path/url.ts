@@ -17,7 +17,7 @@ export class path {
     }
 
     static nextArticles(pageToken: string): NextArticlesResult {
-        let result = { hasMore: false, nextArticlesPath: "" };
+        let result = { hasMore: false, nextArticlesPath: "#" };
         if (!pageToken || pageToken === "") {
             return result;
         }

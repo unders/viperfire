@@ -39,7 +39,11 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 - [ X ] Add centered message (when we cannot sing in due to network error...)
 - [ X ] all action should be in one place
 - [ X ] Move code in view to header and footer view.
-- [ ] Add snackbar (to show sign in messages etc.)
+- [ X ] Add snackbar (to show sign in messages etc.)
+- [ X ] Fix how to cache article list (dom is updated then snackbar change state.).
+- [ ] Move snackbar into its own sass file
+- [ ] update about to have button that launch snackbar and popup.
+- [ ] Add HTML5 boilerplate
 - [ ] Reporting error to stackdriver
 - [ ] add public/404.html page
 - [ ] Fix hasher to work like in firestatic
