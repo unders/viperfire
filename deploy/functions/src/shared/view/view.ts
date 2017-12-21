@@ -1,4 +1,7 @@
 import { wireRender } from "../../dom/dom";
+import { PageLoaderView } from "./page_loader_view";
+import { SnackbarView } from "./snackbar_view";
+import { PopupView } from "./popup_view";
 import { HeaderView } from "./header_view";
 import { ArticleListView } from "./article_list_view";
 import { ArticleView } from "./article_view";
@@ -6,14 +9,13 @@ import { AboutView } from "./about_view";
 import { ProfileView } from "./profile_view";
 import { ErrorView } from "./error_view";
 import { FooterView } from "./footer_view";
-import { path } from "../path/url";
 import { ProfilePresenter } from "../presenter/profile_presenter";
 import { AboutPresenter } from "../presenter/about_presenter";
 import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
 import { ArticlePresenter } from "../presenter/article_presenter";
-import { Presenter} from "../presenter/presenter";
-import { PageLoaderView } from "./page_loader_view";
+import { Presenter } from "../presenter/base_presenter";
+import { onClick } from "../actions";
 
 interface Context {
     header: HeaderView;
@@ -24,6 +26,8 @@ interface Context {
 
 export class View {
     private readonly pageLoader: PageLoaderView = new PageLoaderView();
+    private readonly snackbar: SnackbarView = new SnackbarView();
+    private readonly popup: PopupView = new PopupView();
     private readonly header: HeaderView;
     private readonly articleList: ArticleListView;
     private readonly article: ArticleView = new ArticleView();
@@ -60,18 +64,14 @@ export class View {
     }
 
     private render(html: wireRender, p: Presenter, main: string): string {
-        let links = [];
-        const currentUser = p.currentUser;
-        if (currentUser.signedIn) {
-            links[0]= { name: "My Profile", url:  path.profile(currentUser.uid) };
-        }
-
         return html`
             ${[this.pageLoader.render(p)]}
+            ${[this.popup.render(p)]}
+            ${[this.snackbar.render(p)]}
             <div class="container">
-                <header>${[this.header.render(currentUser)]}</header>
+                <header>${[this.header.render(p)]}</header>
                 <main>${[main]}</main>
-                <footer>${[this.footer.render({ links: links })]}</footer>
+                <footer>${[this.footer.render(p)]}</footer>
             </div>
         `;
     }

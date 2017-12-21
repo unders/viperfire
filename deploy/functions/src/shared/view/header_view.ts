@@ -1,5 +1,7 @@
 import { css } from "../css";
 import { wire } from "../../dom/dom";
+import { onClick } from "../actions";
+import { Presenter } from "../presenter/base_presenter";
 
 interface Context {
     readonly logo: Logo
@@ -24,12 +26,12 @@ export class HeaderView {
         this.html = wire(this);
     }
 
-    render(user: User): string {
+    render(p: Presenter): string {
         const logo = this.logo;
 
         let signOutKlass = "";
         let signInKlass = "";
-        if (user.signedIn) {
+        if (p.currentUser.signedIn) {
             signInKlass = `header-account-link ${css.hide}`;
             signOutKlass = `header-account-link`;
         } else {
@@ -41,10 +43,10 @@ export class HeaderView {
             <a href="${logo.url}" class="header-logo">${logo.name}</a>
             <div class="header-account">
                 <div class="${signInKlass}">
-                    <a href="#sign-in" data-action="signInWithGoogle">Sign In with Google</a>
+                    <a href="#sign-in" data-action="${onClick.signInWithGoogle}">Sign In with Google</a>
                 </div>
                 <div class="${signOutKlass}">
-                    <a href="#sign-out" data-action="signOut">Sign Out</a>
+                    <a href="#sign-out" data-action="${onClick.signOut}">Sign Out</a>
                 </div>
             </div>`;
     }

@@ -1,36 +1,27 @@
-import { PageLoader, Presenter } from "./presenter";
-import { User } from "../data/user";
+import { ContextPresenter, SerializePresenter } from "./presenter";
 import { path } from "../path/url";
+import { time } from "../lib/time";
+import { Presenter } from "./base_presenter";
 
-interface Context {
-    readonly pageLoader: PageLoader;
-    readonly currentUser: User;
-}
+export class AboutPresenter extends Presenter {
+    constructor(ctx: ContextPresenter) {
+        super(ctx);
+        super.init({ title: "About", path: path.about })
+    }
 
-interface Serialize {
-    readonly pageLoader: PageLoader;
-    readonly title: string;
-    readonly isPresenter: boolean;
-    readonly path: string;
-    readonly currentUser: User;
-}
-
-export class AboutPresenter implements Presenter {
-    readonly pageLoader: PageLoader;
-    readonly title: string = "About";
-    readonly isPresenter: boolean = true;
-    readonly path: string = path.about;
-    readonly currentUser: User;
-
-    constructor(ctx: Context) {
-        this.pageLoader = ctx.pageLoader;
-        this.currentUser = ctx.currentUser;
+    static Next(p: Presenter): AboutPresenter {
+        return new AboutPresenter({
+            pageLoader: p.pageLoader,
+            currentUser: p.currentUser,
+            ago: time.ago()
+        });
     }
 
     static Init(p: Presenter): AboutPresenter {
         return new AboutPresenter({
             pageLoader: p.pageLoader,
-            currentUser: p.currentUser
+            currentUser: p.currentUser,
+            ago: time.ago()
         });
     }
 
@@ -38,7 +29,7 @@ export class AboutPresenter implements Presenter {
         return JSON.stringify(this.toObject());
     }
 
-    private toObject(): Serialize {
+    private toObject(): SerializePresenter {
         return {
             pageLoader: this.pageLoader,
             title:       this.title,

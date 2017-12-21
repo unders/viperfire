@@ -1,6 +1,7 @@
 import { wire } from "../../dom/dom";
-import { PageLoader, Presenter } from "../presenter/presenter";
+import { PageLoader } from "../presenter/presenter";
 import { css } from "../css";
+import { Presenter } from "../presenter/base_presenter";
 
 export class PageLoaderView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;

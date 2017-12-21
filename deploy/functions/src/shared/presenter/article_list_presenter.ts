@@ -1,34 +1,23 @@
-import { PageLoader, Presenter } from "./presenter";
-import { User } from "../data/user";
+import { SerializePresenter, ContextPresenter } from "./presenter";
 import { path } from "../path/url";
 import { ArticleList } from "../domain/article_domain";
+import { time } from "../lib/time";
+import { Presenter } from "./base_presenter";
 
-interface Context {
-    readonly pageLoader: PageLoader;
-    readonly currentUser: User;
+interface Context extends ContextPresenter {
     readonly articleList: ArticleList;
 }
 
-interface Serialize {
-    readonly pageLoader: PageLoader;
-    readonly title: string;
-    readonly isPresenter: boolean;
-    readonly path: string;
-    readonly currentUser: User;
+interface Serialize extends SerializePresenter {
     readonly articleList: ArticleList;
 }
 
-export class ArticleListPresenter implements Presenter {
-    readonly pageLoader: PageLoader;
-    readonly title: string = "Articles";
-    readonly isPresenter: boolean = true;
-    readonly path: string = path.articles;
-    readonly currentUser: User;
+export class ArticleListPresenter extends Presenter {
     readonly articleList: ArticleList;
 
     constructor(ctx: Context) {
-        this.pageLoader = ctx.pageLoader;
-        this.currentUser = ctx.currentUser;
+        super(ctx);
+        super.init({ title: "Articles", path: path.articles });
         this.articleList = ctx.articleList;
     }
 
@@ -36,6 +25,7 @@ export class ArticleListPresenter implements Presenter {
         return new ArticleListPresenter({
             pageLoader: p.pageLoader,
             currentUser: p.currentUser,
+            ago: time.ago(),
             articleList: articleList
         });
     }
@@ -45,7 +35,8 @@ export class ArticleListPresenter implements Presenter {
         return new ArticleListPresenter({
             pageLoader: p.pageLoader,
             currentUser: pr.currentUser,
-            articleList: pr.articleList
+            ago: time.ago(),
+            articleList: pr.articleList,
         });
     }
 

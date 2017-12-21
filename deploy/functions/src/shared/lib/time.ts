@@ -18,7 +18,7 @@ const units = [
     { name: "year", limit: null, in_seconds: 31556926 }
 ];
 
-class Ago {
+export class Ago {
     private readonly now: number;
 
     constructor(now: number) {

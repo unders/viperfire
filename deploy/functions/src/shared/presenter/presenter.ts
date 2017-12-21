@@ -1,10 +1,12 @@
 import { User } from "../data/user";
 import { path } from "../path/url";
+import { Presenter } from "./base_presenter";
 import { ProfilePresenter } from "./profile_presenter";
 import { AboutPresenter } from "./about_presenter";
 import { ArticleListPresenter } from "./article_list_presenter";
 import { ArticlePresenter } from "./article_presenter";
 import { ErrorPresenter } from "./error_presenter";
+import { Ago } from "../lib/time";
 
 declare global {
     interface Window { __INITIAL_STATE__: string; }
@@ -16,13 +18,23 @@ export enum PageLoader {
     Done = 2,
 }
 
-export interface Presenter {
-    pageLoader: PageLoader;
-    title: string;
-    isPresenter: boolean;
+export interface ContextInit {
     path: string;
-    currentUser: User;
-    toJSON(): string
+    title: string;
+}
+
+export interface ContextPresenter {
+    readonly pageLoader: PageLoader;
+    readonly currentUser: User;
+    readonly ago: Ago;
+}
+
+export interface SerializePresenter {
+    readonly pageLoader: PageLoader;
+    readonly title: string;
+    readonly isPresenter: boolean;
+    readonly path: string;
+    readonly currentUser: User;
 }
 
 interface Result {
