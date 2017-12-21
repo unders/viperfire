@@ -43,8 +43,9 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 - [ X ] Fix how to cache article list (dom is updated then snackbar change state.).
 - [ X ] Move snackbar into its own sass file
 - [ X ] update about to have button that launch snackbar and popup.
-- [ ] Add HTML5 boilerplate
+- [ X ] Add HTML5 boilerplate and normalize
 - [ ] Add more sign in possibilities.
+- [ ] Add Youtube Logout account popup...
 - [ ] Refactor popup presenter: rename popup to popup_presenter.
 - [ ] Reporting error to stackdriver
 - [ ] add public/404.html page

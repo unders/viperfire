@@ -43,6 +43,10 @@ $z-index-snackbar: 600;
   display: none;
 }
 
+button {
+  cursor: pointer;
+}
+
 
 @media only screen and (max-width: $breakpoint-small) {
   .snackbar-close {

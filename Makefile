@@ -37,6 +37,7 @@ release: ## creates a release
 	@rsync -avz --delete --exclude 'assets/css' --exclude 'assets/js' public/ deploy/public
 	@node_modules/.bin/node-sass --output-style compressed --output ./deploy/public/assets/css ./sass
 	@postcss --use autoprefixer -r deploy/public/assets/css/main.css
+	@cp sass/css/reset.css deploy/public/assets/css/reset.css
 	@node_modules/.bin/webpack --config support/webpack.dev.config.js
 	@node_modules/.bin/webpack --config support/webpack.prod.config.js
 	@cp $(VERSION) $(PREVIOUS)
