@@ -44,3 +44,24 @@ export class SignedInSnackbar implements Snackbar {
         this.text = `You are signed in as ${ctx.email}`;
     }
 }
+
+export interface ContextAction {
+    text: string;
+    actionText: string;
+    action: string;
+}
+
+export class ActionSnackbar implements Snackbar {
+    version: number;
+    state: state;
+    readonly text: string;
+    readonly showAction: boolean = true;
+    readonly actionText: string;
+    readonly action: string;
+
+    constructor(ctx: ContextAction) {
+        this.text = ctx.text;
+        this.actionText = ctx.actionText;
+        this.action = ctx.action;
+    }
+}

@@ -1,5 +1,8 @@
 import { Page } from "../page/page";
-import { HiddenSnackbar, SignedInSnackbar, Snackbar, state } from "../shared/presenter/snackbar_presenter";
+import {
+    ActionSnackbar, HiddenSnackbar, SignedInSnackbar, Snackbar,
+    state
+} from "../shared/presenter/snackbar_presenter";
 import { Logger } from "../log/log";
 
 interface Context {
@@ -31,6 +34,15 @@ export class SnackbarHelper {
     //
     //  -- PUBLIC --
     //
+
+    showUndo(): void {
+        this.logger.info("snackbar.showUndo()");
+        this.show(new ActionSnackbar({
+            text: "Did something",
+            actionText: "undo",
+            action: "undo",
+        }));
+    }
 
     showSignedIn(email: string): void {
         this.logger.info("snackbar.showSignedIn()");

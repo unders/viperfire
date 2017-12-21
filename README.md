@@ -41,9 +41,11 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 - [ X ] Move code in view to header and footer view.
 - [ X ] Add snackbar (to show sign in messages etc.)
 - [ X ] Fix how to cache article list (dom is updated then snackbar change state.).
-- [ ] Move snackbar into its own sass file
-- [ ] update about to have button that launch snackbar and popup.
+- [ X ] Move snackbar into its own sass file
+- [ X ] update about to have button that launch snackbar and popup.
 - [ ] Add HTML5 boilerplate
+- [ ] Add more sign in possibilities.
+- [ ] Refactor popup presenter: rename popup to popup_presenter.
 - [ ] Reporting error to stackdriver
 - [ ] add public/404.html page
 - [ ] Fix hasher to work like in firestatic

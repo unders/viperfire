@@ -107,6 +107,16 @@ export class App {
         this.logger.setUser(this.page.presenter.currentUser);
     }
 
+    //
+    // testing begin
+    //
+    showSnackbar(): void {
+        this.snackbar.showUndo();
+    }
+    //
+    // testing end
+    //
+
     hideSnackbar(): void {
         this.snackbar.close();
     }

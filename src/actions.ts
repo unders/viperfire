@@ -49,6 +49,23 @@ export class ActionHandler {
     }
 
     //
+    // TESTING (open snackbar and popup)
+    //
+    openSnackbarOnclick(event: Event) {
+        this.app.showSnackbar();
+    }
+    openPopupOnclick(event: Event) {
+        this.app.showPopup({
+            title: "This is a test",
+            main: "This is the body message."
+        });
+    }
+
+    //
+    // TESTING
+    //
+
+    //
     // Snackbar begin
     //
     closeSnackbarOnclick(event: Event) {
