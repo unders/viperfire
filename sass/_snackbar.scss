@@ -1,4 +1,4 @@
-@mixin snackbar($bg, $z-index, $color, $accent-color) {
+@mixin snackbar($bg, $z-index, $color, $accent-color, $breakpoint-small) {
   .snackbar {
     display: block;
   }
@@ -55,6 +55,29 @@
 
   .snackbar-close svg:hover {
     background: darken($bg, 4%);
+  }
+
+  @media only screen and (max-width: $breakpoint-small) {
+    .snackbar-close {
+      min-width: 40px;
+      margin-right: 20px;
+    }
+    .snackbar-message {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .snackbar-container {
+      width: 100%;
+    }
+  }
+
+  @media only screen and (min-width: $breakpoint-small) {
+    .snackbar-container {
+      border-radius: 3px;
+      margin-right: auto;
+      margin-left: 20px;
+      bottom: 20px;
+    }
   }
 
 }
