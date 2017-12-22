@@ -12,16 +12,20 @@ export class PageLoaderView {
 
     render(p: Presenter): string {
         let pageProgressBar = css.pageProgressBar;
+        let container = "background-progress-bar";
+
         if (p.pageLoader === PageLoader.Loading) {
+            container = `${container} ${css.loading}`;
             pageProgressBar = `${pageProgressBar} ${css.loading}`;
         }
         if (p.pageLoader === PageLoader.Done) {
-            pageProgressBar = `${pageProgressBar} ${css.loading} ${css.done}`;
+            container = `${container} ${css.done}`;
+            pageProgressBar = `${pageProgressBar} ${css.done}`;
         }
 
         return this.html`
+            <div class="${container}"></div>
             <div class="${pageProgressBar}">
-                <div class="background-progress-bar"></div>
             </div>
         `;
     }

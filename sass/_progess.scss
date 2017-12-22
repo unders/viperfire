@@ -7,19 +7,13 @@
 // remove: "loading"
 // remove: "done"
 //
-@mixin progress-bar($loader, $container, $background, $duration) {
+@mixin progress-bar($bg-loader, $bg-container, $duration) {
   @keyframes loading {
     0% { width: 0; }
     2% { width: 30%; }
     40% { width: 50%; }
     60% { width: 70%; }
     100% { width: 80%; }
-  }
-
-  @keyframes done {
-    0% { background: $loader; }
-    50% { background: $loader; }
-    100% { background: $background; }
   }
 
   .viperfire-progress-bar {
@@ -38,19 +32,19 @@
   .viperfire-progress-bar.loading {
     display: block;
     width: 80%;
-    background-color: $loader;
+    background-color: $bg-loader;
     animation-duration: $duration;
     animation-name: loading;
   }
 
-  .viperfire-progress-bar.loading.done {
+  .viperfire-progress-bar.done {
+    display: block;
     width: 100%;
-    animation-duration: 0.3s;
-    animation-name: done;
-    background: $background;
+    background: $bg-loader;
   }
 
   .background-progress-bar {
+    pointer-events: none;
     z-index: 9998;
     position: fixed;
     display: block;
@@ -58,8 +52,12 @@
     left: 0;
     height: 3px;
     width: 100%;
-    background-color: $container;
-    opacity: 0.2;
+    background-color: $bg-container;
+    opacity: 0;
+  }
+
+  .background-progress-bar.loading,  .background-progress-bar.done  {
+      opacity: 1;
   }
 }
 

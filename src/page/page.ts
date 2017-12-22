@@ -107,6 +107,7 @@ export class Page {
                 loader.done(this);
                 show();
                 loader.reset(this);
+                window.scrollTo(0, 0);
             } else {
                 this.logger.info(`cancel visit => ${pageNumber} !== ${this.pageNumber}`);
             }
@@ -122,6 +123,7 @@ export class Page {
             const p = ErrorPresenter.FromCode(code, this.presenter);
             this.renderError(p);
             loader.reset(this);
+            window.scrollTo(0, 0);
         } else {
             this.logger.info(`cancel error visit => ${pageNumber} !== ${this.pageNumber}`);
         }

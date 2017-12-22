@@ -11,7 +11,7 @@
 //
 $font-size-body: 20px;
 $breakpoint-small: 460px;
-$progress-bar-duration: 2s;
+$progress-bar-duration: 1s;
 $z-index-overlay: 200;
 $z-index-modal: 400;
 $z-index-snackbar: 600;
@@ -20,9 +20,8 @@ $z-index-snackbar: 600;
 // PROGRESS
 //
 @include progress-bar(
-                $primary-color-light,
                 $primary-color-dark,
-                $primary-color,
+                #D9D9D9,
                 $progress-bar-duration)
 
 //
@@ -118,8 +117,8 @@ header {
 //         FOOTER
 //
 footer {
-    background: lighten($primary-color-light, 10%);
-    color: $secondary-text-color;
+    color: lighten($primary-text-color, 30%);
+    border-top: 1px solid $divider-color
 }
 
 .footer-list {
@@ -135,5 +134,5 @@ footer {
     color: inherit;
     @include pv1();
     @include ph1-to-ph2($breakpoint-small);
-    @include link(lighten($primary-color-light, 13%), $primary-color);
+    @include link($body-color, $body-color);
 }

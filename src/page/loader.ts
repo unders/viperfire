@@ -15,7 +15,7 @@ export class loader {
             }
         };
 
-        setTimeout(reset, 300, p.pageNumber);
+        reset(p.pageNumber);
     }
 
     static done(p: Page): void {
@@ -30,7 +30,7 @@ export class loader {
             p.render();
         };
 
-        setTimeout(done, 100, p.pageNumber);
+        done(p.pageNumber);
     }
 
     private static resetNow(p: Page): void {
