@@ -1,4 +1,4 @@
-GITTAG :=v0.0.4
+GITTAG :=v0.0.5
 BUILDSTAMP :=$(shell date -u '+%Y-%m-%dT%I:%M%p')
 GITHASH :=$(shell git rev-parse HEAD)
 

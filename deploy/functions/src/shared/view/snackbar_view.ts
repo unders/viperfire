@@ -43,7 +43,7 @@ export class SnackbarView {
                 <div class="${containerKlass}">
                     <span class="snackbar-message">${snackbar.text}</span>
                     <span class="${actionKlass}">
-                        <a href="#" class="hide">${snackbar.actionText}</a>
+                        <a href="#">${snackbar.actionText}</a>
                      </span>
                     <span class="snackbar-close">
                         <svg xmlns="http://www.w3.org/2000/svg" 

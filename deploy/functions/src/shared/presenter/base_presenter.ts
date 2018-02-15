@@ -1,22 +1,25 @@
 import { ContextInit, ContextPresenter, PageLoader} from "./presenter";
 import { Popup, HiddenPopup } from "./popup";
+import { Auth } from "./auth_presenter";
 import { Snackbar, HiddenSnackbar } from "./snackbar_presenter";
 import { Ago } from "../lib/time";
 import { User } from "../data/user";
 
 export class Presenter {
+    readonly isPresenter: boolean = true;
+    readonly ago: Ago;
+    auth: Auth;
     snackbar: Snackbar;
     popup: Popup;
-    readonly isPresenter: boolean = true;
     pageLoader: PageLoader;
-    readonly ago: Ago;
     currentUser: User;
-    title: string;
-    path: string;
+    title: string = "";
+    path: string = "";
 
     toJSON(): string { throw "must be implemented in subclass."; }
 
     constructor(ctx: ContextPresenter) {
+        this.auth = Auth.hide;
         this.snackbar = new HiddenSnackbar(1);
         this.popup = new HiddenPopup();
         this.pageLoader = ctx.pageLoader;

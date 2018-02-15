@@ -33,8 +33,8 @@ export interface ContextSignedIn {
 }
 
 export class SignedInSnackbar implements Snackbar {
-    version: number;
-    state: state;
+    version: number = 0;
+    state: state = state.hide;
     readonly text: string;
     readonly showAction: boolean = false;
     readonly actionText: string = "";
@@ -42,5 +42,26 @@ export class SignedInSnackbar implements Snackbar {
 
     constructor(ctx: ContextSignedIn) {
         this.text = `You are signed in as ${ctx.email}`;
+    }
+}
+
+export interface ContextAction {
+    text: string;
+    actionText: string;
+    action: string;
+}
+
+export class ActionSnackbar implements Snackbar {
+    version: number = 0;
+    state: state = state.hide;
+    readonly text: string;
+    readonly showAction: boolean = true;
+    readonly actionText: string;
+    readonly action: string;
+
+    constructor(ctx: ContextAction) {
+        this.text = ctx.text;
+        this.actionText = ctx.actionText;
+        this.action = ctx.action;
     }
 }

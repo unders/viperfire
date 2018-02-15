@@ -16,11 +16,13 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="viperfire starter app">
     <title>${ctx.title}</title>
-    <link rel="stylesheet" href="/assets/css/e1f4a92cf508ce8949ddd63cafbfb1f68f0cca26-main.css">
     <script defer src="/__/firebase/4.6.0/firebase-app.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-auth.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-firestore.js"></script>
     <script defer src="/__/firebase/init.js"></script>
+    <script defer src="/assets/js/2c4ada86d651cc540e0d244a9d75a4f07c5882f5-bundle.js"></script>
+    <link rel="stylesheet" href="/assets/css/4b91be373a91929f5ccff78f826a1c648f77744e-reset.css">
+    <link rel="stylesheet" href="/assets/css/0b6a036968e1a67a1717cf75a1aabf0eb3ca4df6-main.css">
     <!--
         <script defer src="/__/firebase/4.6.0/firebase-messaging.js"></script>
         <script defer src="/__/firebase/4.6.0/firebase-storage.js"></script>
@@ -31,7 +33,6 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     <script>
         window.__INITIAL_STATE__ ='${[ctx.initialState]}';
     </script>
-    <script defer src="/assets/js/429caad7f6e83ea9f7d84242ec0ad6655fc9f3f9-bundle.js"></script>
 </body>
 </html>`;
 };

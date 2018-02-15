@@ -110,7 +110,9 @@ const setCacheControl10 = function(res): void {
 };
 
 export const appV1 = functions.https.onRequest(app);
+
 export const createUserProfile = functions.auth.user().onCreate( async (event) => {
+    console.log("createUserProfile: ", event.data);
     const data = event.data;
     const currentUser = fromUserRecord(data);
 
@@ -130,4 +132,3 @@ export const createUserProfile = functions.auth.user().onCreate( async (event) =
         await domain.err().log({ currentUser: currentUser, message: profileError, func: f });
     }
 });
-

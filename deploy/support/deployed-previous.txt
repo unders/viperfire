@@ -1,1 +1,1 @@
-tag:v0.0.3 time:2017-12-15T08:26am githash:4bc4c6ef846ceb222d6b8ba1abe1c1aaca6c747c
+tag:v0.0.4 time:2017-12-21T01:43pm githash:866c1c7b87e5ec9dc7c1df79e8a4b902ad46661a
