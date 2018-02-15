@@ -85,7 +85,7 @@ class SignUpOptions {
                 </button>
                 <p>
                     Already have an account? 
-                    <a href="#" data-action="${onClick.signInOptions}">Sign in</a>.
+                    <a href="#" data-action="${onClick.signInOptions}">Sign in</a>
                 </p>
                  <a href="/terms-of-service" class="auth-tos">Terms of Service</a>
             </div>
@@ -138,7 +138,7 @@ class SignInOptions {
 
         return this.html`
             <div class="${klass}">
-                <h2>Welcome back.</h2>
+                <h2>Welcome back</h2>
                 <button
                     data-action="${onClick.signInWithGoogle}">
                     Sign in with Google
@@ -154,7 +154,7 @@ class SignInOptions {
                 </button>
                 <p>
                     No account?
-                    <a href="#" data-action="${onClick.signUpOptions}">Create one</a>.
+                    <a href="#" data-action="${onClick.signUpOptions}">Create one</a>
                 </p>
                 <a href="/terms-of-service" class="auth-tos">Terms of Service</a>
             </div>
