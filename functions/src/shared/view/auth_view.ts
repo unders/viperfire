@@ -87,10 +87,7 @@ class SignUpOptions {
                     Already have an account? 
                     <a href="#" data-action="${onClick.signInOptions}">Sign in</a>.
                 </p>
-                <p>
-                    By creating an account, you accept Viperfire's 
-                    <a href="/terms-of-service">Terms of Service</a>.
-                </p>
+                 <a href="/terms-of-service" class="auth-tos">Terms of Service</a>
             </div>
         `;
     }
@@ -156,7 +153,8 @@ class SignInOptions {
                     Sign in with email
                 </button>
                 <p>
-                    No account? <a href="#" data-action="${onClick.signUpOptions}">Create one</a>.
+                    No account?
+                    <a href="#" data-action="${onClick.signUpOptions}">Create one</a>.
                 </p>
                 <a href="/terms-of-service" class="auth-tos">Terms of Service</a>
             </div>

@@ -47,12 +47,12 @@ $bg-auth-modal: $primary-color-light;
 //
 // @include auth-modal($z-index-auth-modal, $breakpoint-small);
 .auth-overlay {
+  z-index: $z-index-overlay;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: $z-index-overlay;
   background-color: rgba(0,0,0,0.5); /*dim the background*/
 }
 
