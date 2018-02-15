@@ -24,7 +24,7 @@ export const router = (app: App): void => {
     const route = (hyperApp as router)();
     const visit  = "pushstate";
 
-    route.get("/", function(ctx: Context) {
+    route.get(path.articles, function(ctx: Context) {
         const pageToken  = url.Query()("page_token");
 
         if (ctx.type === visit) {
@@ -43,7 +43,7 @@ export const router = (app: App): void => {
         }
     });
 
-    route.get("/about", function(ctx: Context) {
+    route.get(path.about, function(ctx: Context) {
         if (ctx.type === visit) {
             app.aboutVisit();
         } else {

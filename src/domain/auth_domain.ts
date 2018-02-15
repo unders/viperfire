@@ -19,16 +19,39 @@ export class AuthDomain {
         }
     }
 
-    onAuthStatChanged(callback: (user: firebase.User) => void): void {
-        this.firebase.auth().onAuthStateChanged(async (user: firebase.User) => {
+    onAuthStatChanged(callback: (user: firebase.User | null) => void): void {
+        this.firebase.auth().onAuthStateChanged( async (user: firebase.User | null) => {
             callback(user);
         });
     }
 
     currentUser(): CurrentUserCache { return this.cache; }
-    GooglePopup(): SignInWithPopup {
+
+    async signInWithGooglePopup(): Promise<UserResult>  {
         const provider = new firebase.auth.GoogleAuthProvider();
-        return new SignInWithPopup({firebase: this.firebase, provider: provider});
+        const ctx = { firebase: this.firebase, provider: provider };
+        return new SignInWithPopup(ctx).signIn();
+    }
+
+    async signInWithFacebookPopup(): Promise<UserResult>  {
+        const provider = new firebase.auth.FacebookAuthProvider();
+        const ctx = { firebase: this.firebase, provider: provider };
+        return new SignInWithPopup(ctx).signIn();
+    }
+
+    async signInWithTwitterPopup(): Promise<UserResult>  {
+        const provider = new firebase.auth.TwitterAuthProvider();
+        const ctx = { firebase: this.firebase, provider: provider };
+        return new SignInWithPopup(ctx).signIn();
+    }
+
+    async signOut(): Promise<boolean> {
+        try {
+            await this.firebase.auth().signOut();
+            return true;
+        } catch  {
+            return false;
+        }
     }
 }
 
@@ -78,23 +101,14 @@ class SignInWithPopup {
         this.provider = ctx.provider;
     }
 
-    async signInWithPopup(): Promise<UserResult> {
+    async signIn(): Promise<UserResult> {
         try {
             const result = await this.firebase.auth().signInWithPopup(this.provider);
             const u = result.user as firebase.UserInfo;
             return { currentUser: userBuilder.fromFirebase(u), err: "" };
         } catch (e) {
             const err = e as firebase.auth.Error;
-            return { currentUser: null, err: err.message}
-        }
-    }
-
-    async signOut(): Promise<boolean> {
-        try {
-            await this.firebase.auth().signOut();
-            return true;
-        } catch  {
-            return false;
+            return { currentUser: null, err: err.message }
         }
     }
 }

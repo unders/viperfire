@@ -15,7 +15,7 @@ import { ArticleListPresenter } from "../presenter/article_list_presenter";
 import { ErrorPresenter } from "../presenter/error_presenter";
 import { ArticlePresenter } from "../presenter/article_presenter";
 import { Presenter } from "../presenter/base_presenter";
-import { onClick } from "../actions";
+import { AuthView } from "./auth_view";
 
 interface Context {
     header: HeaderView;
@@ -25,6 +25,7 @@ interface Context {
 }
 
 export class View {
+    private readonly auth: AuthView = new AuthView();
     private readonly pageLoader: PageLoaderView = new PageLoaderView();
     private readonly snackbar: SnackbarView = new SnackbarView();
     private readonly popup: PopupView = new PopupView();
@@ -68,6 +69,7 @@ export class View {
             ${[this.pageLoader.render(p)]}
             ${[this.popup.render(p)]}
             ${[this.snackbar.render(p)]}
+            ${[this.auth.render(p)]}
             <div class="container">
                 <header>${[this.header.render(p)]}</header>
                 <main>${[main]}</main>

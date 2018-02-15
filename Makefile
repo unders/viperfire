@@ -14,6 +14,8 @@ help:
 .PHONY: install
 install: ## installs dependencis
 	## install Typescript
+	## install nvm - https://github.com/creationix/nvm
+	## nvm install 6.11.1
 	## brew install yarn --without-node
 	## go get github.com/cortesi/modd/cmd/modd
 	## npm install -g firebase-tools

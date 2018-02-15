@@ -33,8 +33,8 @@ export interface ContextSignedIn {
 }
 
 export class SignedInSnackbar implements Snackbar {
-    version: number;
-    state: state;
+    version: number = 0;
+    state: state = state.hide;
     readonly text: string;
     readonly showAction: boolean = false;
     readonly actionText: string = "";
@@ -52,8 +52,8 @@ export interface ContextAction {
 }
 
 export class ActionSnackbar implements Snackbar {
-    version: number;
-    state: state;
+    version: number = 0;
+    state: state = state.hide;
     readonly text: string;
     readonly showAction: boolean = true;
     readonly actionText: string;

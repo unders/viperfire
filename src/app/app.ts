@@ -5,8 +5,9 @@ import { Domain } from "../domain/domain";
 import { Page } from "../page/page";
 import { SnackbarHelper } from "./snackbar";
 import { ErrorPopup, HiddenPopup, ContextError } from "../shared/presenter/popup";
+import { Auth } from "../shared/presenter/auth_presenter";
 
-class Context {
+interface Context {
     readonly page: Page;
     readonly domain: Domain;
     readonly logger: Logger;
@@ -79,7 +80,7 @@ export class App {
     //
     // State Changes
     //
-    async onUserStateChanged(user: firebase.User): Promise<void> {
+    async onUserStateChanged(user: firebase.User|null): Promise<void> {
         let currentUser = userBuilder.signedOut();
         if (user) {
             currentUser = userBuilder.fromFirebase(user);
@@ -94,7 +95,7 @@ export class App {
             this.domain.profile().unsubscribe(uid);
         }
 
-        if (currentUser.signedIn) {
+        if (user) {
             this.logger.info("getClaims()");
             const { claims, err } = await this.domain.auth().getClaims(user);
             if (err) {
@@ -105,6 +106,36 @@ export class App {
 
         this.page.render();
         this.logger.setUser(this.page.presenter.currentUser);
+    }
+
+    closeAuthModal(): void {
+        this.logger.info("app.closeAuthModal()");
+        this.page.presenter.auth = Auth.hide;
+        this.page.render();
+    }
+
+    showSignInOptions(): void {
+        this.logger.info("app.showSignInOptions()");
+        this.page.presenter.auth = Auth.signInOptions;
+        this.page.render();
+    }
+
+    showSignInWithEmail(): void {
+        this.logger.info("app.showSignInWithEmail()");
+        this.page.presenter.auth = Auth.signInWithEmail;
+        this.page.render();
+    }
+
+    showSignUpOptions(): void {
+        this.logger.info("app.showSignUpOptions()");
+        this.page.presenter.auth = Auth.signUpOptions;
+        this.page.render();
+    }
+
+    showSignUpWithEmail(): void {
+        this.logger.info("app.showSignUpWithEmail()");
+        this.page.presenter.auth = Auth.signUpWithEmail;
+        this.page.render();
     }
 
     //

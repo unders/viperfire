@@ -44,7 +44,11 @@ Update the GITTAG (i.e: 0.0.1) in the Makefile. Then do this:
 - [ X ] Move snackbar into its own sass file
 - [ X ] update about to have button that launch snackbar and popup.
 - [ X ] Add HTML5 boilerplate and normalize
-- [ ] Add more sign in possibilities.
+- [ X ] Add more sign in possibilities.
+- [ ] Style all auth_view.ts and add sign in/up with email...
+- [ ] Fix createUser function - it is not called when a new user is created....
+- [ ] Change header layout ...
+- [ ] Do not scroll to top if pop history...  window.scrollTo(0, 0) <= src/page/page.ts
 - [ ] Add Youtube Logout account popup...
 - [ ] Refactor popup presenter: rename popup to popup_presenter.
 - [ ] Reporting error to stackdriver
@@ -69,9 +73,17 @@ https://firebase.google.com/docs/functions/reporting-errors
 ### Inspiration
 * [viper news](https://github.com/WebReflection/viper-news)
 * [create-viperhtml-app](https://github.com/WebReflection/create-viperhtml-app)
+* [Youtube](youtube.com)
+* [medium](medium.com)
+* [trends google](https://trends.google.com)
+
 
 ### Icons
 * [Material Icons](https://material.io/icons/)
+* [Social SVG Icons](https://github.com/simple-icons/simple-icons)
+
+### Auth providers
+* [Facebook login](https://firebase.google.com/docs/auth/web/facebook-login?authuser=0)
 
 ### Firebase
 * [Config](https://firebase.google.com/docs/hosting/full-config)
@@ -79,7 +91,12 @@ https://firebase.google.com/docs/functions/reporting-errors
 ### Firebase Web
 * [quickstart js](https://github.com/firebase/quickstart-js)
 
+### Support
+* [Support](https://firebase.google.com/support/)
+
+
 ### Firebase Functions
+* [Use cases](https://firebase.google.com/docs/functions/use-cases)
 * [unit testing functions](https://firebase.google.com/docs/functions/unit-testing)
 * [Extend Cloud Firestore with Cloud Functions](https://firebase.google.com/docs/firestore/extend-with-functions)
 * [write-firebase-functions](https://firebase.google.com/docs/functions/write-firebase-functions)
@@ -87,6 +104,9 @@ https://firebase.google.com/docs/functions/reporting-errors
 * [Code: functions samples](https://github.com/firebase/functions-samples)
 * [Writing an Authentication Trigger with Cloud Functions for Firebase ](https://www.youtube.com/watch?v=pADTJA3BoxE)
 * [Code: Auth triggers](https://github.com/firebase/functions-samples/blob/master/quickstarts/email-users/functions/index.js)
+* [linkedIn auth samples](https://github.com/firebase/functions-samples/tree/master/linkedin-auth)
+* [Stripe sample](https://github.com/firebase/functions-samples/tree/master/stripe)
+* [functions cron](https://github.com/firebase/functions-cron)
 
 ### Firebase hosting
 * [Video: Building Fast Web Experiences with Firebase Hosting](https://www.youtube.com/watch?v=R3v8EcYzf_M)
@@ -125,3 +145,6 @@ https://firebase.google.com/docs/functions/reporting-errors
 
 ### Docs
 * [Firebase Glob patterns](http://mywiki.wooledge.org/glob)
+
+### Troubleshoot
+* [@google-cloud/functions-emulator](https://github.com/GoogleCloudPlatform/cloud-functions-emulator/issues/126#issuecomment-319708141)

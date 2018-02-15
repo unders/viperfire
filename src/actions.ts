@@ -49,7 +49,7 @@ export class ActionHandler {
     }
 
     //
-    // TESTING (open snackbar and popup)
+    // TESTING (open snackbar and popup): START
     //
     openSnackbarOnclick(event: Event) {
         this.app.showSnackbar();
@@ -62,7 +62,7 @@ export class ActionHandler {
     }
 
     //
-    // TESTING
+    // TESTING: END
     //
 
     //
@@ -92,23 +92,77 @@ export class ActionHandler {
         this.app.onUserStateChanged(user);
     }
 
+    async closeAuthOnclick(event: Event) {
+        event.preventDefault();
+        this.app.closeAuthModal();
+    }
+
+    async signInOptionsOnclick(event: Event)  {
+        event.preventDefault();
+        this.app.showSignInOptions();
+    }
+
     async signInWithGoogleOnclick(event: Event)  {
         event.preventDefault();
+        this.app.closeAuthModal();
 
-        const { currentUser, err } = await this.auth.GooglePopup().signInWithPopup();
+        const { currentUser, err } = await this.auth.signInWithGooglePopup();
         if (currentUser === null) {
-            this.logger.error(`signInWithGoogleOnclick failed; error=${err}`);
             this.app.showPopup({
-                title: "Sign in failed",
-                main: "We could not sign you in with Google Provider"
+                title: "Sign in with Google failed",
+                main: err,
             });
+            this.logger.error(`signInWithGoogleOnclick failed; error=${err}`);
         }
+    }
+
+    async signInWithFacebookOnclick(event: Event) {
+        event.preventDefault();
+        this.app.closeAuthModal();
+
+        const { currentUser, err } = await this.auth.signInWithFacebookPopup();
+        if (currentUser === null) {
+            this.app.showPopup({
+                title: "Sign in with Facebook failed",
+                main: err,
+            });
+            this.logger.error(`signInWithFacebookOnclick failed; error=${err}`);
+        }
+    }
+
+    async signInWithTwitterOnclick(event: Event) {
+        event.preventDefault();
+        this.app.closeAuthModal();
+
+        const { currentUser, err } = await this.auth.signInWithTwitterPopup();
+        if (currentUser === null) {
+            this.app.showPopup({
+                title: "Sign in with Twitter failed",
+                main: err,
+            });
+            this.logger.error(`signInWithTwitterOnclick failed; error=${err}`);
+        }
+    }
+
+    async signInWithEmailOnclick(event: Event)  {
+        event.preventDefault();
+        this.app.showSignInWithEmail();
+    }
+
+    async signUpOptionsOnclick(event: Event) {
+        event.preventDefault();
+        this.app.showSignUpOptions();
+    }
+
+    async signUpWithEmailOnclick(event: Event) {
+        event.preventDefault();
+        this.app.showSignUpWithEmail();
     }
 
     async signOutOnclick(event: Event) {
         event.preventDefault();
 
-        const ok = await this.auth.GooglePopup().signOut();
+        const ok = await this.auth.signOut();
         if (!ok) {
             this.app.showPopup({
                 title: "Sign out failed",

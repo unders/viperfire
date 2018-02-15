@@ -13,7 +13,7 @@ import { ArticleList } from "../shared/domain/article_domain";
 import { Article } from "../shared/data/article";
 import { ArticlePresenter } from "../shared/presenter/article_presenter";
 
-class Context {
+interface Context {
     readonly body: Element;
     readonly view: View;
     readonly presenter: Presenter;
@@ -107,7 +107,7 @@ export class Page {
                 loader.done(this);
                 show();
                 loader.reset(this);
-                window.scrollTo(0, 0);
+                window.scrollTo(0, 0); // FIXME: not if push state.
             } else {
                 this.logger.info(`cancel visit => ${pageNumber} !== ${this.pageNumber}`);
             }
@@ -123,7 +123,7 @@ export class Page {
             const p = ErrorPresenter.FromCode(code, this.presenter);
             this.renderError(p);
             loader.reset(this);
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0); // FIXME: not if push state.
         } else {
             this.logger.info(`cancel error visit => ${pageNumber} !== ${this.pageNumber}`);
         }
