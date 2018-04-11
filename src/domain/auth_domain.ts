@@ -89,12 +89,12 @@ class CurrentUserCache {
 
 interface PopupContext {
     readonly firebase: firebase.app.App;
-    readonly provider: firebase.auth.AuthCredential;
+    readonly provider: firebase.auth.AuthProvider;
 }
 
 class SignInWithPopup {
     private readonly firebase: firebase.app.App;
-    private readonly provider: firebase.auth.AuthCredential;
+    private readonly provider: firebase.auth.AuthProvider;
 
     constructor(ctx: PopupContext) {
         this.firebase = ctx.firebase;

@@ -15,7 +15,9 @@ help:
 install: ## installs dependencis
 	## install Typescript
 	## install nvm - https://github.com/creationix/nvm
-	## nvm install 6.11.1
+	## nvm install 6.11.5
+	## npm uninstall -g @google-cloud/functions-emulator
+	## npm install -g @google-cloud/functions-emulator
 	## brew install yarn --without-node
 	## go get github.com/cortesi/modd/cmd/modd
 	## npm install -g firebase-tools

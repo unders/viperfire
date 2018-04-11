@@ -9,7 +9,7 @@ import { fromUserRecord } from "./lib/user";
 import { userProfileBuilder } from "./shared/data/user_profile";
 import { userBuilder } from "./shared/data/user";
 
-const domain = new Domain({ admin: admin.initializeApp(functions.config().firebase) });
+const domain = new Domain({ admin: admin.initializeApp() });
 const app = express();
 const config = getServerConfig();
 const page = new Page({ view: config.view });
@@ -111,10 +111,9 @@ const setCacheControl10 = function(res): void {
 
 export const appV1 = functions.https.onRequest(app);
 
-export const createUserProfile = functions.auth.user().onCreate( async (event) => {
-    console.log("createUserProfile: ", event.data);
-    const data = event.data;
-    const currentUser = fromUserRecord(data);
+export const createUserProfile = functions.auth.user().onCreate(async (userRecord, ctx) => {
+    console.log("createUserProfile: ", ctx.auth.uid, ctx.authType, ctx.timestamp);
+    const currentUser = fromUserRecord(userRecord);
 
     const defaultClaims = userBuilder.defaultClaims;
 
