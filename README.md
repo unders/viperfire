@@ -84,6 +84,7 @@ https://firebase.google.com/docs/functions/reporting-errors
 
 ### Auth providers
 * [Facebook login](https://firebase.google.com/docs/auth/web/facebook-login?authuser=0)
+* [email-link-auth](https://firebase.google.com/docs/auth/web/email-link-auth)
 
 ### Firebase
 * [Cloud Functions Migration Guide: Beta => 1.0](https://goo.gl/4mREqm)

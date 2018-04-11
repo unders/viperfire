@@ -18,5 +18,7 @@ export class onClick {
     static readonly signInWithTwitter = "signInWithTwitter";
     static readonly signInWithEmail = "signInWithEmail";
 
+    static readonly signUp = "signUp";
+    static readonly signIn = "signIn";
     static readonly signOut = "signOut";
 }

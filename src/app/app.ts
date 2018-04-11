@@ -3,9 +3,10 @@ import { userBuilder } from "../shared/data/user";
 import { Logger } from "../log/log";
 import { Domain } from "../domain/domain";
 import { Page } from "../page/page";
-import { SnackbarHelper } from "./snackbar";
 import { ErrorPopup, HiddenPopup, ContextError } from "../shared/presenter/popup";
 import { Auth } from "../shared/presenter/auth_presenter";
+import { SignInFormHelper } from "./sign_in_form";
+import { SnackbarHelper } from "./snackbar";
 
 interface Context {
     readonly page: Page;
@@ -15,6 +16,7 @@ interface Context {
 
 export class App {
     private readonly snackbar: SnackbarHelper;
+    private readonly signInForm: SignInFormHelper;
     private readonly page: Page;
     private readonly domain: Domain;
     private readonly logger: Logger;
@@ -24,6 +26,7 @@ export class App {
         this.domain = ctx.domain;
         this.logger = ctx.logger;
         this.snackbar = new SnackbarHelper({ page: this.page, logger: this.logger });
+        this.signInForm = new SignInFormHelper({ page: this.page, logger: this.logger });
     }
 
     //
@@ -136,6 +139,28 @@ export class App {
         this.logger.info("app.showSignUpWithEmail()");
         this.page.presenter.auth = Auth.signUpWithEmail;
         this.page.render();
+    }
+
+    async submitSignInWithEmail(form: HTMLFormElement): Promise<void> {
+        this.logger.info("app.submitSignInWithEmail()");
+        this.signInForm.disableSubmit();
+
+        const { data, valid } = this.signInForm.checkValidity(form);
+        if (valid) {
+            this.logger.info(`submit data: ${data}`);
+
+            const { currentUser, err } = await this.domain.auth().signInWithEmail(data);
+            if (currentUser === null) {
+                this.showPopup({
+                    title: "Sign in with Email failed",
+                    main: err,
+                });
+                this.logger.error(`signInWithEmail failed; error=${err}`);
+            }
+            this.closeAuthModal();
+        }
+
+        this.logger.info(this.page.presenter.signInForm);
     }
 
     //

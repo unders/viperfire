@@ -4,11 +4,13 @@ import { Auth } from "./auth_presenter";
 import { Snackbar, HiddenSnackbar } from "./snackbar_presenter";
 import { Ago } from "../lib/time";
 import { User } from "../data/user";
+import { signInForm, SignInForm} from "./sign_in_form_presenter";
 
 export class Presenter {
     readonly isPresenter: boolean = true;
     readonly ago: Ago;
     auth: Auth;
+    signInForm: SignInForm;
     snackbar: Snackbar;
     popup: Popup;
     pageLoader: PageLoader;
@@ -20,6 +22,7 @@ export class Presenter {
 
     constructor(ctx: ContextPresenter) {
         this.auth = Auth.hide;
+        this.signInForm = signInForm;
         this.snackbar = new HiddenSnackbar(1);
         this.popup = new HiddenPopup();
         this.pageLoader = ctx.pageLoader;

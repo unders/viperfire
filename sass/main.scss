@@ -6,6 +6,10 @@
 @import "snackbar";
 @import "animate";
 
+* {
+  box-sizing: border-box;
+}
+
 //
 //       CONSTANTS
 //
@@ -108,36 +112,47 @@ $bg-auth-modal: $primary-color-light;
   justify-content: center;
 }
 
-.auth-content h2 {
-}
-
 .auth-content button {
   background: $body-color;
   margin: 10px;
-  padding: 10px;
+  padding: 20px;
   border: none;
-  width: 240px;
+  width: 280px;
+}
+
+.auth-content button:hover {
+  background: darken($body-color, 5%);
 }
 
 .auth-content p a {
   color: darken($accent-color, 30%);
 }
 
+.sign-in-form .form-field {
+  width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sign-in-form button {
+  text-transform: uppercase;
+  color: $accent-color;
+  letter-spacing: 1px;
+  margin-top: 20px;
+}
 
 .auth-content input {
-  width: 240px;
+  width: 100%;
   background: $body-color;
   border: none;
   font-size: 16px;
   padding: 20px;
-  margin-bottom: 20px;
-}
-.auth-content input:focus {
- // outline: none;
+  margin-top: 20px;
 }
 
 .auth-tos {
-  margin-top: 100px;
+  margin-top: 30px;
+  margin-bottom: 30px;
   color: #212121;
 }
 

@@ -28,6 +28,7 @@ export class ActionHandler {
         this.auth.onAuthStatChanged(this.OnAuthStateChanged.bind(this));
 
         document.body.addEventListener('click', this);
+        document.body.addEventListener('submit', this);
     }
 
     handleEvent(event: Event): any {
@@ -171,11 +172,24 @@ export class ActionHandler {
             this.logger.error("signOutOnclick failed!");
         }
     }
+
+
+    async signInFormOnsubmit(event: Event): Promise<void> {
+        event.preventDefault();
+        try {
+            const form =  event.target as HTMLFormElement;
+            this.app.submitSignInWithEmail(form);
+        } catch(e) {
+            this.logger.error("SignInFormOnsubmit error");
+            this.logger.error(e);
+        }
+    }
     //
     // Authentication end
     //
 
     cleanup() {
         document.body.removeEventListener('click', this);
+        document.body.removeEventListener('submit', this);
     }
 }

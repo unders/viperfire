@@ -45,6 +45,18 @@ export class AuthDomain {
         return new SignInWithPopup(ctx).signIn();
     }
 
+    async signInWithEmail(ctx: EmailAndPassword): Promise<UserResult> {
+        try {
+            const provider = new firebase.auth.EmailAuthProvider();
+            const user = await this.firebase.auth().signInWithEmailAndPassword(ctx.email, ctx.password);
+            const u = user as firebase.UserInfo;
+            return { currentUser: userBuilder.fromFirebase(u), err: "" };
+        } catch (e) {
+            const err = e as firebase.auth.Error;
+            return { currentUser: null, err: err.message }
+        }
+    }
+
     async signOut(): Promise<boolean> {
         try {
             await this.firebase.auth().signOut();
@@ -53,6 +65,11 @@ export class AuthDomain {
             return false;
         }
     }
+}
+
+interface EmailAndPassword {
+    email: string;
+    password: string;
 }
 
 interface Config { apiKey: string; }
