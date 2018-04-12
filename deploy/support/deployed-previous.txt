@@ -1,1 +1,1 @@
-tag:v0.0.4 time:2017-12-21T01:43pm githash:866c1c7b87e5ec9dc7c1df79e8a4b902ad46661a
+tag:v0.0.6 time:2018-04-12T08:18am githash:ceda0430893368bfc61c4a7fd9a708648d4eb53c

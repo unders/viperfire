@@ -20,9 +20,9 @@ export const renderMainPageLayout = function(render: wireRender, ctx: MainContex
     <script defer src="/__/firebase/4.6.0/firebase-auth.js"></script>
     <script defer src="/__/firebase/4.6.0/firebase-firestore.js"></script>
     <script defer src="/__/firebase/init.js"></script>
-    <script defer src="/assets/js/2c4ada86d651cc540e0d244a9d75a4f07c5882f5-bundle.js"></script>
+    <script defer src="/assets/js/2cacc9c38bc2d29f08b54596a0cfd5591b8b0121-bundle.js"></script>
     <link rel="stylesheet" href="/assets/css/4b91be373a91929f5ccff78f826a1c648f77744e-reset.css">
-    <link rel="stylesheet" href="/assets/css/0b6a036968e1a67a1717cf75a1aabf0eb3ca4df6-main.css">
+    <link rel="stylesheet" href="/assets/css/27dd2de3d0c7dce05f262be676bb46b222a27fed-main.css">
     <!--
         <script defer src="/__/firebase/4.6.0/firebase-messaging.js"></script>
         <script defer src="/__/firebase/4.6.0/firebase-storage.js"></script>

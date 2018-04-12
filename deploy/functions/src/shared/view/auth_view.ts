@@ -3,6 +3,7 @@ import { Auth } from "../presenter/auth_presenter";
 import { Presenter } from "../presenter/base_presenter";
 import { css } from "../css";
 import { onClick } from "../actions";
+import { SignInForm } from "../presenter/sign_in_form_presenter";
 
 export class AuthView {
     private readonly html: (template: TemplateStringsArray, ...args : any[]) => string;
@@ -47,7 +48,7 @@ export class AuthView {
                     ${this.signUpOptions.render(Auth.signUpOptions === p.auth)}
                     ${this.signUpWithEmail.render(Auth.signUpWithEmail === p.auth)}
                     ${this.signInOptions.render(Auth.signInOptions === p.auth)}
-                    ${this.signInWithEmail.render(Auth.signInWithEmail === p.auth)}
+                    ${this.signInWithEmail.render(Auth.signInWithEmail === p.auth, p.signInForm)}
                 </div>
             </div>
         `;
@@ -85,12 +86,9 @@ class SignUpOptions {
                 </button>
                 <p>
                     Already have an account? 
-                    <a href="#" data-action="${onClick.signInOptions}">Sign in</a>.
+                    <a href="#" data-action="${onClick.signInOptions}">Sign in</a>
                 </p>
-                <p>
-                    By creating an account, you accept Viperfire's 
-                    <a href="/terms-of-service">Terms of Service</a>.
-                </p>
+                 <a href="/terms-of-service" class="auth-tos">Terms of Service</a>
             </div>
         `;
     }
@@ -141,7 +139,7 @@ class SignInOptions {
 
         return this.html`
             <div class="${klass}">
-                <h2>Welcome back.</h2>
+                <h2>Welcome back</h2>
                 <button
                     data-action="${onClick.signInWithGoogle}">
                     Sign in with Google
@@ -153,10 +151,11 @@ class SignInOptions {
                     Sign in with Twitter
                 </button>
                 <button data-action="${onClick.signInWithEmail}">
-                    Sign in with email
+                    Sign in with Email
                 </button>
                 <p>
-                    No account? <a href="#" data-action="${onClick.signUpOptions}">Create one</a>.
+                    No account?
+                    <a href="#" data-action="${onClick.signUpOptions}">Create one</a>
                 </p>
                 <a href="/terms-of-service" class="auth-tos">Terms of Service</a>
             </div>
@@ -171,11 +170,20 @@ class SignInWithEmail{
         this.html = wire(this);
     }
 
-    render(show: boolean): string {
+    render(show: boolean, p: SignInForm): string {
         let klass = css.hide;
 
         if (show) {
             klass = "auth-content";
+        }
+
+        let emailError = css.invisible;
+        if(p.emailError) {
+            emailError = css.error;
+        }
+        let passwordError = css.invisible;
+        if(p.passwordError) {
+            passwordError = css.error;
         }
 
         return this.html`
@@ -184,27 +192,27 @@ class SignInWithEmail{
                 <form action="#" data-action="signInForm" class="sign-in-form" novalidate>
                     <div class="form-field">
                         <input 
-                            data-action="signInInput" 
                             required
-                            maxlength="150"
+                            autofocus
+                            maxlength="350"
                             minlength="4"
                             placeholder="Email"
                             name="email" 
                             type="email"/>
-                        <span class="error invisible">visibility:hidden</span>
+                        <span class="${emailError}">we need your email</span>
                     </div>
                     <div class="form-field">
                         <input 
-                            data-action="signInInput" 
                             placeholder="Password"
                             required 
-                            maxlength="40"
+                            maxlength="60"
                             minlength="4"
+                            name="password"
                             type="password"/>
-                        <span class="error invisible">visibility:hidden</span>
+                        <span class="${passwordError}">we need your password (at least 4 chars)</span>
                     </div>
                     
-                    <button>Sign in</button>
+                    <button disabled="${p.disableSubmit}">Sign in</button>
                 </form>
                 <p>
                     <a href="#" data-action="${onClick.signInOptions}">

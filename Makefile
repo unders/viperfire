@@ -13,15 +13,16 @@ help:
 
 .PHONY: install
 install: ## installs dependencis
-	## install Typescript
 	## install nvm - https://github.com/creationix/nvm
 	## nvm install 6.11.5
 	## npm uninstall -g @google-cloud/functions-emulator
 	## npm install -g @google-cloud/functions-emulator
 	## brew install yarn --without-node
 	## go get github.com/cortesi/modd/cmd/modd
+	## npm install -g typescript
 	## npm install -g firebase-tools
 	## npm install -g postcss
+	## npm install -g postcss-cli autoprefixer
 	cd functions && yarn install
 	npm install
 
@@ -52,16 +53,17 @@ release: ## creates a release
 	##
 	@rm -rf deploy/functions/src
 	@rm -rf deploy/functions/build
+	@rm -rf deploy/functions/node_modules
 	@cp functions/package.json deploy/functions/package.json
 	@cp functions/tsconfig.json deploy/functions/tsconfig.json
 	@cp functions/yarn.lock deploy/functions/yarn.lock
 	@rsync -avz --delete functions/src/ deploy/functions/src
 	@cp support/config.env.dev.ts functions/src/shared/config/env.ts
+	@cd deploy/functions && yarn install && tsc
 	##
 	## Fingerprint assets
 	##
 	@./bin/hasher.sh
-	@cd deploy/functions && yarn install && tsc
 
 .PHONY: list
 list: ## shows firebase projects
