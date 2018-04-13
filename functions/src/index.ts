@@ -112,7 +112,7 @@ const setCacheControl10 = function(res): void {
 export const appV1 = functions.https.onRequest(app);
 
 export const createUserProfile = functions.auth.user().onCreate(async (userRecord, ctx) => {
-    console.log("createUserProfile: ", ctx.auth.uid, ctx.authType, ctx.timestamp);
+    console.log("createUserProfile: ", ctx.authType, ctx.timestamp);
     const currentUser = fromUserRecord(userRecord);
 
     const defaultClaims = userBuilder.defaultClaims;
