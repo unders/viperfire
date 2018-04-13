@@ -59,11 +59,11 @@ release: ## creates a release
 	@cp functions/yarn.lock deploy/functions/yarn.lock
 	@rsync -avz --delete functions/src/ deploy/functions/src
 	@cp support/config.env.dev.ts functions/src/shared/config/env.ts
-	@cd deploy/functions && yarn install && tsc
 	##
 	## Fingerprint assets
 	##
 	@./bin/hasher.sh
+	@cd deploy/functions && yarn install && tsc
 
 .PHONY: list
 list: ## shows firebase projects
